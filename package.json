@@ -1,13 +1,10 @@
 {
-  "name": "puer-freemarker",
+  "name": "puer-freemarker-cli",
   "version": "0.1.0",
-  "description": "",
+  "description": "Commandline interface to use puer with Freemarker templates.",
   "main": "puerFreemarker.js",
   "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
   "license": "MIT",
-  "scripts": {
-    "setup": "npm install -g gulp | npm install"
-  },
   "dependencies": {
     "commander": "^2.9.0"
   }
