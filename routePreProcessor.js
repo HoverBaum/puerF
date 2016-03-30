@@ -11,6 +11,7 @@
 
 //Required packages for this to work.
 var fs = require('fs');
+var path = require('path');
 
 module.exports = function routePreProcessor() {
 
@@ -33,24 +34,27 @@ module.exports = function routePreProcessor() {
      *   Converts a ftlRoutes config object so that it can be added into the combined routes file.
      */
     function convertFtl(config) {
-        return function() {
-            fm.render(config.template, config.data, function(err, data, out) {
+        return `function(req, res, next) {
+            var data = JSON.parse('${JSON.stringify(config.data)}');
+            fm.render('${config.template}', data, function(err, data, out) {
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
                 });
                 res.write(data);
                 res.end();
             });
-        }
+        }`;
     }
 
     /**
      *   Uses all routes to write a file that can be used with puer.
      */
     function createCombinedFile(routes, templatesPath) {
-        var start = `var Freemarker = require('Freemarker');
+        var viewRoot = path.join(__dirname, templatesPath);
+        viewRoot = viewRoot.replace(/\\/g, "\\\\"); //FIXME this is an ugly hackaround for windows.
+        var start = `var Freemarker = require('freemarker.js');
             var fm = new Freemarker({
-              viewRoot: path.join(__dirname, '${templatesPath}')
+              viewRoot: '${viewRoot}'
             });
             module.exports = {`;
         var end = `}`;
