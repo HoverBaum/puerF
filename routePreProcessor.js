@@ -8,6 +8,10 @@
     @param templatesPath    Where templates can be found.
 
 */
+
+//Required packages for this to work.
+var fs = require('fs');
+
 module.exports = function routePreProcessor() {
 
     /**
@@ -22,7 +26,7 @@ module.exports = function routePreProcessor() {
             routes[key] = convertFtl(ftlRoutes[key]);
         }
         var combined = createCombinedFile(routes, templatesPath);
-        console.log(combined);
+        saveCombined(combined, combinedFile)
     }
 
     /**
@@ -67,6 +71,13 @@ module.exports = function routePreProcessor() {
         //Remove the last ','.
         string = string.replace(new RegExp(',' + '$'), '\n');
         return string;
+    }
+
+    /**
+     *
+     */
+    function saveCombined(content, filePath) {
+        fs.writeFile(filePath, content);
     }
 
     return {
