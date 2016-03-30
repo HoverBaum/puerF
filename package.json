@@ -1,0 +1,14 @@
+{
+  "name": "puer-freemarker",
+  "version": "0.1.0",
+  "description": "",
+  "main": "puerFreemarker.js",
+  "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
+  "license": "MIT",
+  "scripts": {
+    "setup": "npm install -g gulp | npm install"
+  },
+  "dependencies": {
+    "commander": "^2.9.0"
+  }
+}
