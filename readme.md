@@ -15,10 +15,23 @@ Move into your working directory and run it:
 cd your/working/directory
 puerF
 ```
+puerF requires that you have Java installed as it is needed to render Freemarker templates.
 
 ### Command reference
+```
+Usage: puerF [options]
 
-Coming soon TM.
+Options:
+
+   -h, --help               output usage information
+   -f, --freemarker <file>  Mock file for Freemarker routes
+   -m, --mock <file>        Your standard puer mock file
+   -t, --templates <path>   Path to folder in which Freemarker templates are stored
+
+   -p, --port               Specific port to use
+   -w, --watch              Filetypes to watch, defaults to js|css|html|xhtml
+   -x, --exclude            Exclude files from being watched for updates
+```
 
 ## Mocking requests
 
@@ -26,7 +39,7 @@ This is what puerF is really all about. Making it as easy as possible for you to
 
 puerF will automatically look for two route files. `mock/routes.js` and `mock/ftlRoutes.js`. While `routes.js` should follow the [puer documentation](https://github.com/leeluolee/puer#mock-request) and can mock any kind of route, the `ftlRoutes.js` file can only contain Freemarker routes.
 
-Should you wish to use files from a different location you can do so useing the `-a` and `-l` options.
+Should you wish to use files from a different location you can do so useing the `-m` and `-f` options.
 
 ### Freemarker routes
 
@@ -36,47 +49,10 @@ The file containing routes for Freemarker should export a single object containi
 
 Note that if `data` has an attribute called `user` the template will get a variable called `user` passed to it.
 
-
-
-# Approaches
-## Gulp task
-Create a task that:
-- Read a config file (routes.js) that has routes and files that should be rendered for those routes with data for the files
-- parse that file into a data.js file
-- use the data.js with puer
-
-Puer mocks http request and listens for file changes
-
-What I build will enable users to run `gulp testserver`
-
-What happens in reality is more like `parse file into data.js and watch for changes` `puer -a data.js`
-
-Write a gulp plugin to abstract this away
-
-### gulp-puer-freemarker
-
-```javascript
-var pf = require('gulp-puer-freemarker');
-
-gulp.task('mock', function() {
-    gulp.src('path/to/routes.js')
-    .pipe(pf())
-});
-```
-
-## Commandline interface
-Get it with `npm install puer-freemarker-cli`
-
-Use as `puer-freemarker path/to/file.js` Starts a puer server, listens to changes on the file and updates on changes.
-
-# Config file
-
-There should be a config file handling all request to '.ftl' files. If you also want to mock other requests to the backend please specify another config file for that, following the specifications for [puer mock-files](https://github.com/leeluolee/puer#mock-request).
-
 ``` javascript
 module.exports = {     
-    'GET /v1/posts': {
-        template: 'template/path.ftl',
+    'GET /test': {
+        template: 'test.ftl',
         data: {
             name: 'value',
             objName: {
@@ -89,13 +65,6 @@ module.exports = {
 }
 ```
 
-# Setup
+#### Freemarker templates
 
-You need to run a few commands to get set up.
-```
-npm install gulp -g
-npm install
-```
-
-No you can run the task to mock a server.
-`gulp mock`
+By default puerF will look for Freemarker templates in `./templates`. To specify another folder you can use `-t`. Read the guid to [author Freemarker templates](http://freemarker.org/docs/dgui.html).
