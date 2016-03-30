@@ -3,6 +3,8 @@ Commandline interface to use [puer](https://github.com/leeluolee/puer) with [Fre
 UNDER DEVELOPMENT - PRE RELEASE!
 Unstable and may not support all features yet.
 
+Can already: merge route files into one and update when they change.
+
 ## Usage
 
 Install with:

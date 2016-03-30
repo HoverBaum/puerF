@@ -1,0 +1,12 @@
+{
+  "name": "puer-freemarker-cli",
+  "version": "0.1.0",
+  "description": "Commandline interface to use puer with Freemarker templates.",
+  "main": "puerFreemarker.js",
+  "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "freemarker.js": "^1.2.2"
+  }
+}
