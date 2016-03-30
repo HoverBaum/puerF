@@ -48,7 +48,6 @@ module.exports = function routePreProcessor() {
         return `function(req, res, next) {
             var data = JSON.parse('${JSON.stringify(config.data)}');
             fm.render('${config.template}', data, function(err, data, out) {
-                console.log(data);
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
                 });
@@ -63,7 +62,7 @@ module.exports = function routePreProcessor() {
      */
     function createCombinedFile(routes, templatesPath) {
         var viewRoot = path.join(__dirname, templatesPath);
-        viewRoot = viewRoot.replace(/\\/g, "\\\\"); //FIXME this is an ugly hackaround for windows.
+        viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
         var start = `var Freemarker = require('freemarker.js');
             var fm = new Freemarker({
               viewRoot: '${viewRoot}'
