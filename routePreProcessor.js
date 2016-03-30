@@ -19,15 +19,26 @@ module.exports = function routePreProcessor() {
      *   Process both the regular and the ftlRoutes file into a single one.
      */
     function processFiles(routesFile, ftlRoutesFile, combinedFile, templatesPath) {
-        routesFile = './' + routesFile.replace('.js', '');
-        ftlRoutesFile = './' + ftlRoutesFile.replace('.js', '');
-        var routes = require(routesFile);
-        var ftlRoutes = require(ftlRoutesFile);
+        var routes = loadModule(routesFile);
+        var ftlRoutes = loadModule(ftlRoutesFile)
         for (key in ftlRoutes) {
             routes[key] = convertFtl(ftlRoutes[key]);
         }
         var combined = createCombinedFile(routes, templatesPath);
         saveCombined(combined, combinedFile)
+    }
+
+    /**
+     *   Loades a module manullay without caching it like require does.
+     */
+    function loadModule(path) {
+        var code = new Function("exports, module", fs.readFileSync(path));
+        var exports = {},
+            module = {
+                exports: exports
+            };
+        code(exports, module);
+        return module.exports;
     }
 
     /**
@@ -37,6 +48,7 @@ module.exports = function routePreProcessor() {
         return `function(req, res, next) {
             var data = JSON.parse('${JSON.stringify(config.data)}');
             fm.render('${config.template}', data, function(err, data, out) {
+                console.log(data);
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
                 });
