@@ -7,7 +7,7 @@ Unstable and may not support all features yet.
 
 Install with:
 ```
-npm install -g puer-freemarker-cli
+npm install -g [package name coming soon]
 ```
 
 Move into your working directory and run it:
