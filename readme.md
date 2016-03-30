@@ -1,4 +1,4 @@
-Commandline interface to use puer with Freemarker templates.
+Commandline interface to use [puer](https://github.com/leeluolee/puer) with [Freemarker templates](http://freemarker.org/).
 
 UNDER DEVELOPMENT - PRE RELEASE!
 Unstable and may not support all features yet.
