@@ -13,11 +13,12 @@ var express = require("express");
 var path = require("path");
 var puer = require("puer");
 var http = require("http");
+var mockRoutes = require('./puerMockRouter');
 
 /**
 *   Start a puer server to serve files and watch for changes.
 */
-var puerServer = function(options) {
+var puerServer = function(routesFile, options) {
 
     //Better make sure options is defined or below will throw errors.
     if(options === undefined) {
@@ -47,9 +48,13 @@ var puerServer = function(options) {
     //Other middleware.
     app.use("/", express.static(__dirname));
 
-    server.listen(port, function(){
+    //Create routes for everything in our combined routes file.
+    var config = require('./' + routesFile.replace(/\.js$/, ''));
+    mockRoutes(config, app);
+
+    /*server.listen(port, function(){
         console.log(`Listening on port ${port}`)
-    });
+    });*/
 
 };
 module.exports = puerServer;

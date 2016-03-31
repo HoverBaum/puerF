@@ -51,5 +51,5 @@ function processRouteFiles(callback) {
 
 //Initially parse the routes files and start the puer server.
 processRouteFiles(function() {
-    startPuer({});
+    startPuer(combinedFile, {});
 });

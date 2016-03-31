@@ -7,6 +7,8 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.9.0",
-    "freemarker.js": "^1.2.2"
+    "express": "^4.13.4",
+    "freemarker.js": "^1.2.2",
+    "puer": "^1.1.1"
   }
 }
