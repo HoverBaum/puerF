@@ -19,6 +19,8 @@ cli
     .option('-p, --port <number>', 'Specific port to use')
     .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
     .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
+    .option('-l, --localhost', 'Use "localhost" instead of "127.0.0.1"')
+    .option('--no-browser', 'Do not autimatically open a brwoser')
     .parse(process.argv);
 
 //Path to ftlRoutes file.
@@ -71,6 +73,8 @@ processRouteFiles(function() {
         port: cli.port,
         dir: cli.root,
         irgnored: cli.exclude,
-        watch: cli.watch
+        watch: cli.watch,
+        localhost: cli.localhost,
+        browser: cli.browser
     });
 });

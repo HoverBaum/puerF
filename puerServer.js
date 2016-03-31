@@ -38,14 +38,14 @@ var puerServer = function(routesFile, options) {
     var mocks = null;
     setupMockRoutes();
 
-    var options = {
+    var puerOptions = {
         dir,
         ignored,
         filetype
     };
 
     //Use puer as a middleware for the express server.
-    app.use(puer.connect(app, server , options));
+    app.use(puer.connect(app, server , puerOptions));
 
     //Some basic logging, later more.
     //IDEA more logging, probably in seperate file for mock paths.
@@ -72,7 +72,12 @@ var puerServer = function(routesFile, options) {
     var listener = server.listen(port, function(){
         var usedPort = listener.address().port
         console.log(`Serveing files and mocked requests on port ${usedPort}`);
-        open('http://localhost:' + usedPort);
+
+        //Open browser for user.
+        if(options.browser) {
+            var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
+            open(`http://${domain}:${usedPort}`);
+        }
     });
 
     /**
