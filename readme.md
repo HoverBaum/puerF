@@ -1,7 +1,7 @@
 Commandline interface to use [puer](https://github.com/leeluolee/puer) with [Freemarker templates](http://freemarker.org/).
 
-PRE RELEASE!
-Supports main features but untested.
+Still under development, consider this a BETA!.
+Feedback welcome.
 
 ## Usage
 
