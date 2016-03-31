@@ -53,6 +53,8 @@ var puerServer = function(routesFile, options) {
         next();
     });
 
+    app.use("/", express.static(staticDir));
+
     //Create routes for everything in our combined routes file.
     app.use('/*', function(req, res, next) {
         var method = req.method.toLowerCase();
@@ -61,7 +63,7 @@ var puerServer = function(routesFile, options) {
         if(call !== undefined) {
             call(req, res, next);
         } else {
-             express.static(staticDir)
+             next();
         }
     });
 
@@ -79,7 +81,6 @@ var puerServer = function(routesFile, options) {
         delete require.cache[require.resolve(requirePath)];
         var config = require(requirePath);
         mocks = mockRoutes(config);
-        console.log(mocks);
     }
 
     return {
