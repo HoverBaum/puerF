@@ -18,6 +18,8 @@ var http = require("http");
 *   Start a puer server to serve files and watch for changes.
 */
 var puerServer = function(options) {
+
+    //Better make sure options is defined or below will throw errors.
     if(options === undefined) {
         options = {};
     }
@@ -43,8 +45,7 @@ var puerServer = function(options) {
     app.use(puer.connect(app, server , options));
 
     //Other middleware.
-    var rootDir = (rootFolder === '') ? __dirname : path.join(__dirname, rootFolder);
-    app.use("/", express.static(__dirname))
+    app.use("/", express.static(__dirname));
 
     server.listen(port, function(){
         console.log(`Listening on port ${port}`)
