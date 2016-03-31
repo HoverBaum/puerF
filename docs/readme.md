@@ -16,3 +16,5 @@ This project follows a git workflow based on a [successful git branching model](
 - release-x.x.x, for a specific release
 
 We are currently not using feature branches, as the project simply isn't big enough for it yet. Please read the link above for more information.
+
+One of the important things to remember it to use `--no-ff` when merging branches. This makes sure we always create a new commit object. Just makes viewing the flow afterwards nicer.
