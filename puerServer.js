@@ -13,6 +13,7 @@ var express = require("express");
 var path = require("path");
 var puer = require("puer");
 var http = require("http");
+var open = require('open');
 var mockRoutes = require('./puerMockRouter');
 
 /**
@@ -68,8 +69,10 @@ var puerServer = function(routesFile, options) {
     });
 
 
-    server.listen(port, function(){
-        console.log(`Listening on port ${port}`)
+    var listener = server.listen(port, function(){
+        var usedPort = listener.address().port
+        console.log(`Serveing files and mocked requests on port ${usedPort}`);
+        open('http://localhost:' + usedPort);
     });
 
     /**
