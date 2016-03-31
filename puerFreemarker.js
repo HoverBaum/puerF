@@ -16,9 +16,9 @@ cli
     .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
     .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored')
     .option('-r, --root <folder>', 'The root folder that files should be served from')
-    .option('-p, --port', 'Specific port to use')
-    .option('-w, --watch', 'Filetypes to watch, defaults to js|css|html|xhtml')
-    .option('-x, --exclude', 'Exclude files from being watched for updates')
+    .option('-p, --port <number>', 'Specific port to use')
+    .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
+    .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
     .parse(process.argv);
 
 //Path to ftlRoutes file.

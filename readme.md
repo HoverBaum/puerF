@@ -25,14 +25,16 @@ Usage: puerF [options]
 
 Options:
 
-   -h, --help               output usage information
-   -f, --freemarker <file>  Mock file for Freemarker routes
-   -m, --mock <file>        Your standard puer mock file
-   -t, --templates <path>   Path to folder in which Freemarker templates are stored
+    -h, --help               output usage information
+    -f, --freemarker <file>  Mock file for Freemarker routes
+    -m, --mock <file>        Your standard puer mock file
+    -c, --combined <file>    Where to save the combined file, defaults to "mock/allRoutes.js"
+    -t, --templates <path>   Path to folder in which Freemarker templates are stored
 
-   -p, --port               Specific port to use
-   -w, --watch              Filetypes to watch, defaults to js|css|html|xhtml
-   -x, --exclude            Exclude files from being watched for updates
+    -r, --root <folder>      The root folder that files should be served from
+    -p, --port <number>      Specific port to use
+    -w, --watch <files>      Filetypes to watch, defaults to js|css|html|xhtml
+    -x, --exclude <files>    Exclude files from being watched for updates
 ```
 
 ## Mocking requests
