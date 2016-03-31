@@ -52,9 +52,9 @@ var puerServer = function(routesFile, options) {
     var config = require('./' + routesFile.replace(/\.js$/, ''));
     mockRoutes(config, app);
 
-    /*server.listen(port, function(){
+    server.listen(port, function(){
         console.log(`Listening on port ${port}`)
-    });*/
+    });
 
 };
 module.exports = puerServer;
