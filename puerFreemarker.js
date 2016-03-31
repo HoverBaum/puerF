@@ -46,10 +46,16 @@ function processRouteFiles(callback) {
         routesFile,
         ftlRoutesFile,
         combinedFile,
-        templatesPath}, callback);
+        templatesPath
+    }, callback);
 }
 
 //Initially parse the routes files and start the puer server.
 processRouteFiles(function() {
-    startPuer(combinedFile, {});
+    startPuer(combinedFile, {
+        port: cli.port,
+        dir: cli.root,
+        irgnored: cli.exclude,
+        watch: cli.watch
+    });
 });

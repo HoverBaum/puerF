@@ -25,12 +25,13 @@ var puerServer = function(routesFile, options) {
         options = {};
     }
 
+    console.log(options);
+
     //Set options to either default or provided.
     var port = options.port || 8080;
     var dir = options.dir || './';
     var ignored = options.irgnored || /node_modules/;
     var filetype = options.watch || 'js|css|html|xhtml';
-    var rootFolder = options.root || '';
 
     var app = express();
     var server = http.createServer(app);
@@ -46,7 +47,8 @@ var puerServer = function(routesFile, options) {
     app.use(puer.connect(app, server , options));
 
     //Other middleware.
-    app.use("/", express.static(__dirname));
+    var staticDir = (options.dir) ? path.join(__dirname, options.dir) : __dirname
+    app.use("/", express.static(staticDir));
 
     //Create routes for everything in our combined routes file.
     var config = require('./' + routesFile.replace(/\.js$/, ''));
