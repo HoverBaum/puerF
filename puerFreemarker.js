@@ -1,3 +1,10 @@
+/**
+
+    puerF, a commandline tool to run puer with mocked FreeMarker pages.
+
+*/
+
+//Dependencies.
 var cli = require('commander');
 var fs = require('fs');
 
@@ -44,12 +51,12 @@ fs.watch(routesFile, (event, filename) => {
 });
 
 /**
-*   A function to be called when routes change.
-*   Will parse them again and tell the server to update routes.
-*/
+ *   A function to be called when routes change.
+ *   Will parse them again and tell the server to update routes.
+ */
 function onRoutesChange() {
     processRouteFiles(function() {
-        if(server !== null) {
+        if (server !== null) {
             server.updateRoutes();
         }
     });
@@ -72,7 +79,7 @@ processRouteFiles(function() {
     server = startPuer(combinedFile, {
         port: cli.port,
         dir: cli.root,
-        irgnored: cli.exclude,
+        ignored: cli.exclude,
         watch: cli.watch,
         localhost: cli.localhost,
         browser: cli.browser
