@@ -5,6 +5,9 @@ var fs = require('fs');
 var processor = require('./routePreProcessor');
 var startPuer = require('./puerServer');
 
+//The puer server.
+var server = null;
+
 //Configure commandline usage.
 cli
     .usage('puerF [options]')
@@ -32,11 +35,23 @@ var templatesPath = cli.templates || 'templates';
 
 //Watch route files for changes and act upon them.
 fs.watch(ftlRoutesFile, (event, filename) => {
-    processRouteFiles();
+    onRoutesChange();
 });
 fs.watch(routesFile, (event, filename) => {
-    processRouteFiles();
+    onRoutesChange();
 });
+
+/**
+*   A function to be called when routes change.
+*   Will parse them again and tell the server to update routes.
+*/
+function onRoutesChange() {
+    processRouteFiles(function() {
+        if(server !== null) {
+            server.updateRoutes();
+        }
+    });
+}
 
 /**
  *   Process both route files with given config.
@@ -52,7 +67,7 @@ function processRouteFiles(callback) {
 
 //Initially parse the routes files and start the puer server.
 processRouteFiles(function() {
-    startPuer(combinedFile, {
+    server = startPuer(combinedFile, {
         port: cli.port,
         dir: cli.root,
         irgnored: cli.exclude,
