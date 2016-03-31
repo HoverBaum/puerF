@@ -2,11 +2,12 @@
 
     puer mock router module for puerFreemarker.
 
-    Takes in the combined config file and creates express routes with it.
+    Returns an object in which one can look up what to do on which route.
 
 */
 module.exports = function createRouteLookup(config) {
 
+    //The store of what to do for which route.
     var routes = {
         get: new Map(),
         post: new Map(),

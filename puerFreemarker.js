@@ -1,3 +1,10 @@
+/**
+
+    puerF, a commandline tool to run puer with mocked FreeMarker pages.
+
+*/
+
+//Dependencies.
 var cli = require('commander');
 var fs = require('fs');
 
@@ -19,6 +26,8 @@ cli
     .option('-p, --port <number>', 'Specific port to use')
     .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
     .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
+    .option('-l, --localhost', 'Use "localhost" instead of "127.0.0.1"')
+    .option('--no-browser', 'Do not autimatically open a brwoser')
     .parse(process.argv);
 
 //Path to ftlRoutes file.
@@ -42,12 +51,12 @@ fs.watch(routesFile, (event, filename) => {
 });
 
 /**
-*   A function to be called when routes change.
-*   Will parse them again and tell the server to update routes.
-*/
+ *   A function to be called when routes change.
+ *   Will parse them again and tell the server to update routes.
+ */
 function onRoutesChange() {
     processRouteFiles(function() {
-        if(server !== null) {
+        if (server !== null) {
             server.updateRoutes();
         }
     });
@@ -70,7 +79,9 @@ processRouteFiles(function() {
     server = startPuer(combinedFile, {
         port: cli.port,
         dir: cli.root,
-        irgnored: cli.exclude,
-        watch: cli.watch
+        ignored: cli.exclude,
+        watch: cli.watch,
+        localhost: cli.localhost,
+        browser: cli.browser
     });
 });
