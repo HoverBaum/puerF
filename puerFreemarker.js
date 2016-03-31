@@ -36,10 +36,18 @@ fs.watch(routesFile, (event, filename) => {
     processRouteFiles();
 });
 
-function processRouteFiles() {
-    console.log('processing routes');
-    processor.process(routesFile, ftlRoutesFile, combinedFile, templatesPath);
+/**
+ *   Process both route files with given config.
+ */
+function processRouteFiles(callback) {
+    processor.process({
+        routesFile,
+        ftlRoutesFile,
+        combinedFile,
+        templatesPath}, callback);
 }
 
-//Initially generate a combined version of the routes files.
-processRouteFiles()
+//Initially parse the routes files and start the puer server.
+processRouteFiles(function() {
+    
+});

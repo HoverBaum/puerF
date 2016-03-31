@@ -18,14 +18,18 @@ module.exports = function routePreProcessor() {
     /**
      *   Process both the regular and the ftlRoutes file into a single one.
      */
-    function processFiles(routesFile, ftlRoutesFile, combinedFile, templatesPath) {
+    function processFiles(options, callback) {
+        var routesFile = options.routesFile;
+        var ftlRoutesFile = options.ftlRoutesFile;
+        var combinedFile = options.combinedFile;
+        var templatesPath = options.templatesPath;
         var routes = loadModule(routesFile);
         var ftlRoutes = loadModule(ftlRoutesFile)
         for (key in ftlRoutes) {
             routes[key] = convertFtl(ftlRoutes[key]);
         }
         var combined = createCombinedFile(routes, templatesPath);
-        saveCombined(combined, combinedFile)
+        saveCombined(combined, combinedFile, callback)
     }
 
     /**
@@ -91,8 +95,12 @@ module.exports = function routePreProcessor() {
     /**
      *
      */
-    function saveCombined(content, filePath) {
-        fs.writeFile(filePath, content);
+    function saveCombined(content, filePath, callback) {
+        fs.writeFile(filePath, content, function() {
+            if(callback !== undefined) {
+                callback();
+            }
+        });
     }
 
     return {
