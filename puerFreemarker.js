@@ -3,6 +3,10 @@ var fs = require('fs');
 
 //Submodules
 var processor = require('./routePreProcessor');
+var startPuer = require('./puerServer');
+
+//The puer server.
+var server = null;
 
 //Configure commandline usage.
 cli
@@ -11,9 +15,10 @@ cli
     .option('-m, --mock <file>', 'Your standard puer mock file')
     .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
     .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored')
-    .option('-p, --port', 'Specific port to use')
-    .option('-w, --watch', 'Filetypes to watch, defaults to js|css|html|xhtml')
-    .option('-x, --exclude', 'Exclude files from being watched for updates')
+    .option('-r, --root <folder>', 'The root folder that files should be served from')
+    .option('-p, --port <number>', 'Specific port to use')
+    .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
+    .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
     .parse(process.argv);
 
 //Path to ftlRoutes file.
@@ -30,16 +35,42 @@ var templatesPath = cli.templates || 'templates';
 
 //Watch route files for changes and act upon them.
 fs.watch(ftlRoutesFile, (event, filename) => {
-    processRouteFiles();
+    onRoutesChange();
 });
 fs.watch(routesFile, (event, filename) => {
-    processRouteFiles();
+    onRoutesChange();
 });
 
-function processRouteFiles() {
-    console.log('processing routes');
-    processor.process(routesFile, ftlRoutesFile, combinedFile, templatesPath);
+/**
+*   A function to be called when routes change.
+*   Will parse them again and tell the server to update routes.
+*/
+function onRoutesChange() {
+    processRouteFiles(function() {
+        if(server !== null) {
+            server.updateRoutes();
+        }
+    });
 }
 
-//Initially generate a combined version of the routes files.
-processRouteFiles()
+/**
+ *   Process both route files with given config.
+ */
+function processRouteFiles(callback) {
+    processor.process({
+        routesFile,
+        ftlRoutesFile,
+        combinedFile,
+        templatesPath
+    }, callback);
+}
+
+//Initially parse the routes files and start the puer server.
+processRouteFiles(function() {
+    server = startPuer(combinedFile, {
+        port: cli.port,
+        dir: cli.root,
+        irgnored: cli.exclude,
+        watch: cli.watch
+    });
+});
