@@ -17,7 +17,7 @@ var server = null;
 
 //Configure commandline usage.
 cli
-    .usage('puerF [options]')
+    .usage('[options]')
     .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
     .option('-m, --mock <file>', 'Your standard puer mock file')
     .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
