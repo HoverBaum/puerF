@@ -1,9 +1,7 @@
 Commandline interface to use [puer](https://github.com/leeluolee/puer) with [Freemarker templates](http://freemarker.org/).
 
-UNDER DEVELOPMENT - PRE RELEASE!
-Unstable and may not support all features yet.
-
-Can already: merge route files into one and update when they change.
+PRE RELEASE!
+Supports main features but untested.
 
 ## Usage
 
