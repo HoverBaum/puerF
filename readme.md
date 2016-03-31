@@ -33,6 +33,8 @@ Options:
     -p, --port <number>      Specific port to use
     -w, --watch <files>      Filetypes to watch, defaults to js|css|html|xhtml
     -x, --exclude <files>    Exclude files from being watched for updates
+    -l, --localhost          Use "localhost" instead of "127.0.0.1"
+    --no-browser             Do not autimatically open a brwoser
 ```
 
 ## Mocking requests
