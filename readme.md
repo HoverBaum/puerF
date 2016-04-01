@@ -1,17 +1,11 @@
 Commandline interface to use [puer](https://github.com/leeluolee/puer) with [Freemarker templates](http://freemarker.org/).
 
-Still under development, consider this a BETA!.
-Feedback welcome.
-
 ## Usage
 
-Install with:
+Install it either as a global command line tool or as a local development dependency:
 ```
 npm install -g puer-freemarker-cli
-```
-
-Consider using puerf as a dev-dependency. As it comes with some dependencies you might not want to bloat your global so much and this has a specific use-case.
-```
+or
 npm install --save-dev puer-freemarker-cli
 ```
 
