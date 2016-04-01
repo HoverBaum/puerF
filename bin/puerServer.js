@@ -33,6 +33,10 @@ var Freemarker = require('freemarker.js');
  */
 function startPuerServer(routesFile, options) {
 
+    //Disable console.log while server is starting, to prevent puer logs.
+    var oldConsole = console.log;
+    console.log = function(){};
+
     //Better make sure options is defined or below will throw errors.
     if (options === undefined) {
         options = {};
@@ -97,10 +101,13 @@ function startPuerServer(routesFile, options) {
     var listener = server.listen(port, function() {
         var usedPort = listener.address().port
 
+        //Reanable console.
+        console.log = oldConsole;
+
         //Open browser for user.
         if (options.browser) {
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
-            open(`http://${domain}:${usedPort}`);
+            //open(`http://${domain}:${usedPort}`);
         }
     });
 
