@@ -43,13 +43,6 @@ module.exports = function createLogger() {
                 level: 'error'
             }),
 
-            //A file for all logs.
-            new(winston.transports.File)({
-                name: 'file-debug',
-                filename: path.join(__dirname, 'debug.log'),
-                level: 'debug'
-            }),
-
             //Log everyhting before info to console.
             new(winston.transports.Console)({
                 level: 'info'

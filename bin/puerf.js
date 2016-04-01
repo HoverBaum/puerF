@@ -92,7 +92,7 @@ function processRouteFiles(callback) {
 /**
  *   This is where the script starts.
  */
-logger.log('Starting up...');
+logger.info('Starting up...');
 
 //Initially parse the routes files and start the puer server.
 processRouteFiles(function() {

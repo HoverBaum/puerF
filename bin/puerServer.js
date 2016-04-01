@@ -24,6 +24,7 @@ var http = require('http');
 var open = require('open');
 var helper = require('./helper');
 var mockRoutes = require('./puerMockRouter');
+var logger = require('./logger');
 
 //Include this here in case this is used as a global package.
 var Freemarker = require('freemarker.js');
@@ -100,14 +101,17 @@ function startPuerServer(routesFile, options) {
     //TODO check if port available, try different one otherwise.
     var listener = server.listen(port, function() {
         var usedPort = listener.address().port
+        logger.info(`Server running on port ${usedPort}.`);
 
         //Reanable console.
-        console.log = oldConsole;   
+        console.log = oldConsole;
 
         //Open browser for user.
         if (options.browser) {
+            logger.info('Openening browser...');
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
-            //open(`http://${domain}:${usedPort}`);
+            open(`http://${domain}:${usedPort}`);
+            logger.info('Happy coding.')
         }
     });
 
