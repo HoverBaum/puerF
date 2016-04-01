@@ -1,16 +1,13 @@
 /**
-    A module to process routes.js and tflRoutes.js files into a single file.
 
-    module.process(routesFile, ftlRoutesFile, combinedFile)
-    @param routesFile       The path the the routes file.
-    @param ftlRoutesFile    Path to the file containing tflRoutes.
-    @param combinedFile     The file in which to save the combined version.
+    A module to process routes.js and tflRoutes.js files into a single file.
 
 */
 
 //Required packages for this to work.
 var fs = require('fs');
 var path = require('path');
+var helper = require('./helper');
 
 module.exports = function routePreProcessor() {
 
@@ -21,26 +18,13 @@ module.exports = function routePreProcessor() {
         var routesFile = options.routesFile;
         var ftlRoutesFile = options.ftlRoutesFile;
         var combinedFile = options.combinedFile;
-        var routes = loadModule(routesFile);
-        var ftlRoutes = loadModule(ftlRoutesFile)
+        var routes = helper.loadModule(routesFile);
+        var ftlRoutes = helper.loadModule(ftlRoutesFile)
         for (key in ftlRoutes) {
             routes[key] = convertFtl(ftlRoutes[key]);
         }
         var combined = createCombinedFile(routes);
         saveCombined(combined, combinedFile, callback)
-    }
-
-    /**
-     *   Loades a module manullay without caching it like require does.
-     */
-    function loadModule(path) {
-        var code = new Function("exports, module", fs.readFileSync(path));
-        var exports = {},
-            module = {
-                exports: exports
-            };
-        code(exports, module);
-        return module.exports;
     }
 
     /**

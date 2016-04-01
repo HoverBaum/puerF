@@ -21,6 +21,7 @@ var path = require('path');
 var puer = require('puer');
 var http = require('http');
 var open = require('open');
+var helper = require('./helper');
 var mockRoutes = require('./puerMockRouter');
 
 //Include this here in case this is used as a global package.
@@ -110,9 +111,9 @@ var puerServer = function(routesFile, options) {
         console.log('setting routes');
 
         //Require the module with all routes without cache.
+
         var requirePath = path.join(staticDir, routesFile.replace(/\.js$/, ''));
-        delete require.cache[require.resolve(requirePath)];
-        var config = require(requirePath);
+        var config = helper.loadModule(requirePath);
         mocks = mockRoutes(config);
     }
 
