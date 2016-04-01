@@ -109,7 +109,7 @@ function startPuerServer(routesFile, options) {
     //TODO check if port available, try different one otherwise.
     var listener = server.listen(port, function() {
         var usedPort = listener.address().port
-        logger.info(`Server running on port ${usedPort}.`);
+        logger.info(`Server running on port: ${usedPort}`);
 
         //Reanable console.
         console.log = oldConsole;
@@ -119,7 +119,7 @@ function startPuerServer(routesFile, options) {
             logger.info('Openening browser...');
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
             open(`http://${domain}:${usedPort}`);
-            logger.info('Happy coding.')
+            logger.info('Happy coding :)')
         }
     });
 
