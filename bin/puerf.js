@@ -34,7 +34,8 @@ cli
     .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
     .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
     .option('-l, --localhost', 'Use "localhost" instead of "127.0.0.1"')
-    .option('--no-browser', 'Do not autimatically open a brwoser');
+    .option('--no-browser', 'Do not autimatically open a brwoser')
+    .option('--debug', 'Display debug messages');
 
 //Give some more help text
 cli.on('--help', function() {
@@ -45,6 +46,11 @@ cli.on('--help', function() {
 
 //Runn commander.js
 cli.parse(process.argv);
+
+//Check if we should enable debug.
+if(cli.debug) {
+    logger.enableDebug();
+}
 
 //Path to ftlRoutes file.
 var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
