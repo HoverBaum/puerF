@@ -24,22 +24,23 @@ puerF requires that you have Java installed as it is needed to render Freemarker
 
 ### Command reference
 ```
-Usage: puerF [options]
+Usage: puerf [options]
 
 Options:
 
     -h, --help               output usage information
+    -V, --version            output the version number
     -f, --freemarker <file>  Mock file for Freemarker routes
     -m, --mock <file>        Your standard puer mock file
     -c, --combined <file>    Where to save the combined file, defaults to "mock/allRoutes.js"
     -t, --templates <path>   Path to folder in which Freemarker templates are stored
-
     -r, --root <folder>      The root folder that files should be served from
     -p, --port <number>      Specific port to use
     -w, --watch <files>      Filetypes to watch, defaults to js|css|html|xhtml
     -x, --exclude <files>    Exclude files from being watched for updates
     -l, --localhost          Use "localhost" instead of "127.0.0.1"
     --no-browser             Do not autimatically open a brwoser
+    --debug                  Display debug messages
 ```
 
 ## Mocking requests

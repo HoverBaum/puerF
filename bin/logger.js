@@ -41,6 +41,10 @@ winston.loggers.add('debug', {
     file: {
         level: 'silly',
         filename: 'puerf-debug'
+    },
+    file: {
+        level: 'error',
+        filename: 'puerf-error'
     }
 });
 

@@ -111,7 +111,7 @@ function startPuerServer(routesFile, options) {
         if (options.browser) {
             logger.info('Openening browser...');
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
-            //open(`http://${domain}:${usedPort}`);
+            open(`http://${domain}:${usedPort}`);
             logger.info('Happy coding.')
         }
     });
