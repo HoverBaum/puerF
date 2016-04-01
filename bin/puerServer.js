@@ -37,6 +37,8 @@ function startPuerServer(routesFile, options) {
     //Disable console.log while server is starting, to prevent puer logs.
     var oldConsole = console.log;
     console.log = function(){};
+    logger.debug('Starting puer server for routes file: ', routesFile);
+    logger.debug('With options: ', options);
 
     //Better make sure options is defined or below will throw errors.
     if (options === undefined) {
@@ -55,6 +57,7 @@ function startPuerServer(routesFile, options) {
 
     //The root directory for static files.
     var staticDir = (options.dir) ? path.join(process.cwd(), options.dir) : process.cwd();
+    logger.debug('Static files will be served from: ', staticDir);
 
     //A container for mocked routes.
     var mocks = null;
@@ -69,10 +72,13 @@ function startPuerServer(routesFile, options) {
     logger.debug('Options for puer: ', puerOptions);
     app.use(puer.connect(app, server, puerOptions));
 
-    //Some basic logging, later more.
-    //IDEA more logging, probably in seperate file for mock paths.
+    //Insane logging on the silly level for each request.
     app.use(function(req, res, next) {
-        console.log('Time:', Date.now());
+        logger.silly('Request to server', {
+            time: Date.now(),
+            originalUrl: req.originalUrl,
+            method: req.method
+        });
         next();
     });
 
@@ -82,6 +88,7 @@ function startPuerServer(routesFile, options) {
     //Setup freemarker template handling.
     var viewRoot = path.join(process.cwd(), options.templatesPath);
     viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
+    logger.debug('Freemarker templates folder: ', viewRoot);
     var fm = new Freemarker({
           viewRoot: viewRoot
     });
@@ -123,6 +130,8 @@ function startPuerServer(routesFile, options) {
         var requirePath = path.join(staticDir, routesFile.replace(/\.js$/, ''));
         var config = helper.loadModule(requirePath);
         mocks = mockRoutes(config);
+        logger.debug('Rebuild mocks');
+        logger.silly('Mocks are: ', mocks);
     }
 
     return {
