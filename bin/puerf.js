@@ -52,8 +52,6 @@ if(cli.debug) {
     logger.enableDebug();
 }
 
-logger.error("some error")
-
 //Path to ftlRoutes file.
 var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
 
