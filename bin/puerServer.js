@@ -10,7 +10,8 @@
         ignored,        Files to ignore
         filetype,       Filetypes to watch
         localhost,      Wether to use localhost instead of 127.0.0.1
-        browser         If the browser should be opened automatically
+        browser,        If the browser should be opened automatically
+        templatesPath   The path where templates can be found
     }
 
 */
@@ -21,7 +22,9 @@ var path = require('path');
 var puer = require('puer');
 var http = require('http');
 var open = require('open');
+var helper = require('./helper');
 var mockRoutes = require('./puerMockRouter');
+var logger = require('./logger');
 
 //Include this here in case this is used as a global package.
 var Freemarker = require('freemarker.js');
@@ -29,7 +32,13 @@ var Freemarker = require('freemarker.js');
 /**
  *   Start a puer server to serve files and watch for changes.
  */
-var puerServer = function(routesFile, options) {
+function startPuerServer(routesFile, options) {
+
+    //Disable console.log while server is starting, to prevent puer logs.
+    var oldConsole = console.log;
+    console.log = function(){};
+    logger.debug('Starting puer server for routes file: ', routesFile);
+    logger.debug('With options: ', options);
 
     //Better make sure options is defined or below will throw errors.
     if (options === undefined) {
@@ -48,24 +57,28 @@ var puerServer = function(routesFile, options) {
 
     //The root directory for static files.
     var staticDir = (options.dir) ? path.join(process.cwd(), options.dir) : process.cwd();
+    logger.debug('Static files will be served from: ', staticDir);
 
     //A container for mocked routes.
     var mocks = null;
     setupMockRoutes();
 
+    //Use puer as a middleware for the express server.
     var puerOptions = {
         dir,
         ignored,
         filetype
     };
-
-    //Use puer as a middleware for the express server.
+    logger.debug('Options for puer: ', puerOptions);
     app.use(puer.connect(app, server, puerOptions));
 
-    //Some basic logging, later more.
-    //IDEA more logging, probably in seperate file for mock paths.
+    //Insane logging on the silly level for each request.
     app.use(function(req, res, next) {
-        console.log('Time:', Date.now());
+        logger.silly('Request to server', {
+            time: Date.now(),
+            originalUrl: req.originalUrl,
+            method: req.method
+        });
         next();
     });
 
@@ -73,11 +86,12 @@ var puerServer = function(routesFile, options) {
     app.use("/", express.static(staticDir));
 
     //Setup freemarker template handling.
-    var viewRoot = path.join(staticDir, options.templatesPath);
+    var viewRoot = path.join(process.cwd(), options.templatesPath);
     viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
+    logger.debug('Freemarker templates folder: ', viewRoot);
     var fm = new Freemarker({
           viewRoot: viewRoot
-        });
+    });
 
     //Create routes for everything in our combined routes file.
     app.use('/*', function(req, res, next) {
@@ -92,14 +106,20 @@ var puerServer = function(routesFile, options) {
     });
 
     //Actually run the server.
+    //TODO check if port available, try different one otherwise.
     var listener = server.listen(port, function() {
         var usedPort = listener.address().port
-        console.log(`Serveing files and mocked requests on port ${usedPort}`);
+        logger.info(`Server running on port ${usedPort}.`);
+
+        //Reanable console.
+        console.log = oldConsole;
 
         //Open browser for user.
         if (options.browser) {
+            logger.info('Openening browser...');
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
             open(`http://${domain}:${usedPort}`);
+            logger.info('Happy coding.')
         }
     });
 
@@ -107,13 +127,11 @@ var puerServer = function(routesFile, options) {
      *   Will parse the combined routes file into actual routes.
      */
     function setupMockRoutes() {
-        console.log('setting routes');
-
-        //Require the module with all routes without cache.
         var requirePath = path.join(staticDir, routesFile.replace(/\.js$/, ''));
-        delete require.cache[require.resolve(requirePath)];
-        var config = require(requirePath);
+        var config = helper.loadModule(requirePath);
         mocks = mockRoutes(config);
+        logger.debug('Rebuild mocks');
+        logger.silly('Mocks are: ', mocks);
     }
 
     return {
@@ -121,4 +139,4 @@ var puerServer = function(routesFile, options) {
     }
 
 };
-module.exports = puerServer;
+module.exports = startPuerServer;
