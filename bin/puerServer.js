@@ -44,7 +44,7 @@ var puerServer = function(routesFile, options) {
     var server = http.createServer(app);
 
     //The root directory for static files.
-    var staticDir = (options.dir) ? path.join(__dirname, options.dir) : __dirname;
+    var staticDir = (options.dir) ? path.join(process.cwd(), options.dir) : process.cwd();
 
     //A container for mocked routes.
     var mocks = null;
@@ -100,7 +100,7 @@ var puerServer = function(routesFile, options) {
         console.log('setting routes');
 
         //Require the module with all routes without cache.
-        var requirePath = './' + routesFile.replace(/\.js$/, '');
+        var requirePath = path.join(staticDir, routesFile.replace(/\.js$/, ''));
         delete require.cache[require.resolve(requirePath)];
         var config = require(requirePath);
         mocks = mockRoutes(config);

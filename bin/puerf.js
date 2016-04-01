@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+
 /**
 
     puerF, a commandline tool to run puer with mocked FreeMarker pages.
@@ -16,8 +17,12 @@ var startPuer = require('./puerServer');
 //The puer server.
 var server = null;
 
+//Get the npm packe so we can read from it.
+var package = require('./../package.json');
+
 //Configure commandline usage.
 cli
+    .version(package.version)
     .usage('[options]')
     .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
     .option('-m, --mock <file>', 'Your standard puer mock file')
@@ -28,8 +33,17 @@ cli
     .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
     .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
     .option('-l, --localhost', 'Use "localhost" instead of "127.0.0.1"')
-    .option('--no-browser', 'Do not autimatically open a brwoser')
-    .parse(process.argv);
+    .option('--no-browser', 'Do not autimatically open a brwoser');
+
+//Give some more help text
+cli.on('--help', function() {
+    console.log('  More info:');
+    console.log('');
+    console.log('    visit https://github.com/HoverBaum/puerF');
+});
+
+//Runn commander.js
+cli.parse(process.argv);
 
 //Path to ftlRoutes file.
 var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
