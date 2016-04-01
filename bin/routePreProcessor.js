@@ -8,6 +8,7 @@
 var fs = require('fs');
 var path = require('path');
 var helper = require('./helper');
+var logger = require('./logger');
 
 module.exports = function routePreProcessor() {
 
@@ -24,6 +25,8 @@ module.exports = function routePreProcessor() {
             routes[key] = convertFtl(ftlRoutes[key]);
         }
         var combined = createCombinedFile(routes);
+        logger.debug('Routes files got combined');
+        logger.silly('New combined routes file', combined);
         saveCombined(combined, combinedFile, callback)
     }
 
@@ -70,7 +73,7 @@ module.exports = function routePreProcessor() {
     }
 
     /**
-     *
+     * Saves the combined file.
      */
     function saveCombined(content, filePath, callback) {
         fs.writeFile(filePath, content, function() {
