@@ -1,19 +1,19 @@
 {
-    "name": "puer-freemarker-cli",
-    "version": "0.2.2",
-    "description": "Commandline interface to use puer with Freemarker templates.",
-    "main": "puerFreemarker.js",
-    "repository": "https://github.com/HoverBaum/puerF",
-    "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
-    "license": "MIT",
-    "dependencies": {
-        "commander": "^2.9.0",
-        "express": "^4.13.4",
-        "freemarker.js": "^1.2.2",
-        "open": "0.0.5",
-        "puer": "^1.1.1"
-    },
-    "bin": {
-        "puerf": "./puerFreemarker.js"
-    }
+  "name": "puer-freemarker-cli",
+  "version": "0.2.3",
+  "description": "Commandline interface to use puer with Freemarker templates.",
+  "main": "puerFreemarker.js",
+  "repository": "https://github.com/HoverBaum/puerF",
+  "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "express": "^4.13.4",
+    "freemarker.js": "^1.2.2",
+    "open": "0.0.5",
+    "puer": "^1.1.1"
+  },
+  "bin": {
+    "puerf": "./puerFreemarker.js"
+  }
 }

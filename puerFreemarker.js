@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 /**
 
     puerF, a commandline tool to run puer with mocked FreeMarker pages.
