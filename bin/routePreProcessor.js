@@ -1,11 +1,10 @@
 /**
     A module to process routes.js and tflRoutes.js files into a single file.
 
-    module.process(routesFile, ftlRoutesFile, combinedFile, templatesPath)
+    module.process(routesFile, ftlRoutesFile, combinedFile)
     @param routesFile       The path the the routes file.
     @param ftlRoutesFile    Path to the file containing tflRoutes.
     @param combinedFile     The file in which to save the combined version.
-    @param templatesPath    Where templates can be found.
 
 */
 
@@ -22,13 +21,12 @@ module.exports = function routePreProcessor() {
         var routesFile = options.routesFile;
         var ftlRoutesFile = options.ftlRoutesFile;
         var combinedFile = options.combinedFile;
-        var templatesPath = options.templatesPath;
         var routes = loadModule(routesFile);
         var ftlRoutes = loadModule(ftlRoutesFile)
         for (key in ftlRoutes) {
             routes[key] = convertFtl(ftlRoutes[key]);
         }
-        var combined = createCombinedFile(routes, templatesPath);
+        var combined = createCombinedFile(routes);
         saveCombined(combined, combinedFile, callback)
     }
 
@@ -64,14 +62,9 @@ module.exports = function routePreProcessor() {
     /**
      *   Uses all routes to write a file that can be used with puer.
      */
-    function createCombinedFile(routes, templatesPath) {
-        var viewRoot = path.join(__dirname, templatesPath);
-        viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
-        var start = `var Freemarker = require('freemarker.js');
-            var fm = new Freemarker({
-              viewRoot: '${viewRoot}'
-            });
-            module.exports = {`;
+    function createCombinedFile(routes) {
+
+        var start = `module.exports = {`;
         var end = `}`;
         var middle = createMiddleString(routes);
         var combined = start + middle + end;
