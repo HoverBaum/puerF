@@ -84,8 +84,7 @@ function processRouteFiles(callback) {
     processor.process({
         routesFile,
         ftlRoutesFile,
-        combinedFile,
-        templatesPath
+        combinedFile
     }, callback);
 }
 
@@ -97,6 +96,7 @@ processRouteFiles(function() {
         ignored: cli.exclude,
         watch: cli.watch,
         localhost: cli.localhost,
-        browser: cli.browser
+        browser: cli.browser,
+        templatesPath: templatesPath
     });
 });

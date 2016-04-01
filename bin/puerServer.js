@@ -23,6 +23,9 @@ var http = require('http');
 var open = require('open');
 var mockRoutes = require('./puerMockRouter');
 
+//Include this here in case this is used as a global package.
+var Freemarker = require('freemarker.js');
+
 /**
  *   Start a puer server to serve files and watch for changes.
  */
@@ -68,6 +71,13 @@ var puerServer = function(routesFile, options) {
 
     //Serve static files.
     app.use("/", express.static(staticDir));
+
+    //Setup freemarker template handling.
+    var viewRoot = path.join(staticDir, options.templatesPath);
+    viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
+    var fm = new Freemarker({
+          viewRoot: viewRoot
+        });
 
     //Create routes for everything in our combined routes file.
     app.use('/*', function(req, res, next) {

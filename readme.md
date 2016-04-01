@@ -10,6 +10,11 @@ Install with:
 npm install -g puer-freemarker-cli
 ```
 
+Consider using puerf as a dev-dependency. As it comes with some dependencies you might not want to bloat your global so much and this has a specific use-case.
+```
+npm install --save-dev puer-freemarker-cli
+```
+
 Move into your working directory and run it:
 ```
 cd your/working/directory
