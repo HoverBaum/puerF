@@ -10,7 +10,8 @@
         ignored,        Files to ignore
         filetype,       Filetypes to watch
         localhost,      Wether to use localhost instead of 127.0.0.1
-        browser         If the browser should be opened automatically
+        browser,        If the browser should be opened automatically
+        templatesPath   The path where templates can be found
     }
 
 */
@@ -30,7 +31,7 @@ var Freemarker = require('freemarker.js');
 /**
  *   Start a puer server to serve files and watch for changes.
  */
-var puerServer = function(routesFile, options) {
+function startPuerServer(routesFile, options) {
 
     //Better make sure options is defined or below will throw errors.
     if (options === undefined) {
@@ -54,13 +55,12 @@ var puerServer = function(routesFile, options) {
     var mocks = null;
     setupMockRoutes();
 
+    //Use puer as a middleware for the express server.
     var puerOptions = {
         dir,
         ignored,
         filetype
     };
-
-    //Use puer as a middleware for the express server.
     app.use(puer.connect(app, server, puerOptions));
 
     //Some basic logging, later more.
@@ -74,11 +74,11 @@ var puerServer = function(routesFile, options) {
     app.use("/", express.static(staticDir));
 
     //Setup freemarker template handling.
-    var viewRoot = path.join(staticDir, options.templatesPath);
+    var viewRoot = path.join(process.cwd(), options.templatesPath);
     viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
     var fm = new Freemarker({
           viewRoot: viewRoot
-        });
+    });
 
     //Create routes for everything in our combined routes file.
     app.use('/*', function(req, res, next) {
@@ -93,9 +93,9 @@ var puerServer = function(routesFile, options) {
     });
 
     //Actually run the server.
+    //TODO check if port available, try different one otherwise.
     var listener = server.listen(port, function() {
         var usedPort = listener.address().port
-        console.log(`Serveing files and mocked requests on port ${usedPort}`);
 
         //Open browser for user.
         if (options.browser) {
@@ -108,10 +108,6 @@ var puerServer = function(routesFile, options) {
      *   Will parse the combined routes file into actual routes.
      */
     function setupMockRoutes() {
-        console.log('setting routes');
-
-        //Require the module with all routes without cache.
-
         var requirePath = path.join(staticDir, routesFile.replace(/\.js$/, ''));
         var config = helper.loadModule(requirePath);
         mocks = mockRoutes(config);
@@ -122,4 +118,4 @@ var puerServer = function(routesFile, options) {
     }
 
 };
-module.exports = puerServer;
+module.exports = startPuerServer;
