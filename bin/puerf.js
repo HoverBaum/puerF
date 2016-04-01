@@ -16,8 +16,11 @@ var startPuer = require('./puerServer');
 //The puer server.
 var server = null;
 
+var package = require('./../package.json');
+
 //Configure commandline usage.
 cli
+    .version(package.version)
     .usage('[options]')
     .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
     .option('-m, --mock <file>', 'Your standard puer mock file')

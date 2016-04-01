@@ -14,6 +14,6 @@
     "puer": "^1.1.1"
   },
   "bin": {
-    "puerf": "./puerFreemarker.js"
+    "puerf": "./bin/puerf.js"
   }
 }
