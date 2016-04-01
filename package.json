@@ -12,7 +12,8 @@
     "express": "^4.13.4",
     "freemarker.js": "^1.2.2",
     "open": "0.0.5",
-    "puer": "^1.1.1"
+    "puer": "^1.1.1",
+    "winston": "^2.2.0"
   },
   "bin": {
     "puerf": "./bin/puerf.js"

@@ -13,6 +13,7 @@ var fs = require('fs');
 //Submodules
 var processor = require('./routePreProcessor');
 var startPuer = require('./puerServer');
+var logger = require('./logger');
 
 //The puer server.
 var server = null;
@@ -88,8 +89,14 @@ function processRouteFiles(callback) {
     }, callback);
 }
 
+/**
+ *   This is where the script starts.
+ */
+logger.log('Starting up...');
+
 //Initially parse the routes files and start the puer server.
 processRouteFiles(function() {
+    logger.info('Initially compiled routes, starting server...')
     server = startPuer(combinedFile, {
         port: cli.port,
         dir: cli.root,

@@ -102,7 +102,7 @@ function startPuerServer(routesFile, options) {
         var usedPort = listener.address().port
 
         //Reanable console.
-        console.log = oldConsole;
+        console.log = oldConsole;   
 
         //Open browser for user.
         if (options.browser) {
