@@ -99,6 +99,11 @@ function startPuerServer(routesFile, options) {
         var url = req.originalUrl;
         var call = mocks[method].get(url);
         if (call !== undefined) {
+            logger.silly('Mocking route ', {
+                url: url,
+                method: method,
+                call: call
+            });
             call(req, res, next);
         } else {
             next();

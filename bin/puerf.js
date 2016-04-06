@@ -29,7 +29,7 @@ cli
     .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
     .option('-m, --mock <file>', 'Your standard puer mock file')
     .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
-    .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored')
+    .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored') //TODO check this works, path might be weird.
     .option('-r, --root <folder>', 'The root folder that files should be served from')
     .option('-p, --port <number>', 'Specific port to use')
     .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
@@ -47,7 +47,7 @@ cli
     .option('--no-mock', 'Disables generating mock files')
     .option('-T, --template-folder <folder>', 'Specify the folder for FreeMarker templates')
     .option('--no-template', 'Disables generating template files')
-    .action(function(cmd, options) {
+    .action(function(options) {
         var initializer = require('./initializer');
         initializer.init(options);
     });

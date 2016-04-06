@@ -26,7 +26,7 @@ module.exports = function() {
         // more info: http://eloquentjavascript.net/10_modules.html#h_v/XE3QWFpP
         logger.debug('Loading module without cache from ', path);
         var code = dummyFunction;
-        if(fs.existsSync(path)) {
+        if (fs.existsSync(path)) {
             code = new Function("exports, module", fs.readFileSync(path));
         }
         var exports = {},
@@ -47,7 +47,7 @@ module.exports = function() {
     function makeSureFolderExists(pathToCheck) {
 
         //If the path containes a file ending, cut that away.
-        if(path.extname(pathToCheck) !== '') {
+        if (path.extname(pathToCheck) !== '') {
             pathToCheck = path.dirname(pathToCheck);
         }
         if (!fs.existsSync(pathToCheck)) {
@@ -55,9 +55,23 @@ module.exports = function() {
         }
     }
 
+    /**
+     *   Returns the absolute path, relative paths are resolved relative to executing dir.
+     */
+    function getAbsolutePath(uri) {
+        var absolute = path.resolve(process.cwd(), uri);
+        logger.silly('Created an absolute path', {
+            cwd: process.cwd(),
+            path: uri,
+            absolute: absolute
+        });
+        return absolute;
+    }
+
     return {
         loadModule: loadModuleWithoutCache,
-        guarantyFolder: makeSureFolderExists
+        guarantyFolder: makeSureFolderExists,
+        absolutePath: getAbsolutePath
     }
 
 }();

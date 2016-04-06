@@ -5,13 +5,15 @@
     Returns an object in which one can look up what to do on which route.
 
 */
+var logger = require('./logger');
 module.exports = function createRouteLookup(config) {
 
     //The store of what to do for which route.
     var routes = {
         get: new Map(),
         post: new Map(),
-        delte: new Map()
+        delte: new Map(),
+        put: new Map()
     }
 
     //Iterate over all configured routes.
@@ -28,6 +30,10 @@ module.exports = function createRouteLookup(config) {
         identifiers = identifier.split(' ');
         var method = identifiers[0].toLowerCase();
         var path = identifiers[1];
+        logger.silly('Parsed a route for mocking', {
+            method,
+            path
+        })
 
         //Add this route and it's function to the router;
         routes[method].set(path, call);

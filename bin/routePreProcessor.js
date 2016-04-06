@@ -21,7 +21,9 @@ module.exports = function routePreProcessor() {
         var ftlRoutesFile = options.ftlRoutesFile;
         var combinedFile = options.combinedFile;
         var routes = helper.loadModule(routesFile);
-        var ftlRoutes = helper.loadModule(ftlRoutesFile)
+        logger.silly('Routes file loaded', routes);
+        var ftlRoutes = helper.loadModule(ftlRoutesFile);
+        logger.silly('FTLRoutes loaded', ftlRoutes);
         for (key in ftlRoutes) {
             routes[key] = convertFtl(ftlRoutes[key]);
         }
