@@ -36,7 +36,7 @@ function startPuerServer(routesFile, options) {
 
     //Disable console.log while server is starting, to prevent puer logs.
     var oldConsole = console.log;
-    console.log = function(){};
+    console.log = function() {};
     logger.debug('Starting puer server for routes file: ', routesFile);
     logger.debug('With options: ', options);
 
@@ -90,16 +90,23 @@ function startPuerServer(routesFile, options) {
     viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
     logger.debug('Freemarker templates folder: ', viewRoot);
     var fm = new Freemarker({
-          viewRoot: viewRoot
+        viewRoot: viewRoot
     });
 
     //Create routes for everything in our combined routes file.
     app.use('/*', function(req, res, next) {
         var method = req.method.toLowerCase();
         var url = req.originalUrl;
-        var call = mocks[method].get(url);
-        if (call !== undefined) {
-            call(req, res, next);
+        var handler = mocks[method].get(url);
+        this.fm = fm;
+        if (handler !== undefined) {
+            logger.silly('Mocking route ', {
+                url: url,
+                method: method
+            });
+
+            //Call handler with this as context so that fm is present.
+            handler.call(this, req, res, next);
         } else {
             next();
         }
@@ -109,7 +116,7 @@ function startPuerServer(routesFile, options) {
     //TODO check if port available, try different one otherwise.
     var listener = server.listen(port, function() {
         var usedPort = listener.address().port
-        logger.info(`Server running on port ${usedPort}.`);
+        logger.info(`Server running on port: ${usedPort}`);
 
         //Reanable console.
         console.log = oldConsole;
@@ -119,7 +126,7 @@ function startPuerServer(routesFile, options) {
             logger.info('Openening browser...');
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
             open(`http://${domain}:${usedPort}`);
-            logger.info('Happy coding.')
+            logger.info('Happy coding :)')
         }
     });
 
@@ -127,7 +134,10 @@ function startPuerServer(routesFile, options) {
      *   Will parse the combined routes file into actual routes.
      */
     function setupMockRoutes() {
-        var requirePath = path.join(staticDir, routesFile.replace(/\.js$/, ''));
+        var requirePath = path.join(staticDir, routesFile);
+        logger.debug('Getting config for mocked routes', {
+            requirePath
+        });
         var config = helper.loadModule(requirePath);
         mocks = mockRoutes(config);
         logger.debug('Rebuild mocks');

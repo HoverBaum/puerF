@@ -16,11 +16,14 @@ module.exports = function routePreProcessor() {
      *   Process both the regular and the ftlRoutes file into a single one.
      */
     function processFiles(options, callback) {
+        helper.guarantyFolder(options.combinedFile);
         var routesFile = options.routesFile;
         var ftlRoutesFile = options.ftlRoutesFile;
         var combinedFile = options.combinedFile;
-        var routes = helper.loadModule(routesFile);
-        var ftlRoutes = helper.loadModule(ftlRoutesFile)
+        var routes = helper.loadModule(helper.absolutePath(routesFile));
+        logger.silly('Routes file loaded', routes);
+        var ftlRoutes = helper.loadModule(helper.absolutePath(ftlRoutesFile));
+        logger.silly('FTLRoutes loaded', ftlRoutes);
         for (key in ftlRoutes) {
             routes[key] = convertFtl(ftlRoutes[key]);
         }

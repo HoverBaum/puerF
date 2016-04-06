@@ -28,24 +28,28 @@ winston.loggers.add('standard', {
     },
     file: {
         level: 'error',
-        filename: 'puerf-error'
+        filename: 'puerf-error.log'
     }
 });
 
 //Configure Debug logger.
 winston.loggers.add('debug', {
-    console: {
-        level: 'debug',
-        colorize: true
-    },
-    file: {
-        level: 'silly',
-        filename: 'puerf-debug'
-    },
-    file: {
-        level: 'error',
-        filename: 'puerf-error'
-    }
+    transports: [
+        new(winston.transports.Console)({
+            level: 'debug',
+            colorize: true
+        }),
+        new(winston.transports.File)({
+            name: 'debug-file',
+            filename: 'puerf-debug.log',
+            level: 'silly'
+        }),
+        new(winston.transports.File)({
+            name: 'error-file',
+            filename: 'puerf-error.log',
+            level: 'error'
+        })
+    ]
 });
 
 module.exports = function createLogger() {
