@@ -132,7 +132,8 @@ function startPuerServer(routesFile, options) {
      *   Will parse the combined routes file into actual routes.
      */
     function setupMockRoutes() {
-        var requirePath = path.join(staticDir, routesFile.replace(/\.js$/, ''));
+        var requirePath = path.join(staticDir, routesFile);
+        logger.debug('Getting config for mocked routes', {requirePath});
         var config = helper.loadModule(requirePath);
         mocks = mockRoutes(config);
         logger.debug('Rebuild mocks');

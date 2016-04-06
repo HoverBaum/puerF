@@ -38,7 +38,7 @@ module.exports = function() {
     }
 
     function dummyFunction(exports, modules) {
-        exports = {};
+        module.exports = {};
     }
 
     /**

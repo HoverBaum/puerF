@@ -7,6 +7,7 @@
 */
 var logger = require('./logger');
 module.exports = function createRouteLookup(config) {
+    logger.silly('Creating a route lookup object', config);
 
     //The store of what to do for which route.
     var routes = {
@@ -32,7 +33,8 @@ module.exports = function createRouteLookup(config) {
         var path = identifiers[1];
         logger.silly('Parsed a route for mocking', {
             method,
-            path
+            path,
+            call
         })
 
         //Add this route and it's function to the router;
