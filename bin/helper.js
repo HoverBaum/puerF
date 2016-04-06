@@ -6,6 +6,7 @@
 
 //dependencies
 var fs = require('fs');
+var path = require('path');
 var logger = require('./logger');
 
 module.exports = function() {
@@ -24,7 +25,10 @@ module.exports = function() {
         //Read the module and return the exports.
         // more info: http://eloquentjavascript.net/10_modules.html#h_v/XE3QWFpP
         logger.debug('Loading module without cache from ', path);
-        var code = new Function("exports, module", fs.readFileSync(path));
+        var code = dummyFunction;
+        if(fs.existsSync(path)) {
+            code = new Function("exports, module", fs.readFileSync(path));
+        }
         var exports = {},
             module = {
                 exports: exports
@@ -33,8 +37,27 @@ module.exports = function() {
         return module.exports;
     }
 
+    function dummyFunction(exports, modules) {
+        exports = {};
+    }
+
+    /**
+     *   Makes sure that a path exists, not a file but the deepest folder.
+     */
+    function makeSureFolderExists(pathToCheck) {
+
+        //If the path containes a file ending, cut that away.
+        if(path.extname(pathToCheck) !== '') {
+            pathToCheck = path.dirname(pathToCheck);
+        }
+        if (!fs.existsSync(pathToCheck)) {
+            fs.mkdirSync(pathToCheck);
+        }
+    }
+
     return {
-        loadModule: loadModuleWithoutCache
+        loadModule: loadModuleWithoutCache,
+        guarantyFolder: makeSureFolderExists
     }
 
 }();

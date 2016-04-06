@@ -65,12 +65,17 @@ var combinedFile = cli.combined || 'mock/allRoutes.js';
 var templatesPath = cli.templates || 'templates';
 
 //Watch route files for changes and act upon them.
-fs.watch(ftlRoutesFile, (event, filename) => {
-    onRoutesChange();
-});
-fs.watch(routesFile, (event, filename) => {
-    onRoutesChange();
-});
+if(fs.existsSync(ftlRoutesFile)) {
+    fs.watch(ftlRoutesFile, (event, filename) => {
+        onRoutesChange();
+    });
+}
+if(fs.existsSync(routesFile)) {
+    fs.watch(routesFile, (event, filename) => {
+        onRoutesChange();
+    });
+}
+
 
 /**
  *   A function to be called when routes change.
