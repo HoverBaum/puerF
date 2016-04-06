@@ -36,7 +36,7 @@ function startPuerServer(routesFile, options) {
 
     //Disable console.log while server is starting, to prevent puer logs.
     var oldConsole = console.log;
-    console.log = function(){};
+    console.log = function() {};
     logger.debug('Starting puer server for routes file: ', routesFile);
     logger.debug('With options: ', options);
 
@@ -90,21 +90,23 @@ function startPuerServer(routesFile, options) {
     viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
     logger.debug('Freemarker templates folder: ', viewRoot);
     var fm = new Freemarker({
-          viewRoot: viewRoot
+        viewRoot: viewRoot
     });
 
     //Create routes for everything in our combined routes file.
     app.use('/*', function(req, res, next) {
         var method = req.method.toLowerCase();
         var url = req.originalUrl;
-        var call = mocks[method].get(url);
-        if (call !== undefined) {
+        var handler = mocks[method].get(url);
+        this.fm = fm;
+        if (handler !== undefined) {
             logger.silly('Mocking route ', {
                 url: url,
-                method: method,
-                call: call
+                method: method
             });
-            call(req, res, next);
+
+            //Call handler with this as context so that fm is present.
+            handler.call(this, req, res, next);
         } else {
             next();
         }
@@ -133,7 +135,9 @@ function startPuerServer(routesFile, options) {
      */
     function setupMockRoutes() {
         var requirePath = path.join(staticDir, routesFile);
-        logger.debug('Getting config for mocked routes', {requirePath});
+        logger.debug('Getting config for mocked routes', {
+            requirePath
+        });
         var config = helper.loadModule(requirePath);
         mocks = mockRoutes(config);
         logger.debug('Rebuild mocks');
