@@ -25,7 +25,7 @@ var package = require('./../package.json');
 cli
     .version(package.version)
     .usage('[cmd] [options]')
-    .description('Start a puer Server and easily mock routes and render FreeMarker templates')
+    .description('Start a puer Server, easily mock routes and render FreeMarker templates')
     .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
     .option('-m, --mock <file>', 'Your standard puer mock file')
     .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
@@ -59,6 +59,7 @@ cli.on('--help', function() {
     console.log('    visit https://github.com/HoverBaum/puerF');
 });
 
+
 //Runn commander.js
 cli.parse(process.argv);
 
@@ -66,6 +67,12 @@ cli.parse(process.argv);
 if (cli.debug) {
     logger.enableDebug();
 }
+
+//Set up handling of undcaught errors, so that we won't crash.
+process.on('uncaughtException', function(err) {
+    logger.error('Congratulations, you found a bug\nShould this keep happening, please:\n  - run with --debug\n  - file a bug report at https://github.com/HoverBaum/puerF/issues');
+    logger.error(err);
+});
 
 //Start puerf if we are not running the init script.
 if(cli.args.every(elm => elm._name !== 'init')) {
@@ -105,6 +112,7 @@ function startPuerf() {
      */
     function onRoutesChange() {
         processRouteFiles(function() {
+            logger.info('Refreshing mocked routes')
             if (server !== null) {
                 server.updateRoutes();
             }

@@ -9,7 +9,7 @@
         templateFolder, Specifies the folder to use for template files (default: templates)
         noTemplate      If true, does not create template files
     }
-}
+
 
 */
 
@@ -35,6 +35,7 @@ module.exports = function createInitializer() {
         } else {
             logger.info('Will not create template files')
         }
+        logger.info(`Finished setting up, let's role`);
     }
 
     /**
@@ -50,7 +51,7 @@ module.exports = function createInitializer() {
         var ftlRoutesFile = path.join(folderPath, 'ftlRoutes.js');
         createFileIfNotExist(routesFile, stdRoutesContent);
         createFileIfNotExist(ftlRoutesFile, stdFtlContent);
-        logger.info('Created basic mock files.')
+        logger.info('Created basic mock files');
     }
 
     /**
@@ -64,6 +65,7 @@ module.exports = function createInitializer() {
         helper.guarantyFolder(folderPath);
         var testTemplate = path.join(folderPath, 'test.ftl');
         createFileIfNotExist(testTemplate, testTemplContent);
+        logger.info('Created template basics')
     }
 
     /**
@@ -76,6 +78,10 @@ module.exports = function createInitializer() {
             fs.writeFileSync(file, contents);
         }
     }
+
+    /*
+        Initial contents for files.
+    */
 
     var stdRoutesContent = `module.exports = {
 

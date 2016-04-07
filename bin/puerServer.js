@@ -70,17 +70,11 @@ function startPuerServer(routesFile, options) {
         filetype
     };
     logger.debug('Options for puer: ', puerOptions);
-    app.use(puer.connect(app, server, puerOptions));
 
-    //Insane logging on the silly level for each request.
-    app.use(function(req, res, next) {
-        logger.silly('Request to server', {
-            time: Date.now(),
-            originalUrl: req.originalUrl,
-            method: req.method
-        });
-        next();
-    });
+    /*
+        Include middlewares, puer has to be the first one!
+    */
+    app.use(puer.connect(app, server, puerOptions));
 
     //Serve static files.
     app.use("/", express.static(staticDir));
@@ -96,8 +90,14 @@ function startPuerServer(routesFile, options) {
     //Create routes for everything in our combined routes file.
     app.use('/*', function(req, res, next) {
         var method = req.method.toLowerCase();
-        var url = req.originalUrl;
+        var url = req.originalUrl.replace(/\?.*=.*$/, '');
         var handler = mocks[method].get(url);
+        logger.silly('Request to server', {
+            time: Date.now(),
+            originalUrl: req.originalUrl,
+            url,
+            method: req.method
+        });
         this.fm = fm;
         if (handler !== undefined) {
             logger.silly('Mocking route ', {
