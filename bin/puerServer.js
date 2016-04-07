@@ -76,12 +76,6 @@ function startPuerServer(routesFile, options) {
     */
     app.use(puer.connect(app, server, puerOptions));
 
-    //Insane logging on the silly level for each request.
-    app.use(function(req, res, next) {
-
-        next();
-    });
-
     //Serve static files.
     app.use("/", express.static(staticDir));
 
