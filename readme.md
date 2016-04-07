@@ -12,13 +12,19 @@ npm install --save-dev puer-freemarker-cli
 Move into your working directory and run it:
 ```
 cd your/working/directory
-puerF
+puerf
 ```
 puerF requires that you have Java installed as it is needed to render Freemarker templates.
 
 ### Command reference
 ```
-Usage: puerf [options]
+Usage: puerf [cmd] [options]
+
+Commands:
+
+    init [options]   Set up basic folders and files tow ork with puerf
+
+Start a puer Server, easily mock routes and render FreeMarker templates
 
 Options:
 
@@ -44,6 +50,19 @@ This is what puerF is really all about. Making it as easy as possible for you to
 puerF will automatically look for two route files. `mock/routes.js` and `mock/ftlRoutes.js`. While `routes.js` should follow the [puer documentation](https://github.com/leeluolee/puer#mock-request) and can mock any kind of route, the `ftlRoutes.js` file can only contain Freemarker routes.
 
 Should you wish to use files from a different location you can do so useing the `-m` and `-f` options.
+
+### Working with query parameters
+
+Real world applications might use query parameters to get specific results from a URL. You can easily mock those requests as well. To mock a route like `/example/some?user=name`, inside your regular routes file, you can simply access `req.query.user` to get the users name.
+
+``` javascript
+"GET /example/some": function(req, res, next) {
+    var name = req.query.user;
+
+    //Do something with the name, like sending it back.
+    res.status(200).send(name).end();
+}
+```
 
 ### Freemarker routes
 
