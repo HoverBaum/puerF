@@ -2,6 +2,11 @@
 
     A module to process routes.js and tflRoutes.js files into a single file.
 
+    Call process with the following options:
+    routesFile      File to puerRoutes
+    ftlRoutesFile   File for ftl routesFile
+    combinedFile    File in which to combine routes
+    
 */
 
 //Required packages for this to work.
