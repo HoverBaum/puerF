@@ -17,5 +17,5 @@ preProcessorTest(test);
 test.onFinish(function() {
 
     //Cleanup after ourselfes.
-    fs.removeSync(tmpPath);
+    //fs.removeSync(tmpPath);
 });

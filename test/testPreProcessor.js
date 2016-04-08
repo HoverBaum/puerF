@@ -7,6 +7,8 @@ var helper = require('../bin/helper');
 var fs = require('fs-extra');
 module.exports = function(test) {
 
+    //TODO this test failes, also depending on order other parts fail.
+
     var tmpPath = path.join(__dirname, 'tmp');
     var processor = require('../bin/routePreProcessor');
 
