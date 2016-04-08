@@ -1,10 +1,10 @@
 var test = require('tape');
 
 var helperTest = require('./testHelper');
-helperTest(test);
+//helperTest(test);
 
 var mockRouterTest = require('./testMockRouter');
 //mockRouterTest(test);
 
 var preProcessorTest = require('./testPreProcessor');
-//preProcessorTest(test);
+preProcessorTest(test);
