@@ -6,7 +6,6 @@
   "repository": "https://github.com/HoverBaum/puerF",
   "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
   "license": "MIT",
-  "preferGlobal": true,
   "dependencies": {
     "commander": "^2.9.0",
     "express": "^4.13.4",
