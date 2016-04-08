@@ -45,7 +45,7 @@ module.exports = function() {
      *   Makes sure that a path exists, not a file but the deepest folder.
      */
     function makeSureFolderExists(pathToCheck) {
-
+        
         //If the path containes a file ending, cut that away.
         if (path.extname(pathToCheck) !== '') {
             pathToCheck = path.dirname(pathToCheck);
