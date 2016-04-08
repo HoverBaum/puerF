@@ -5,7 +5,7 @@ var path = require('path');
 var tmpPath = path.join(__dirname, 'tmp');
 
 var helperTest = require('./testHelper');
-helperTest(test);
+//helperTest(test);
 
 var mockRouterTest = require('./testMockRouter');
 //mockRouterTest(test);
@@ -14,10 +14,10 @@ var preProcessorTest = require('./testPreProcessor');
 //preProcessorTest(test);
 
 var initializationTest = require('./testInitializer');
-//initializationTest(test);
+initializationTest(test);
 
 test.onFinish(function() {
 
     //Cleanup after ourselfes.
-    fs.removeSync(tmpPath);
+    //fs.removeSync(tmpPath);
 });

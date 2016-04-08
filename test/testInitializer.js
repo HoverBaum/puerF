@@ -9,11 +9,12 @@ module.exports = function(test) {
 
     var tmpPath = path.join(__dirname, 'tmp');
     var mockFolder = path.join(tmpPath, 'mock');
-    var templateFolder = path.join(tmpPath, 'teampltes');
-    var routesFile = path.join(tmpPath, 'routes.js');
-    var ftlFile = path.join(tmpPath, 'ftlRoutes.js');
+    var templateFolder = path.join(tmpPath, 'templates');
+    var routesFile = path.join(mockFolder, 'routes.js');
+    var ftlRoutesFile = path.join(mockFolder, 'ftlRoutes.js');
+    var ftlFile = path.join(templateFolder, 'test.ftl');
 
-    test('Initialization script', function() {
+    test('Initialization script', function(t) {
 
         if(fs.existsSync(tmpPath)) fs.removeSync(tmpPath);
 
@@ -27,11 +28,12 @@ module.exports = function(test) {
         initializer.init(options, function() {
             fs.stat(routesFile, function(err, stats) {
                 if(err) t.fail(`Basic setup check for routes failed ${err}`);
-                t.ok(stats.isFile(), 'Basic init routes exist');
-                fs.stat(ftlFile, function(err, stats) {
+                t.ok(stats.isFile(), 'Basic init, routes exist');
+                fs.stat(ftlRoutesFile, function(err, stats) {
                     if(err) t.fail(`Basic setup check for ftlRoutes failed ${err}`);
-                    t.ok(stats.isFile(), 'Basic init ftlRoutes exist');
+                    t.ok(stats.isFile(), 'Basic init, ftlRoutes exist');
                     noMock();
+
                 });
             });
         });
@@ -42,12 +44,13 @@ module.exports = function(test) {
             options.noMock = true;
             initializer.init(options, function() {
                 fs.stat(routesFile, function(err, stats) {
-                    if(err) t.fail(`noMock setup check for routes failed ${err}`);
-                    t.notOk(stats.isFile(), 'noMock init routes exist');
-                    fs.stat(ftlFile, function(err, stats) {
-                        if(err) t.fail(`noMock setup check for ftlRoutes failed ${err}`);
-                        t.ok(stats.isFile(), 'noMock init ftlRoutes exist');
-                        noTemplate();
+                    t.notOk(stats, 'noMock init, routes don\'t exist');
+                    fs.stat(ftlRoutesFile, function(err, stats) {
+                        t.notOk(stats, 'noMock init, ftlRoutes don\'t exist');
+                        fs.stat(ftlFile, function(err, stats) {
+                            t.ok(stats.isFile(), 'noMock init, template does exist');
+                            noTemplate();
+                        });
                     });
                 });
             });
@@ -60,11 +63,9 @@ module.exports = function(test) {
             options.noTemplate = true;
             initializer.init(options, function() {
                 fs.stat(routesFile, function(err, stats) {
-                    if(err) t.fail(`noTemplate setup check for routes failed ${err}`);
-                    t.ok(stats.isFile(), 'noTeamplte init routes exist');
+                    t.ok(stats.isFile(), 'noTeamplte init, routes exist');
                     fs.stat(ftlFile, function(err, stats) {
-                        if(err) t.fail(`noTemplate setup check for ftlRoutes failed ${err}`);
-                        t.notOk(stats.isFile(), 'noTemplate init ftlRoutes exist');
+                        t.notOk(stats, 'noTemplate init, ftlRoutes don\'t exist');
                         t.end();
                     });
                 });

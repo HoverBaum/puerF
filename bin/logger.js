@@ -16,6 +16,8 @@
 
 */
 
+//TODO add a setting to disable loogs, for testing and such
+
 //Dependencies
 var winston = require('winston');
 var path = require('path');
