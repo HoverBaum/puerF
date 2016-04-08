@@ -5,7 +5,7 @@ var path = require('path');
 var tmpPath = path.join(__dirname, 'tmp');
 
 var helperTest = require('./testHelper');
-//helperTest(test);
+helperTest(test);
 
 var mockRouterTest = require('./testMockRouter');
 //mockRouterTest(test);

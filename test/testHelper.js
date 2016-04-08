@@ -27,6 +27,11 @@ module.exports = function(test) {
         helper.guarantyFolder(pathToFile);
         t.ok(fs.existsSync(pathToFolder), 'Creates folder when given file path');
 
+        //Test making deep folders.
+        var deepPath = path.join(tmpPath, 'some', 'more', 'folders');
+        helper.guarantyFolder(deepPath);
+        t.ok(fs.existsSync(deepPath), 'Deep folder creation');
+
         //Absolute path
         var uri = './test';
         var uriShould = path.resolve(process.cwd(), uri);

@@ -45,11 +45,18 @@ module.exports = function() {
      *   Makes sure that a path exists, not a file but the deepest folder.
      */
     function makeSureFolderExists(pathToCheck) {
-        
+
         //If the path containes a file ending, cut that away.
         if (path.extname(pathToCheck) !== '') {
             pathToCheck = path.dirname(pathToCheck);
         }
+
+        //Make sure parent exists.
+        if(!fs.existsSync(path.dirname(pathToCheck))) {
+            makeSureFolderExists(path.dirname(pathToCheck));
+        }
+
+        //Now make sure the requested exists.
         if (!fs.existsSync(pathToCheck)) {
             fs.mkdirSync(pathToCheck);
         }
