@@ -5,10 +5,10 @@ module.exports = function(test) {
 
     var tmpPath = path.join(__dirname, 'tmp');
 
-    test('Testing helper functions', function(t) {
+    //First clear the tmp folder.
+    if(fs.existsSync(tmpPath)) fs.removeSync(tmpPath);
 
-        //First clear the tmp folder.
-        if(fs.existsSync(tmpPath)) fs.removeSync(tmpPath);
+    test('Testing helper', function(t) {
 
         helper.guarantyFolder(tmpPath);
         t.ok(fs.existsSync(tmpPath), 'Creates folders');
@@ -18,9 +18,6 @@ module.exports = function(test) {
         helper.guarantyFolder(pathToFile);
         t.ok(fs.existsSync(pathToFolder), 'Creates folder when given file path');
 
-        //Cleanup after ourselfes.
-        fs.removeSync(tmpPath);
-
         t.end();
 
 /*
@@ -29,5 +26,8 @@ module.exports = function(test) {
         absolutePath: getAbsolutePath
 */
     });
+
+    //Cleanup after ourselfes.
+    fs.removeSync(tmpPath);
 
 }
