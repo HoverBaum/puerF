@@ -23,7 +23,7 @@ module.exports = function createInitializer() {
     /**
      *   Starts setting up basic files to work with puerF.
      */
-    function startInitialization(options) {
+    function startInitialization(options, callback) {
         logger.info('Initializing a basic setup for puerf');
         if (!options.noMock) {
             createMockFiles(options.mockFolder);
@@ -36,6 +36,7 @@ module.exports = function createInitializer() {
             logger.info('Will not create template files')
         }
         logger.info(`Finished setting up, let's role`);
+        if(callback) callback();
     }
 
     /**

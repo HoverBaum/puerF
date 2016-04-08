@@ -11,11 +11,13 @@ var mockRouterTest = require('./testMockRouter');
 //mockRouterTest(test);
 
 var preProcessorTest = require('./testPreProcessor');
-preProcessorTest(test);
+//preProcessorTest(test);
 
+var initializationTest = require('./testInitializer');
+//initializationTest(test);
 
 test.onFinish(function() {
 
     //Cleanup after ourselfes.
-    //fs.removeSync(tmpPath);
+    fs.removeSync(tmpPath);
 });
