@@ -4,6 +4,8 @@
 
     Returns an object in which one can look up what to do on which route.
 
+    Config should be a module describing the routes. (the allRoutes.js)
+
 */
 var logger = require('./logger');
 module.exports = function createRouteLookup(config) {
@@ -13,7 +15,7 @@ module.exports = function createRouteLookup(config) {
     var routes = {
         get: new Map(),
         post: new Map(),
-        delte: new Map(),
+        delete: new Map(),
         put: new Map()
     }
 
@@ -35,7 +37,7 @@ module.exports = function createRouteLookup(config) {
             method,
             path,
             call
-        })
+        });
 
         //Add this route and it's function to the router;
         routes[method].set(path, call);
