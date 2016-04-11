@@ -58,7 +58,7 @@ module.exports = function createLogger() {
     var debugging = false;
 
     //Wether logging is currently disabled.
-    var var disabled = false;
+    var disabled = false;
 
 
     function log(level, text, more) {
@@ -155,7 +155,7 @@ module.exports = function createLogger() {
      *   Will enable loggong, as it is by default.
      */
     function enableLogging() {
-        disabled = false.
+        disabled = false;
     }
 
     return {
