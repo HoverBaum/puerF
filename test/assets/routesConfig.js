@@ -12,7 +12,10 @@ module.exports = {
 
     },
     'POST /': function() {
-
+        
+    },
+    'POST /postTest': function() {
+        throw(new Error('POST error'));
     },
     'GET /test': function() {
         throw(new Error('Test error'));

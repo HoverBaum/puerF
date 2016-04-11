@@ -65,7 +65,7 @@ module.exports = function(test) {
                 fs.stat(routesFile, function(err, stats) {
                     t.ok(stats.isFile(), 'noTeamplte init, routes exist');
                     fs.stat(ftlFile, function(err, stats) {
-                        t.notOk(stats, 'noTemplate init, ftlRoutes don\'t exist');
+                        t.notOk(stats, 'noTemplate init, ftl templates don\'t exist');
                         t.end();
                     });
                 });

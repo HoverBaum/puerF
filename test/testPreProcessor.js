@@ -7,9 +7,10 @@ var helper = require('../bin/helper');
 var fs = require('fs-extra');
 module.exports = function(test) {
 
-    //TODO this test failes, also depending on order other parts fail.
-
+    //Path to the tmp dir.
     var tmpPath = path.join(__dirname, 'tmp');
+
+    //THe processor to test.
     var processor = require('../bin/routePreProcessor');
 
     test('Pre processing of routes', function(t) {
@@ -25,24 +26,30 @@ module.exports = function(test) {
             combinedFile: path.join(__dirname, 'tmp', 'allRoutes.js')
         }
 
+        //Start the testing.
+        bothFilled()
+
         //First the standard case
-        processor.process(config, function() {
-            t.ok(fs.existsSync(config.combinedFile), 'Combined file exists');
-            var mod = helper.loadModule(config.combinedFile);
-            var value = mod['GET /test'] && mod['GET /ftl'];
-            t.ok(value, 'Combined file has methods from both files');
-            routesEmpty();
-        });
+        function bothFilled() {
+            processor.process(config, function() {
+                t.ok(fs.existsSync(config.combinedFile), 'both files filled, combined file exists');
+                var mod = helper.loadModule(config.combinedFile);
+                var value = mod['GET /test'] && mod['GET /ftl'];
+                t.ok(value, 'both files filled, combined file has methods from both files');
+                routesEmpty();
+            });
+        }
 
         //Test empty routes file
         function routesEmpty() {
             fs.copySync(path.join(__dirname, 'assets', 'emptyModule.js'), config.routesFile);
-            fs.remove(config.combinedFile);
+            fs.copySync(path.join(__dirname, 'assets', 'ftlRoutes.js'), path.join(__dirname, 'tmp', 'ftlRoutes.js'));
+            fs.removeSync(config.combinedFile);
             processor.process(config, function() {
-                t.ok(fs.existsSync(config.combinedFile), 'Combined file exists with empty routes');
+                t.ok(fs.existsSync(config.combinedFile), 'routes empty, combined file exists');
                 var mod = helper.loadModule(config.combinedFile);
-                t.ok(mod['GET /ftl'], 'File has ftl Components');
-                t.notOk(mod['GET /test'], 'File does not have routes Components');
+                t.ok(mod['GET /ftl'], 'routes empty, combined has ftl Components');
+                t.notOk(mod['GET /test'], 'routes empty, combined does not have routes Components');
                 ftlEmpty();
             });
         }
@@ -51,18 +58,43 @@ module.exports = function(test) {
         function ftlEmpty() {
             fs.copySync(path.join(__dirname, 'assets', 'routes.js'), path.join(__dirname, 'tmp', 'routes.js'));
             fs.copySync(path.join(__dirname, 'assets', 'emptyModule.js'), config.ftlRoutesFile);
-            fs.remove(config.combinedFile);
+            fs.removeSync(config.combinedFile);
             processor.process(config, function() {
-                t.ok(fs.existsSync(config.combinedFile), 'Combined file exists with empty ftlRoutes file');
+                t.ok(fs.existsSync(config.combinedFile), 'ftl empty, combined file exists');
                 var mod = helper.loadModule(config.combinedFile);
-                t.ok(mod['GET /test'], 'File has routes Components');
-                t.notOk(mod['GET /ftl'], 'File does not have ftl Components');
+                t.ok(mod['GET /test'], 'ftl empty, combined has routes Components');
+                t.notOk(mod['GET /ftl'], 'ftl empty, combined does not have ftl Components');
                 noRoutes();
             });
         }
 
         //Test with non existing routes file.
         function noRoutes() {
+            fs.removeSync(path.join(__dirname, 'tmp', 'routes.js'));
+            fs.copySync(path.join(__dirname, 'assets', 'ftlRoutes.js'), config.ftlRoutesFile);
+            fs.removeSync(config.combinedFile);
+            processor.process(config, function() {
+                t.ok(fs.existsSync(config.combinedFile), 'routes don\'t exist, combined file exists');
+                var mod = helper.loadModule(config.combinedFile);
+                t.ok(mod['GET /ftl'], 'routes don\'t exist, combined has ftl components');
+                noFTL();
+            });
+        }
+
+        //Test with ftl file not existing.
+        function noFTL() {
+            fs.copySync(path.join(__dirname, 'assets', 'routes.js'), path.join(__dirname, 'tmp', 'routes.js'));
+            fs.removeSync(path.join(__dirname, 'tmp', 'ftlRoutes.js'));
+            fs.removeSync(config.combinedFile);
+            processor.process(config, function() {
+                t.ok(fs.existsSync(config.combinedFile), 'ftlRoutes don\'t exist, combined file exists');
+                var mod = helper.loadModule(config.combinedFile);
+                t.ok(mod['GET /test'], 'ftlRoutes don\'t exist, combined has routes components');
+                end();
+            });
+        }
+
+        function end() {
             t.end();
         }
 

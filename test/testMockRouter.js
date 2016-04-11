@@ -1,5 +1,8 @@
 /**
     Test bin/puerMockRouter
+
+    Interface tested:
+    mock()
 */
 
 module.exports = function(test) {
@@ -15,7 +18,8 @@ module.exports = function(test) {
         t.ok(mocked['delete'].get('/'), 'DELTE is present');
         t.ok(mocked['post'].get('/'), 'POST is present');
 
-        t.throws(mocked['get'].get('/test'), new Error('Test error'), 'Function calles return the right things');
+        t.throws(mocked['get'].get('/test'), new Error('Test error'), 'Function calls return the right things');
+        t.throws(mocked['post'].get('/postTest'), new Error('POST error'), 'Function are different from one another');
 
         t.end();
     });
