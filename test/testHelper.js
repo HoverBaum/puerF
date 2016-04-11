@@ -10,9 +10,7 @@
 var path = require('path');
 var fs = require('fs-extra');
 var helper = require('../bin/helper');
-module.exports = function(test) {
-
-    var tmpPath = path.join(__dirname, 'tmp');
+module.exports = function(test, tmpPath) {
 
     test('Testing helper', function(t) {
 

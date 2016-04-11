@@ -5,10 +5,7 @@
 var path = require('path');
 var helper = require('../bin/helper');
 var fs = require('fs-extra');
-module.exports = function(test) {
-
-    //Path to the tmp dir.
-    var tmpPath = path.join(__dirname, 'tmp');
+module.exports = function(test, tmpPath) {
 
     //THe processor to test.
     var processor = require('../bin/routePreProcessor');
@@ -95,6 +92,7 @@ module.exports = function(test) {
         }
 
         function end() {
+            fs.removeSync(tmpPath);
             t.end();
         }
 

@@ -13,10 +13,10 @@
 
 */
 
-var logger = require('./logger');
-var helper = require('./helper')
-var fs = require('fs');
 var path = require('path');
+var fs = require('fs');
+var logger = require('./logger');
+var helper = require('./helper');
 
 module.exports = function createInitializer() {
 
@@ -24,6 +24,7 @@ module.exports = function createInitializer() {
      *   Starts setting up basic files to work with puerF.
      */
     function startInitialization(options, callback) {
+        //console.log(helper);
         logger.info('Initializing a basic setup for puerf');
         if (!options.noMock) {
             createMockFiles(options.mockFolder);

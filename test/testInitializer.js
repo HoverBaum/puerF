@@ -5,9 +5,9 @@
 var path = require('path');
 var fs = require('fs-extra');
 
-module.exports = function(test) {
+module.exports = function(test, tmpPath) {
 
-    var tmpPath = path.join(__dirname, 'tmp');
+    //Create paths to files.
     var mockFolder = path.join(tmpPath, 'mock');
     var templateFolder = path.join(tmpPath, 'templates');
     var routesFile = path.join(mockFolder, 'routes.js');

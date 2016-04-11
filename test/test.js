@@ -4,19 +4,20 @@ var path = require('path');
 var logger = require('../bin/logger');
 logger.disable();
 
+//Path to be used for temporary files.
 var tmpPath = path.join(__dirname, 'tmp');
 
 var helperTest = require('./testHelper');
-helperTest(test);
+helperTest(test, tmpPath);
+
+var initializationTest = require('./testInitializer');
+initializationTest(test, tmpPath);
 
 var mockRouterTest = require('./testMockRouter');
 mockRouterTest(test);
 
 var preProcessorTest = require('./testPreProcessor');
-preProcessorTest(test);
-
-var initializationTest = require('./testInitializer');
-initializationTest(test);
+preProcessorTest(test, tmpPath);
 
 test.onFinish(function() {
 
