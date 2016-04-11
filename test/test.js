@@ -26,13 +26,17 @@ var mockRouterTest = require('./testMockRouter');
 var preProcessorTest = require('./testPreProcessor');
 //preProcessorTest(test, tmpPath);
 
+//Test running a server.
+var serverTest = require('./testServer');
+serverTest(test, tmpPath);
+
 //Test main component does the right things given options.
 var puerFTest = require('./testPuerF');
-puerFTest(test, tmpPath);
+//puerFTest(test, tmpPath);
 
 test.onFinish(function() {
     console.log('all tests ended');
     //Cleanup after ourselfes.
     //if(fs.existsSync(tmpPath)) fs.removeSync(tmpPath);
-    //var inf = process._getActiveHandles();
+    console.log(process._getActiveHandles());
 });

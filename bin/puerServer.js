@@ -3,6 +3,8 @@
 
     This module provides a single function to start a puer Server.
 
+    routesFile: relativ path to combined file, from current working directory.
+
     You can hand it an options object or use the default options.
     options = {
         port,           Specific port to use
@@ -75,6 +77,7 @@ function startPuerServer(routesFile, options, callback) {
         Include middlewares, puer has to be the first one!
     */
     app.use(puer.connect(app, server, puerOptions));
+    //NOTE this is keeping the server from shutting down programatically
 
     //Serve static files.
     app.use("/", express.static(staticDir));
@@ -138,8 +141,8 @@ function startPuerServer(routesFile, options, callback) {
     /**
      *   Will parse the combined routes file into actual routes.
      */
-    function setupMockRoutes() {
-        var requirePath = path.join(staticDir, routesFile);
+    function setupMockRoutes(callback) {
+        var requirePath = helper.absolutePath(routesFile);
         logger.debug('Getting config for mocked routes', {
             requirePath
         });
@@ -147,6 +150,9 @@ function startPuerServer(routesFile, options, callback) {
         mocks = mockRoutes(config);
         logger.debug('Rebuild mocks');
         logger.silly('Mocks are: ', mocks);
+        if(callback) {
+            callback();
+        }
     }
 
     function closeServer(callback) {
