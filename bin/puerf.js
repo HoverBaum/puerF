@@ -1,13 +1,11 @@
-#! /usr/bin/env node
-
 /**
 
-    puerF, a commandline tool to run puer with mocked FreeMarker pages.
+    puerF, a cimple tool to run a live reloading server
+    with mocked routes and FreeMarker tmeplates.
 
 */
 
 //Dependencies.
-var cli = require('commander');
 var fs = require('fs');
 
 //Submodules
@@ -17,67 +15,33 @@ var logger = require('./logger');
 
 //The puer server.
 var server = null;
+var cli = null;
 
-//Get the npm packe so we can read from it.
-var package = require('./../package.json');
+module.exports = function(options, command) {
+    cli = options
 
-//Configure commandline usage.
-cli
-    .version(package.version)
-    .usage('[cmd] [options]')
-    .description('Start a puer Server, easily mock routes and render FreeMarker templates')
-    .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
-    .option('-m, --mock <file>', 'Your standard puer mock file')
-    .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
-    .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored') //TODO check this works, path might be weird.
-    .option('-r, --root <folder>', 'The root folder that files should be served from')
-    .option('-p, --port <number>', 'Specific port to use')
-    .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
-    .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
-    .option('-l, --localhost', 'Use "localhost" instead of "127.0.0.1"')
-    .option('--no-browser', 'Do not autimatically open a brwoser')
-    .option('--debug', 'Display debug messages')
+    //Check if we should enable debug.
+    if (cli.debug) {
+        logger.enableDebug();
+    }
 
-//Define a set up command
-cli
-    .command('init')
-    .usage('[options]')
-    .description('Set up basic folders and files tow ork with puerf')
-    .option('-M, --mock-folder <folder>', 'Specify the folder for mock files')
-    .option('--no-mock', 'Disables generating mock files')
-    .option('-T, --template-folder <folder>', 'Specify the folder for FreeMarker templates')
-    .option('--no-template', 'Disables generating template files')
-    .action(function(options) {
+    cli = options;
+    if(command === 'init') {
         var initializer = require('./initializer');
         initializer.init(options);
-    });
-
-//Give some more help text
-cli.on('--help', function() {
-    console.log('  More info:');
-    console.log('');
-    console.log('    visit https://github.com/HoverBaum/puerF');
-});
-
-
-//Runn commander.js
-cli.parse(process.argv);
-
-//Check if we should enable debug.
-if (cli.debug) {
-    logger.enableDebug();
+    } else {
+        startPuerf()
+    }
 }
 
-//Set up handling of undcaught errors, so that we won't crash.
-process.on('uncaughtException', function(err) {
-    logger.error('Congratulations, you found a bug\nShould this keep happening, please:\n  - run with --debug\n  - file a bug report at https://github.com/HoverBaum/puerF/issues');
-    logger.error(err);
-});
+
+
+
 
 //Start puerf if we are not running the init script.
-if(cli.args.every(elm => elm._name !== 'init')) {
-    startPuerf();
-}
+//if(cli.args.every(elm => elm._name !== 'init')) {
+//    startPuerf();
+//}
 
 function startPuerf() {
 

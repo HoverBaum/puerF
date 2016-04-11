@@ -2,7 +2,7 @@
   "name": "puer-freemarker-cli",
   "version": "0.3.3",
   "description": "Commandline interface to use puer with Freemarker templates.",
-  "main": "puerFreemarker.js",
+  "main": "./bin/puerf.js",
   "repository": "https://github.com/HoverBaum/puerF",
   "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "winston": "^2.2.0"
   },
   "bin": {
-    "puerf": "./bin/puerf.js"
+    "puerf": "./bin/puerf-cli.js"
   },
   "scripts": {
     "test": "node test/test.js"
