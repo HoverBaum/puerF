@@ -32,7 +32,7 @@ var Freemarker = require('freemarker.js');
 /**
  *   Start a puer server to serve files and watch for changes.
  */
-function startPuerServer(routesFile, options) {
+function startPuerServer(routesFile, options, callback) {
 
     //Disable console.log while server is starting, to prevent puer logs.
     var oldConsole = console.log;
@@ -56,7 +56,7 @@ function startPuerServer(routesFile, options) {
     var server = http.createServer(app);
 
     //The root directory for static files.
-    var staticDir = (options.dir) ? path.join(process.cwd(), options.dir) : process.cwd();
+    var staticDir = (options.dir) ? helper.absolutePath(options.dir) : process.cwd();
     logger.debug('Static files will be served from: ', staticDir);
 
     //A container for mocked routes.
@@ -121,12 +121,17 @@ function startPuerServer(routesFile, options) {
         //Reanable console.
         console.log = oldConsole;
 
+        //We are now finsihed setting up.
+        if(callback) {
+            callback(server);
+        }
+
         //Open browser for user.
         if (options.browser) {
             logger.info('Openening browser...');
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
             open(`http://${domain}:${usedPort}`);
-            logger.info('Happy coding :)')
+            logger.info('Happy coding :)');
         }
     });
 
@@ -144,8 +149,19 @@ function startPuerServer(routesFile, options) {
         logger.silly('Mocks are: ', mocks);
     }
 
+    function closeServer(callback) {
+        logger.debug('Server will be closed');
+        server.close(function() {
+            logger.debug('Server closed');
+            if(callback) {
+                callback();
+            }
+        });
+    }
+
     return {
-        updateRoutes: setupMockRoutes
+        updateRoutes: setupMockRoutes,
+        close: closeServer
     }
 
 };

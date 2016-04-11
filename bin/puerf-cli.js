@@ -42,7 +42,7 @@ cli
     .option('-T, --template-folder <folder>', 'Specify the folder for FreeMarker templates')
     .option('--no-template', 'Disables generating template files')
     .action(function(options) {
-        puerf(options, 'init');
+        puerf.init(options);
     });
 
 //Give some more help text
@@ -62,4 +62,4 @@ process.on('uncaughtException', function(err) {
     logger.error(err);
 });
 
-puerf(cli);
+puerf.start(cli);

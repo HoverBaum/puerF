@@ -3,7 +3,11 @@
     puerF, a cimple tool to run a live reloading server
     with mocked routes and FreeMarker tmeplates.
 
+    Please see the cli for available options.
+
 */
+
+//NOTE need a close function that closes watcher and server..
 
 //Dependencies.
 var fs = require('fs');
@@ -13,11 +17,16 @@ var processor = require('./routePreProcessor');
 var startPuer = require('./puerServer');
 var logger = require('./logger');
 
-//The puer server.
 var server = null;
 var cli = null;
+var watcher = [];
 
-module.exports = function(options, command) {
+function runInitializer(options, callback) {
+    var initializer = require('./initializer');
+    initializer.init(options, callback);
+}
+
+function startPuerF(options, callback) {
     cli = options
 
     //Check if we should enable debug.
@@ -25,25 +34,24 @@ module.exports = function(options, command) {
         logger.enableDebug();
     }
 
-    cli = options;
-    if(command === 'init') {
-        var initializer = require('./initializer');
-        initializer.init(options);
-    } else {
-        startPuerf()
+    if (callback === undefined && command !== undefined) {
+        callback = command;
     }
+    runPuerF(callback)
 }
 
+function closePuerF(callback) {
+    logger.debug('Stopping file watchers');
+    watcher.forEach(watcher => {
+        watcher.close();
+    });
+    logger.debug('Stopping server');
+    server.close(function() {
+        callback();
+    });
+}
 
-
-
-
-//Start puerf if we are not running the init script.
-//if(cli.args.every(elm => elm._name !== 'init')) {
-//    startPuerf();
-//}
-
-function startPuerf() {
+function runPuerF(callback) {
 
     //Path to ftlRoutes file.
     var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
@@ -59,14 +67,16 @@ function startPuerf() {
 
     //Watch route files for changes and act upon them.
     if (fs.existsSync(ftlRoutesFile)) {
-        fs.watch(ftlRoutesFile, (event, filename) => {
+        var ftlWatcher = fs.watch(ftlRoutesFile, (event, filename) => {
             onRoutesChange();
         });
+        watcher.push(ftlWatcher);
     }
     if (fs.existsSync(routesFile)) {
-        fs.watch(routesFile, (event, filename) => {
+        var routesWatcher = fs.watch(routesFile, (event, filename) => {
             onRoutesChange();
         });
+        watcher.push(routesWatcher);
     }
 
 
@@ -99,7 +109,6 @@ function startPuerf() {
      */
     logger.info('Starting up...');
 
-
     //Initially parse the routes files and start the puer server.
     processRouteFiles(function() {
         logger.info('Initially compiled routes, starting server...')
@@ -111,6 +120,12 @@ function startPuerf() {
             localhost: cli.localhost,
             browser: cli.browser,
             templatesPath: templatesPath
-        });
+        }, callback);
     });
 };
+
+module.exports = {
+    start: startPuerF,
+    close: closePuerF,
+    init: runInitializer
+}
