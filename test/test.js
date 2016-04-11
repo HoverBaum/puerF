@@ -1,6 +1,8 @@
 var test = require('tape');
 var fs = require('fs-extra');
 var path = require('path');
+var logger = require('../bin/logger');
+logger.disable();
 
 var tmpPath = path.join(__dirname, 'tmp');
 
