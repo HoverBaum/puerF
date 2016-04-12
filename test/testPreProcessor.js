@@ -126,7 +126,7 @@ module.exports = function(test, tmpPath) {
         }
 
         function end() {
-            //fs.removeSync(tmpPath);
+            fs.removeSync(tmpPath);
             t.end();
         }
 
