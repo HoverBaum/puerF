@@ -94,7 +94,7 @@ module.exports = function createInitializer() {
         res.send({
             title: "title here",
             id: req.params.id
-        })
+        });
 
     },
     // PUT POST DELETE is the same
