@@ -7,8 +7,6 @@
 
 */
 
-//NOTE need a close function that closes watcher and server..
-
 //Dependencies.
 var fs = require('fs');
 
@@ -17,26 +15,37 @@ var processor = require('./routePreProcessor');
 var startPuer = require('./puerServer');
 var logger = require('./logger');
 
+//The server we are running, so that it can be closed later.
 var server = null;
-var cli = null;
+
+//Keep track of all watcher we started so we can close them later.
 var watcher = [];
 
+/**
+ *   Just runs the initializer.
+ */
 function runInitializer(options, callback) {
     var initializer = require('./initializer');
     initializer.init(options, callback);
 }
 
+/**
+ *   Starts teh core application.
+ */
 function startPuerF(options, callback) {
-    cli = options
 
     //Check if we should enable debug.
-    if (cli.debug) {
+    if (options.debug) {
         logger.enableDebug();
     }
 
-    runPuerF(callback)
+    runPuerF(options, callback)
 }
 
+/**
+*   Programatically closes puerF.
+    //FIXME this is not working, see https://github.com/leeluolee/puer/issues/30
+*/
 function closePuerF(callback) {
     logger.debug('Stopping file watchers');
     watcher.forEach(watcher => {
@@ -48,7 +57,10 @@ function closePuerF(callback) {
     });
 }
 
-function runPuerF(callback) {
+/**
+ *   Actually start the core application.
+ */
+function runPuerF(cli, callback) {
 
     //Path to ftlRoutes file.
     var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
