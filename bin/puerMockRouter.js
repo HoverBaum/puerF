@@ -6,8 +6,7 @@
 
 */
 var logger = require('./logger');
-module.exports = function createRouteLookup(config) {
-    logger.silly('Creating a route lookup object', config);
+module.exports = function createRouteLookup() {
 
     //The store of what to do for which route.
     var routes = {
@@ -17,9 +16,41 @@ module.exports = function createRouteLookup(config) {
         put: new Map()
     }
 
-    //Iterate over all configured routes.
-    for (key in config) {
-        parseRoute(key, config[key]);
+    function parseRoutes(config) {
+        logger.silly('Creating a route lookup object', config);
+
+        //Iterate over all configured routes.
+        for (key in config) {
+            parseRoute(key, config[key]);
+        }
+    }
+
+    /**
+     *   Looks up a route and returns object with info if present.
+     */
+    function lookUpRoute(path, method, params) {
+        if(params === undefined) params = [];
+        if(routes[method].has(path) === true) {
+            var info = routes[method].get(path);
+            params.reverse();
+            var info.paramValues = {};
+            info.params.forEach((par, index) => {
+                info.paramValues[par] = params[index];
+            });
+            return info;
+        } else  {
+
+            //If path is still 2+ deep.
+            if(/^\/.*\/.+/.test(path)) {
+                var parts = path.split('/');
+                var lastParam = parts.pop().replace(/\//g, '');
+                params.push(lastParam);
+                var challowerPath = parts.join('/');
+                return lookUpRoute(challowerPath, method, params);
+            } else {
+                return undefined;
+            }
+        }
     }
 
     /**
@@ -63,6 +94,9 @@ module.exports = function createRouteLookup(config) {
         return obj;
     }
 
-    return routes;
+    return {
+        lookUp: lookUpRoute,
+        configure: parseRoutes
+    }
 
 };

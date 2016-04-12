@@ -34,7 +34,7 @@ var puer = require('puer');
 var http = require('http');
 var open = require('open');
 var helper = require('./helper');
-var mockRoutes = require('./puerMockRouter');
+var mocks = require('./puerMockRouter');
 var logger = require('./logger');
 
 //Include this here in case this is used as a global package.
@@ -71,8 +71,6 @@ function startPuerServer(routesFile, options, callback) {
     logger.debug('Static files will be served from: ', staticDir);
 
     //A container for mocked routes.
-    var mocks = null;
-    setupMockRoutes();
 
     //Use puer as a middleware for the express server.
     var puerOptions = {
@@ -103,12 +101,15 @@ function startPuerServer(routesFile, options, callback) {
     app.use('/*', function(req, res, next) {
         var method = req.method.toLowerCase();
         var url = req.originalUrl.replace(/\?.*=.*$/, '');
-        var handler = mocks[method].get(url);
+        var info = mocks.lookUp(url, method);
+        req.params = info.paramValues;
+        var handler = info.call;
         logger.silly('Request to server', {
             time: Date.now(),
             originalUrl: req.originalUrl,
             url,
-            method: req.method
+            method: req.method,
+            infoObj: info
         });
         this.fm = fm;
         if (handler !== undefined) {
@@ -156,9 +157,8 @@ function startPuerServer(routesFile, options, callback) {
             requirePath
         });
         var config = helper.loadModule(requirePath);
-        mocks = mockRoutes(config);
+        mocks.configure(config);
         logger.debug('Rebuild mocks');
-        logger.silly('Mocks are: ', mocks);
         if(callback) {
             callback();
         }
