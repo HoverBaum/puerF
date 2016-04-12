@@ -5,9 +5,9 @@
 
     options {
         mockFolder,     Specifies the folder to use for mock files (default: mock)
-        noMock,         If ture, does not create mock files
+        mock,           Create mock files
         templateFolder, Specifies the folder to use for template files (default: templates)
-        noTemplate      If true, does not create template files
+        template        Create template files
     }
 
 
@@ -24,14 +24,13 @@ module.exports = function createInitializer() {
      *   Starts setting up basic files to work with puerF.
      */
     function startInitialization(options, callback) {
-        //console.log(helper);
         logger.info('Initializing a basic setup for puerf');
-        if (!options.noMock) {
+        if (options.mock) {
             createMockFiles(options.mockFolder);
         } else {
             logger.info('Will not create mock files')
         }
-        if (!options.noTemplate) {
+        if (options.template) {
             createTemplateFiles(options.templateFolder);
         } else {
             logger.info('Will not create template files')
