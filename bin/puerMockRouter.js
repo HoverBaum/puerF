@@ -33,7 +33,7 @@ module.exports = function createRouteLookup() {
         if(routes[method].has(path) === true) {
             var info = routes[method].get(path);
             params.reverse();
-            var info.paramValues = {};
+            info.paramValues = {};
             info.params.forEach((par, index) => {
                 info.paramValues[par] = params[index];
             });
@@ -99,4 +99,4 @@ module.exports = function createRouteLookup() {
         configure: parseRoutes
     }
 
-};
+}();
