@@ -10,7 +10,7 @@ var fs = require('fs-extra');
 var request = require('request');
 module.exports = function(test, tmpPath) {
 
-    test('puerF exported module', function(t) {
+    test.skip('puerF exported module', function(t) {
 
         //Remove tmp folder if it is there.
         if (fs.existsSync(tmpPath)) fs.removeSync(tmpPath);
