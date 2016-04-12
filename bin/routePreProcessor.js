@@ -2,6 +2,11 @@
 
     A module to process routes.js and tflRoutes.js files into a single file.
 
+    Call process with the following options:
+    routesFile      File to puerRoutes
+    ftlRoutesFile   File for ftl routesFile
+    combinedFile    File in which to combine routes
+
 */
 
 //Required packages for this to work.
@@ -53,7 +58,7 @@ module.exports = function routePreProcessor() {
      *   Uses all routes to write a file that can be used with puer.
      */
     function createCombinedFile(routes) {
-
+        logger.silly('Creating combined file', routes);
         var start = `module.exports = {`;
         var end = `}`;
         var middle = createMiddleString(routes);
@@ -72,6 +77,7 @@ module.exports = function routePreProcessor() {
 
         //Remove the last ','.
         string = string.replace(new RegExp(',' + '$'), '\n');
+        logger.silly('Middlestring for combined routes', string);
         return string;
     }
 

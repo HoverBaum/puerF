@@ -50,6 +50,13 @@ module.exports = function() {
         if (path.extname(pathToCheck) !== '') {
             pathToCheck = path.dirname(pathToCheck);
         }
+
+        //Make sure parent exists.
+        if(!fs.existsSync(path.dirname(pathToCheck))) {
+            makeSureFolderExists(path.dirname(pathToCheck));
+        }
+
+        //Now make sure the requested exists.
         if (!fs.existsSync(pathToCheck)) {
             fs.mkdirSync(pathToCheck);
         }

@@ -13,17 +13,18 @@
 
 */
 
-var logger = require('./logger');
-var helper = require('./helper')
-var fs = require('fs');
 var path = require('path');
+var fs = require('fs');
+var logger = require('./logger');
+var helper = require('./helper');
 
 module.exports = function createInitializer() {
 
     /**
      *   Starts setting up basic files to work with puerF.
      */
-    function startInitialization(options) {
+    function startInitialization(options, callback) {
+        //console.log(helper);
         logger.info('Initializing a basic setup for puerf');
         if (!options.noMock) {
             createMockFiles(options.mockFolder);
@@ -36,6 +37,7 @@ module.exports = function createInitializer() {
             logger.info('Will not create template files')
         }
         logger.info(`Finished setting up, let's role`);
+        if(callback) callback();
     }
 
     /**

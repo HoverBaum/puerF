@@ -3,6 +3,8 @@
 
     This module provides a single function to start a puer Server.
 
+    routesFile: relativ path to combined file, from current working directory.
+
     You can hand it an options object or use the default options.
     options = {
         port,           Specific port to use
@@ -32,7 +34,7 @@ var Freemarker = require('freemarker.js');
 /**
  *   Start a puer server to serve files and watch for changes.
  */
-function startPuerServer(routesFile, options) {
+function startPuerServer(routesFile, options, callback) {
 
     //Disable console.log while server is starting, to prevent puer logs.
     var oldConsole = console.log;
@@ -56,7 +58,7 @@ function startPuerServer(routesFile, options) {
     var server = http.createServer(app);
 
     //The root directory for static files.
-    var staticDir = (options.dir) ? path.join(process.cwd(), options.dir) : process.cwd();
+    var staticDir = (options.dir) ? helper.absolutePath(options.dir) : process.cwd();
     logger.debug('Static files will be served from: ', staticDir);
 
     //A container for mocked routes.
@@ -75,6 +77,7 @@ function startPuerServer(routesFile, options) {
         Include middlewares, puer has to be the first one!
     */
     app.use(puer.connect(app, server, puerOptions));
+    //NOTE this is keeping the server from shutting down programatically
 
     //Serve static files.
     app.use("/", express.static(staticDir));
@@ -121,20 +124,25 @@ function startPuerServer(routesFile, options) {
         //Reanable console.
         console.log = oldConsole;
 
+        //We are now finsihed setting up.
+        if(callback) {
+            callback(server);
+        }
+
         //Open browser for user.
         if (options.browser) {
             logger.info('Openening browser...');
             var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
             open(`http://${domain}:${usedPort}`);
-            logger.info('Happy coding :)')
+            logger.info('Happy coding :)');
         }
     });
 
     /**
      *   Will parse the combined routes file into actual routes.
      */
-    function setupMockRoutes() {
-        var requirePath = path.join(staticDir, routesFile);
+    function setupMockRoutes(callback) {
+        var requirePath = helper.absolutePath(routesFile);
         logger.debug('Getting config for mocked routes', {
             requirePath
         });
@@ -142,10 +150,24 @@ function startPuerServer(routesFile, options) {
         mocks = mockRoutes(config);
         logger.debug('Rebuild mocks');
         logger.silly('Mocks are: ', mocks);
+        if(callback) {
+            callback();
+        }
+    }
+
+    function closeServer(callback) {
+        logger.debug('Server will be closed');
+        server.close(function() {
+            logger.debug('Server closed');
+            if(callback) {
+                callback();
+            }
+        });
     }
 
     return {
-        updateRoutes: setupMockRoutes
+        updateRoutes: setupMockRoutes,
+        close: closeServer
     }
 
 };

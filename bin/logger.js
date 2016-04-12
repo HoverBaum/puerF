@@ -55,10 +55,16 @@ winston.loggers.add('debug', {
 module.exports = function createLogger() {
 
     //If debugging level is activated.
-    debugging = false;
+    var debugging = false;
+
+    //Wether logging is currently disabled.
+    var disabled = false;
 
 
     function log(level, text, more) {
+        if(disabled) {
+            return;
+        }
         if (text === undefined) {
             text = level;
             level = 'info';
@@ -70,6 +76,9 @@ module.exports = function createLogger() {
     }
 
     function error(text, more) {
+        if(disabled) {
+            return;
+        }
         if (more === undefined) {
             more = '';
         }
@@ -77,6 +86,9 @@ module.exports = function createLogger() {
     }
 
     function warn(text, more) {
+        if(disabled) {
+            return;
+        }
         if (more === undefined) {
             more = '';
         }
@@ -84,6 +96,9 @@ module.exports = function createLogger() {
     }
 
     function info(text, more) {
+        if(disabled) {
+            return;
+        }
         if (more === undefined) {
             more = '';
         }
@@ -91,6 +106,9 @@ module.exports = function createLogger() {
     }
 
     function debug(text, more) {
+        if(disabled) {
+            return;
+        }
         if (more === undefined) {
             more = '';
         }
@@ -98,6 +116,9 @@ module.exports = function createLogger() {
     }
 
     function silly(text, more) {
+        if(disabled) {
+            return;
+        }
         if (more === undefined) {
             more = '';
         }
@@ -122,6 +143,21 @@ module.exports = function createLogger() {
         info('Enabling debugging output');
     }
 
+    /**
+     *   Will disable any logging.
+     *   Meant for testing where we don't want logs.
+     */
+    function disableLogging() {
+        disabled = true;
+    }
+
+    /**
+     *   Will enable loggong, as it is by default.
+     */
+    function enableLogging() {
+        disabled = false;
+    }
+
     return {
         log: log,
         debug: debug,
@@ -129,7 +165,9 @@ module.exports = function createLogger() {
         error: error,
         warn: warn,
         silly: silly,
-        enableDebug: enableDebug
+        enableDebug: enableDebug,
+        disable: disableLogging,
+        enable: enableLogging
     }
 
 }();

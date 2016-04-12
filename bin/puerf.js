@@ -1,13 +1,13 @@
-#! /usr/bin/env node
-
 /**
 
-    puerF, a commandline tool to run puer with mocked FreeMarker pages.
+    puerF, a cimple tool to run a live reloading server
+    with mocked routes and FreeMarker tmeplates.
+
+    Please see the cli for available options.
 
 */
 
 //Dependencies.
-var cli = require('commander');
 var fs = require('fs');
 
 //Submodules
@@ -15,71 +15,52 @@ var processor = require('./routePreProcessor');
 var startPuer = require('./puerServer');
 var logger = require('./logger');
 
-//The puer server.
+//The server we are running, so that it can be closed later.
 var server = null;
 
-//Get the npm packe so we can read from it.
-var package = require('./../package.json');
+//Keep track of all watcher we started so we can close them later.
+var watcher = [];
 
-//Configure commandline usage.
-cli
-    .version(package.version)
-    .usage('[cmd] [options]')
-    .description('Start a puer Server, easily mock routes and render FreeMarker templates')
-    .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
-    .option('-m, --mock <file>', 'Your standard puer mock file')
-    .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
-    .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored') //TODO check this works, path might be weird.
-    .option('-r, --root <folder>', 'The root folder that files should be served from')
-    .option('-p, --port <number>', 'Specific port to use')
-    .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
-    .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
-    .option('-l, --localhost', 'Use "localhost" instead of "127.0.0.1"')
-    .option('--no-browser', 'Do not autimatically open a brwoser')
-    .option('--debug', 'Display debug messages')
+/**
+ *   Just runs the initializer.
+ */
+function runInitializer(options, callback) {
+    var initializer = require('./initializer');
+    initializer.init(options, callback);
+}
 
-//Define a set up command
-cli
-    .command('init')
-    .usage('[options]')
-    .description('Set up basic folders and files tow ork with puerf')
-    .option('-M, --mock-folder <folder>', 'Specify the folder for mock files')
-    .option('--no-mock', 'Disables generating mock files')
-    .option('-T, --template-folder <folder>', 'Specify the folder for FreeMarker templates')
-    .option('--no-template', 'Disables generating template files')
-    .action(function(options) {
-        var initializer = require('./initializer');
-        initializer.init(options);
+/**
+ *   Starts teh core application.
+ */
+function startPuerF(options, callback) {
+
+    //Check if we should enable debug.
+    if (options.debug) {
+        logger.enableDebug();
+    }
+
+    runPuerF(options, callback)
+}
+
+/**
+*   Programatically closes puerF.
+    //FIXME this is not working, see https://github.com/leeluolee/puer/issues/30
+*/
+function closePuerF(callback) {
+    logger.debug('Stopping file watchers');
+    watcher.forEach(watcher => {
+        watcher.close();
     });
-
-//Give some more help text
-cli.on('--help', function() {
-    console.log('  More info:');
-    console.log('');
-    console.log('    visit https://github.com/HoverBaum/puerF');
-});
-
-
-//Runn commander.js
-cli.parse(process.argv);
-
-//Check if we should enable debug.
-if (cli.debug) {
-    logger.enableDebug();
+    logger.debug('Stopping server');
+    server.close(function() {
+        callback();
+    });
 }
 
-//Set up handling of undcaught errors, so that we won't crash.
-process.on('uncaughtException', function(err) {
-    logger.error('Congratulations, you found a bug\nShould this keep happening, please:\n  - run with --debug\n  - file a bug report at https://github.com/HoverBaum/puerF/issues');
-    logger.error(err);
-});
-
-//Start puerf if we are not running the init script.
-if(cli.args.every(elm => elm._name !== 'init')) {
-    startPuerf();
-}
-
-function startPuerf() {
+/**
+ *   Actually start the core application.
+ */
+function runPuerF(cli, callback) {
 
     //Path to ftlRoutes file.
     var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
@@ -95,14 +76,16 @@ function startPuerf() {
 
     //Watch route files for changes and act upon them.
     if (fs.existsSync(ftlRoutesFile)) {
-        fs.watch(ftlRoutesFile, (event, filename) => {
+        var ftlWatcher = fs.watch(ftlRoutesFile, (event, filename) => {
             onRoutesChange();
         });
+        watcher.push(ftlWatcher);
     }
     if (fs.existsSync(routesFile)) {
-        fs.watch(routesFile, (event, filename) => {
+        var routesWatcher = fs.watch(routesFile, (event, filename) => {
             onRoutesChange();
         });
+        watcher.push(routesWatcher);
     }
 
 
@@ -135,7 +118,6 @@ function startPuerf() {
      */
     logger.info('Starting up...');
 
-
     //Initially parse the routes files and start the puer server.
     processRouteFiles(function() {
         logger.info('Initially compiled routes, starting server...')
@@ -147,6 +129,12 @@ function startPuerf() {
             localhost: cli.localhost,
             browser: cli.browser,
             templatesPath: templatesPath
-        });
+        }, callback);
     });
 };
+
+module.exports = {
+    start: startPuerF,
+    close: closePuerF,
+    init: runInitializer
+}
