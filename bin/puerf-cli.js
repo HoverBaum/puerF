@@ -62,4 +62,12 @@ process.on('uncaughtException', function(err) {
     logger.error(err);
 });
 
-puerf.start(cli);
+
+//Check if we are not running other commands.
+if(cli.args.every(command => {
+    command._name !== 'init';
+})) {
+
+    puerf.start(cli);
+
+}

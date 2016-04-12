@@ -34,9 +34,6 @@ function startPuerF(options, callback) {
         logger.enableDebug();
     }
 
-    if (callback === undefined && command !== undefined) {
-        callback = command;
-    }
     runPuerF(callback)
 }
 
