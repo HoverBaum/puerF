@@ -51,7 +51,7 @@ module.exports = function(test, tmpPath) {
                 writeHeader: function(){},
                 end: function(){},
                 write: function(data) {
-                    t.ok(data.testOK, 'data for routes, plain data route is correct');
+                    t.ok(data.testOK, 'data for ftl routes, plain data route is correct');
                     rightJSONData();
                 }
             }
@@ -64,7 +64,7 @@ module.exports = function(test, tmpPath) {
                 writeHeader: function(){},
                 end: function(){},
                 write: function(data) {
-                    t.notOk(data.testOK, 'data for routes, JSON data is correct');
+                    t.notOk(data.testOK, 'data for ftl routes, JSON data is correct');
                     routesEmpty();
                 }
             }

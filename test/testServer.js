@@ -7,6 +7,8 @@ module.exports = function(test, tmpPath) {
 
 //NOTE Server is not corretly closing down right now....
 
+//TODO test routes that have /:something to see if that is setup right.
+
     test.skip('Server for mocks and static files', function(t) {
 
         //Remove tmp folder if it is there.
