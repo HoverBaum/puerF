@@ -18,6 +18,15 @@
 
 */
 
+//TODO handle requests to something/:param
+//maybe let express get the params for us, cut the url and only register listeners on something.
+//conflict with comething/:one/:two
+//try using inbuild mocking of puer more and only mock routes for freemarker templates myself, maybe that works better.
+
+//NOTE maybe replace puer with a live-reloader as we are only using it for that, could solve bugs in test with server not closing
+
+//NOTE using express starts to seem like an overhead that is unneded.
+
 //Include dependencies.
 var express = require('express');
 var path = require('path');
