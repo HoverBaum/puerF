@@ -109,7 +109,7 @@ function startPuerServer(routesFile, options, callback) {
             });
 
             //Call handler with this as context so that fm is present.
-            handler.call(this, req, res, next);
+            handler(req, res, next, fm);
         } else {
             next();
         }

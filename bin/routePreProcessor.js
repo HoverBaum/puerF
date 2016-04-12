@@ -49,7 +49,7 @@ module.exports = function routePreProcessor() {
             var absPath = path.resolve(path.dirname(ftlRoutesFile), config.jsonFile).replace(/\.json$/, '');
             data = require(absPath);
         }
-        return `function(req, res, next) {
+        return `function(req, res, next, fm) {
             var data = JSON.parse('${JSON.stringify(data)}');
             fm.render('${config.template}', data, function(err, data, out) {
                 res.writeHeader(200, {

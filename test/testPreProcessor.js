@@ -16,6 +16,7 @@ module.exports = function(test, tmpPath) {
         if(fs.existsSync(tmpPath)) fs.removeSync(tmpPath);
         fs.copySync(path.join(__dirname, 'assets', 'routes.js'), path.join(__dirname, 'tmp', 'routes.js'));
         fs.copySync(path.join(__dirname, 'assets', 'ftlRoutes.js'), path.join(__dirname, 'tmp', 'ftlRoutes.js'));
+        fs.copySync(path.join(__dirname, 'assets', 'someJSON.json'), path.join(__dirname, 'tmp', 'data.json'));
 
         var config = {
             routesFile: path.join(__dirname, 'tmp', 'routes.js'),
@@ -31,10 +32,43 @@ module.exports = function(test, tmpPath) {
             processor.process(config, function() {
                 t.ok(fs.existsSync(config.combinedFile), 'both files filled, combined file exists');
                 var mod = helper.loadModule(config.combinedFile);
-                var value = mod['GET /test'] && mod['GET /ftl'];
-                t.ok(value, 'both files filled, combined file has methods from both files');
-                routesEmpty();
+                t.ok(mod['GET /test'], 'both files filled, combined file has routes file methods');
+                t.ok(mod['GET /ftl'], 'both files filled, combined file has ftl methods');
+                rightData();
             });
+        }
+
+        var fakeFM = {
+            render: function(string, data, callback) {
+                callback(null, data);
+            }
+        }
+
+        //Make sure routs actually return the right data.
+        function rightData() {
+            var mod = helper.loadModule(config.combinedFile);
+            var fakeRes = {
+                writeHeader: function(){},
+                end: function(){},
+                write: function(data) {
+                    t.ok(data.testOK, 'data for routes, plain data route is correct');
+                    rightJSONData();
+                }
+            }
+            mod['GET /ftl'](null, fakeRes, null, fakeFM);
+        }
+
+        function rightJSONData(){
+            var mod = helper.loadModule(config.combinedFile);
+            var fakeRes = {
+                writeHeader: function(){},
+                end: function(){},
+                write: function(data) {
+                    t.notOk(data.testOK, 'data for routes, JSON data is correct');
+                    routesEmpty();
+                }
+            }
+            mod['GET /json'](null, fakeRes, null, fakeFM);
         }
 
         //Test empty routes file
@@ -92,7 +126,7 @@ module.exports = function(test, tmpPath) {
         }
 
         function end() {
-            fs.removeSync(tmpPath);
+            //fs.removeSync(tmpPath);
             t.end();
         }
 
