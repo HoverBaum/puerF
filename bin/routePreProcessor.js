@@ -30,7 +30,7 @@ module.exports = function routePreProcessor() {
         var ftlRoutes = helper.loadModule(helper.absolutePath(ftlRoutesFile));
         logger.silly('FTLRoutes loaded', ftlRoutes);
         for (key in ftlRoutes) {
-            routes[key] = convertFtl(ftlRoutes[key]);
+            routes[key] = convertFtl(ftlRoutes[key], ftlRoutesFile);
         }
         var combined = createCombinedFile(routes);
         logger.debug('Routes files got combined');
@@ -41,9 +41,16 @@ module.exports = function routePreProcessor() {
     /**
      *   Converts a ftlRoutes config object so that it can be added into the combined routes file.
      */
-    function convertFtl(config) {
+    function convertFtl(config, ftlRoutesFile) {
+        var data = {};
+        if(config.data) {
+            data = config.data;
+        } else if(config.jsonFile) {
+            var absPath = path.resolve(path.dirname(ftlRoutesFile), config.jsonFile).replace(/\.json$/, '');
+            data = require(absPath);
+        }
         return `function(req, res, next) {
-            var data = JSON.parse('${JSON.stringify(config.data)}');
+            var data = JSON.parse('${JSON.stringify(data)}');
             fm.render('${config.template}', data, function(err, data, out) {
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
