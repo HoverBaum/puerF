@@ -18,19 +18,21 @@ module.exports = function createRouteLookup(config) {
     }
 
     //Iterate over all configured routes.
-    for(key in config) {
+    for (key in config) {
         parseRoute(key, config[key]);
     }
 
     /**
-    *   Take an identifier and a function to be called for a route.
-    *   @param identifier   Describes the route, such as "GET /index".
-    *   @param call         The function to call when route is accessed.
-    */
+     *   Take an identifier and a function to be called for a route.
+     *   @param identifier   Describes the route, such as "GET /index".
+     *   @param call         The function to call when route is accessed.
+     */
     function parseRoute(identifier, call) {
         identifiers = identifier.split(' ');
         var method = identifiers[0].toLowerCase();
         var path = identifiers[1];
+        var info = createPathObject(path);
+        info.call = call;
         logger.silly('Parsed a route for mocking', {
             method,
             path,
@@ -38,7 +40,27 @@ module.exports = function createRouteLookup(config) {
         })
 
         //Add this route and it's function to the router;
-        routes[method].set(path, call);
+        routes[method].set(path, info);
+    }
+
+    /**
+     *   Create an object that rpresents a URL and possible parameters in the it.
+     */
+    function createPathObject(path) {
+        var obj = {
+            path: '',
+            params: []
+        }
+        if (/:/g.test(path)) {
+            var parts = path.split(':');
+            obj.path = parts.shift().replace(/\/$/, '');
+            parts.forEach(param => {
+                obj.params.push(param.replace(/\/$/, ''));
+            });
+        } else {
+            obj.path = path;
+        }
+        return obj;
     }
 
     return routes;
