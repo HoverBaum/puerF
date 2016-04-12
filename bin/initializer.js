@@ -13,6 +13,8 @@
 
 */
 
+//TODO give better feedback when files already exist.
+
 var path = require('path');
 var fs = require('fs');
 var logger = require('./logger');

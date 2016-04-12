@@ -26,15 +26,14 @@ module.exports = function routePreProcessor() {
         var ftlRoutesFile = options.ftlRoutesFile;
         var combinedFile = options.combinedFile;
         var routes = helper.loadModule(helper.absolutePath(routesFile));
-        logger.silly('Routes file loaded', routes);
+        logger.debug('Routes file loaded', helper.absolutePath(routesFile));
         var ftlRoutes = helper.loadModule(helper.absolutePath(ftlRoutesFile));
-        logger.silly('FTLRoutes loaded', ftlRoutes);
+        logger.debug('FTLRoutes loaded', helper.absolutePath(ftlRoutesFile));
         for (key in ftlRoutes) {
             routes[key] = convertFtl(ftlRoutes[key], ftlRoutesFile);
         }
         var combined = createCombinedFile(routes);
         logger.debug('Routes files got combined');
-        logger.silly('New combined routes file', combined);
         saveCombined(combined, combinedFile, callback)
     }
 
@@ -65,7 +64,6 @@ module.exports = function routePreProcessor() {
      *   Uses all routes to write a file that can be used with puer.
      */
     function createCombinedFile(routes) {
-        logger.silly('Creating combined file', routes);
         var start = `module.exports = {`;
         var end = `}`;
         var middle = createMiddleString(routes);
@@ -84,7 +82,6 @@ module.exports = function routePreProcessor() {
 
         //Remove the last ','.
         string = string.replace(new RegExp(',' + '$'), '\n');
-        logger.silly('Middlestring for combined routes', string);
         return string;
     }
 
