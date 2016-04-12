@@ -38,6 +38,20 @@ module.exports = function(test, tmpPath) {
             });
         }
 
+        //Test that normal puer routes have the right data after combining.
+        function rightData() {
+            var mod = helper.loadModule(config.combinedFile);
+            var fakeRes = {
+                writeHeader: function(){},
+                end: function(){},
+                send: function(data) {
+                    t.ok(data.dataFound, 'data for puer routes, correct data send');
+                    rightftlData()
+                }
+            }
+            mod['GET /data'](null, fakeRes, null);
+        }
+
         var fakeFM = {
             render: function(string, data, callback) {
                 callback(null, data);
@@ -45,7 +59,7 @@ module.exports = function(test, tmpPath) {
         }
 
         //Make sure routs actually return the right data.
-        function rightData() {
+        function rightftlData() {
             var mod = helper.loadModule(config.combinedFile);
             var fakeRes = {
                 writeHeader: function(){},

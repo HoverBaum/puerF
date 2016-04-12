@@ -12,15 +12,15 @@ var tmpPath = path.join(__dirname, 'tmp');
 
 //Test helper functionalities
 var helperTest = require('./testHelper');
-helperTest(test, tmpPath);
+//helperTest(test, tmpPath);
 
 //Test initialization script
 var initializationTest = require('./testInitializer');
-initializationTest(test, tmpPath);
+//initializationTest(test, tmpPath);
 
 //Test generation of lookp for mocked routes
 var mockRouterTest = require('./testMockRouter');
-mockRouterTest(test);
+//mockRouterTest(test);
 
 //Test PreProcessing module
 var preProcessorTest = require('./testPreProcessor');
@@ -28,11 +28,11 @@ preProcessorTest(test, tmpPath);
 
 //Test running a server.
 var serverTest = require('./testServer');
-serverTest(test, tmpPath);
+//serverTest(test, tmpPath);
 
 //Test main component does the right things given options.
 var puerFTest = require('./testPuerF');
-puerFTest(test, tmpPath);
+//puerFTest(test, tmpPath);
 
 test.onFinish(function() {
 
