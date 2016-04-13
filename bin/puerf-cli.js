@@ -57,10 +57,13 @@ cli.on('--help', function() {
 cli.parse(process.argv);
 
 //Set up handling of undcaught errors, so that we won't crash.
-process.on('uncaughtException', function(err) {
-    logger.error('Congratulations, you found a bug\nShould this keep happening, please:\n  - run with --debug\n  - file a bug report at https://github.com/HoverBaum/puerF/issues');
-    logger.error(err);
-});
+if(!cli.debug) {
+    process.on('uncaughtException', function(err) {
+        logger.error('Congratulations, you found a bug\nShould this keep happening, please:\n  - run with --debug\n  - file a bug report at https://github.com/HoverBaum/puerF/issues');
+        logger.error(err);
+    });
+}
+
 
 
 //Check if we are not running other commands.

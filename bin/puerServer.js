@@ -34,7 +34,7 @@ var puer = require('puer');
 var http = require('http');
 var open = require('open');
 var helper = require('./helper');
-var mockRoutes = require('./puerMockRouter');
+var mocks = require('./puerMockRouter');
 var logger = require('./logger');
 
 //Include this here in case this is used as a global package.
@@ -66,86 +66,106 @@ function startPuerServer(routesFile, options, callback) {
     var app = express();
     var server = http.createServer(app);
 
-    //The root directory for static files.
-    var staticDir = (options.dir) ? helper.absolutePath(options.dir) : process.cwd();
-    logger.debug('Static files will be served from: ', staticDir);
+    configureServer();
+    setupMockRoutes(startServer);
 
-    //A container for mocked routes.
-    var mocks = null;
-    setupMockRoutes();
 
-    //Use puer as a middleware for the express server.
-    var puerOptions = {
-        dir,
-        ignored,
-        filetype
-    };
-    logger.debug('Options for puer: ', puerOptions);
+    /**
+     *   Set up the express server and configure routing.
+     */
+    function configureServer() {
 
-    /*
-        Include middlewares, puer has to be the first one!
-    */
-    app.use(puer.connect(app, server, puerOptions));
-    //NOTE this is keeping the server from shutting down programatically
+        //The root directory for static files.
+        var staticDir = (options.dir) ? helper.absolutePath(options.dir) : process.cwd();
+        logger.debug('Static files will be served from: ', staticDir);
 
-    //Serve static files.
-    app.use("/", express.static(staticDir));
+        //A container for mocked routes.
 
-    //Setup freemarker template handling.
-    var viewRoot = path.join(process.cwd(), options.templatesPath);
-    viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
-    logger.debug('Freemarker templates folder: ', viewRoot);
-    var fm = new Freemarker({
-        viewRoot: viewRoot
-    });
+        //Use puer as a middleware for the express server.
+        var puerOptions = {
+            dir,
+            ignored,
+            filetype
+        };
+        logger.debug('Options for puer: ', puerOptions);
 
-    //Create routes for everything in our combined routes file.
-    app.use('/*', function(req, res, next) {
-        var method = req.method.toLowerCase();
-        var url = req.originalUrl.replace(/\?.*=.*$/, '');
-        var handler = mocks[method].get(url);
-        logger.silly('Request to server', {
-            time: Date.now(),
-            originalUrl: req.originalUrl,
-            url,
-            method: req.method
+        /*
+            Include middlewares, puer has to be the first one!
+        */
+        app.use(puer.connect(app, server, puerOptions));
+        //NOTE this is keeping the server from shutting down programatically
+
+        //Serve static files.
+        app.use("/", express.static(staticDir));
+
+        //Setup freemarker template handling.
+        var viewRoot = path.join(process.cwd(), options.templatesPath);
+        viewRoot = viewRoot.replace(/\\/g, "\\\\"); //HACK this is an ugly hackaround for windows.
+        logger.debug('Freemarker templates folder: ', viewRoot);
+        var fm = new Freemarker({
+            viewRoot: viewRoot
         });
-        this.fm = fm;
-        if (handler !== undefined) {
-            logger.silly('Mocking route ', {
-                url: url,
-                method: method
+
+        //Create routes for everything in our combined routes file.
+        //NOTE test/ gives 404 while /test gives error
+        app.use('/*', function(req, res, next) {
+            var method = req.method.toLowerCase();
+            var url = req.originalUrl.replace(/\?.*=.*$/, '');
+            logger.silly('Now looking up info object', url);
+            var info = mocks.lookUp(url, method);
+            logger.silly('Looked up info object', info);
+            logger.silly('Request to server', {
+                time: Date.now(),
+                originalUrl: req.originalUrl,
+                url,
+                method: req.method,
+                infoObj: info
             });
+            this.fm = fm;
+            if (info !== undefined) {
+                req.params = info.paramValues;
+                var handler = info.call;
+                logger.silly('Mocking route ', {
+                    url: url,
+                    method: method
+                });
 
-            //Call handler with this as context so that fm is present.
-            handler(req, res, next, fm);
-        } else {
-            next();
-        }
-    });
+                //Call handler with this as context so that fm is present.
+                handler(req, res, next, fm);
+            } else {
+                res.status(404).end();
+            }
+        });
+    }
 
-    //Actually run the server.
-    //TODO check if port available, try different one otherwise.
-    var listener = server.listen(port, function() {
-        var usedPort = listener.address().port
-        logger.info(`Server running on port: ${usedPort}`);
+    /**
+     *   Actually start the server.
+     */
+    function startServer() {
 
-        //Reanable console.
-        console.log = oldConsole;
+        //TODO check if port available, try different one otherwise.
+        var listener = server.listen(port, function() {
+            var usedPort = listener.address().port
+            logger.info(`Server running on port: ${usedPort}`);
 
-        //We are now finsihed setting up.
-        if(callback) {
-            callback(server);
-        }
+            //Reanable console.
+            console.log = oldConsole;
 
-        //Open browser for user.
-        if (options.browser) {
-            logger.info('Openening browser...');
-            var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
-            open(`http://${domain}:${usedPort}`);
-            logger.info('Happy coding :)');
-        }
-    });
+            //We are now finsihed setting up.
+            if (callback) {
+                callback(server);
+            }
+
+            //Open browser for user.
+            if (options.browser) {
+                logger.info('Openening browser...');
+                var domain = (options.localhost) ? 'localhost' : '127.0.0.1';
+                open(`http://${domain}:${usedPort}`);
+                logger.info('Happy coding :)');
+            }
+        });
+    }
+
 
     /**
      *   Will parse the combined routes file into actual routes.
@@ -156,19 +176,21 @@ function startPuerServer(routesFile, options, callback) {
             requirePath
         });
         var config = helper.loadModule(requirePath);
-        mocks = mockRoutes(config);
+        mocks.configure(config);
         logger.debug('Rebuild mocks');
-        logger.silly('Mocks are: ', mocks);
-        if(callback) {
+        if (callback) {
             callback();
         }
     }
 
+    /**
+     *   Closes the server down.
+     */
     function closeServer(callback) {
         logger.debug('Server will be closed');
         server.close(function() {
             logger.debug('Server closed');
-            if(callback) {
+            if (callback) {
                 callback();
             }
         });
