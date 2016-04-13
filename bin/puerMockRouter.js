@@ -16,6 +16,9 @@ module.exports = function createRouteLookup() {
         put: new Map()
     }
 
+    /**
+     *   Parse a config object into a routes store.
+     */
     function parseRoutes(config) {
         logger.silly('Creating a route lookup object', config);
 
@@ -24,7 +27,6 @@ module.exports = function createRouteLookup() {
             parseRoute(key, config[key]);
         }
         logger.silly('Mocked routes configured', routes);
-        //console.log(require('util').inspect(routes, true, 5))
     }
 
     /**
