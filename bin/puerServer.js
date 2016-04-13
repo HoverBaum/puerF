@@ -101,18 +101,20 @@ function startPuerServer(routesFile, options, callback) {
     app.use('/*', function(req, res, next) {
         var method = req.method.toLowerCase();
         var url = req.originalUrl.replace(/\?.*=.*$/, '');
+        logger.silly('Now looking up info object', url);
         var info = mocks.lookUp(url, method);
-        req.params = info.paramValues;
-        var handler = info.call;
-        logger.silly('Request to server', {
+        logger.silly('Looked up info object', info);
+        //req.params = info.paramValues;
+    //    var handler = info.call;
+        /*logger.silly('Request to server', {
             time: Date.now(),
             originalUrl: req.originalUrl,
             url,
             method: req.method,
             infoObj: info
-        });
+        });*/
         this.fm = fm;
-        if (handler !== undefined) {
+    /*    if (handler !== undefined) {
             logger.silly('Mocking route ', {
                 url: url,
                 method: method
@@ -122,7 +124,8 @@ function startPuerServer(routesFile, options, callback) {
             handler(req, res, next, fm);
         } else {
             next();
-        }
+        }*/
+        res.send('hi')
     });
 
     //Actually run the server.

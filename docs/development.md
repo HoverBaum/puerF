@@ -45,3 +45,7 @@ One of the important things to remember it to use `--no-ff` when merging branche
 ### Example
 
 Commonly we will work on the `development` branch, or we may create an extra branch called `feature name` to develop a feature or make some changes. Once we are sattisfied with what we have got we create a branch `release-x.x.x` from development with `git checkout -b release-x.x.x development`. Than on this release branch we usually at least want to update the version number in the package, so we might run `npm version patch` to change that. We can also make last minute hotfixes here and maybe update the readme but shouldn't include more features. They simply have to wait for the next release. Now we merge the release branch into both the master and development branch. remember to use `git merge --no-ff` to create new commit objects.
+
+## errors
+
+An error that was stumbled upon multiple times so far is `can not set displayName of undefined` or something of the likes. In this case make sure all variables are defined. That is probably where the error occurs.
