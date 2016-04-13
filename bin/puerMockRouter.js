@@ -63,7 +63,7 @@ module.exports = function createRouteLookup() {
                 info = inf;
             }
         });
-        if (info !== null) {
+        if (info !== undefined) {
             params.reverse();
             info.paramValues = {};
             info.params.forEach((par, index) => {

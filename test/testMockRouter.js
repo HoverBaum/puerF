@@ -33,6 +33,13 @@ module.exports = function(test) {
         t.ok(challow.paramValues.id, 'challow route, works as well');
         t.equal(challow.paramValues.id, '12345', 'challow route, has right paramValue');
 
+        //Check 404
+        var userProblem = mock.lookUp('/user', 'get');
+        t.notOk(userProblem, 'Route with no params');
+
+        var anotherUser = mock.lookUp('/user/', 'get');
+        t.equal(anotherUser, undefined, 'Route with no params even with /');
+
         //Make sure unexisting routes are undefined
         var notThere = mock.lookUp('/this/route/does/not/exist/for/sure', 'get');
         t.equal(notThere, undefined, 'Non existing routes are undefined');

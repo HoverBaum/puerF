@@ -107,6 +107,7 @@ function startPuerServer(routesFile, options, callback) {
         });
 
         //Create routes for everything in our combined routes file.
+        //NOTE test/ gives 404 while /test gives error
         app.use('/*', function(req, res, next) {
             var method = req.method.toLowerCase();
             var url = req.originalUrl.replace(/\?.*=.*$/, '');
