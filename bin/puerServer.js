@@ -114,13 +114,13 @@ function startPuerServer(routesFile, options, callback) {
             var info = mocks.lookUp(url, method);
             console.log(info);
             logger.silly('Looked up info object', info);
-            logger.silly('Request to server', {
+            /*logger.silly('Request to server', {
                 time: Date.now(),
                 originalUrl: req.originalUrl,
                 url,
                 method: req.method,
                 infoObj: info
-            });
+            });*/
             this.fm = fm;
             if (info !== undefined) {
                 console.log('info not undefined');
