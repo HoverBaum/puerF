@@ -28,7 +28,9 @@ module.exports = function(test) {
         t.equal(info.paramValues.id, '1234', 'Paramter routes, paramteres have the expected values');
         t.equal(info.paramValues.name, 'username', 'Paramter routes, different paramteres have the expected values');
 
-
+        var challow = mock.lookUp('/user/12345', 'get');
+        t.ok(challow.paramValues.id, 'challow route, works as well');
+        t.equal(challow.paramValues.id, '12345', 'challow route, has right paramValue');
 
         t.end();
     });

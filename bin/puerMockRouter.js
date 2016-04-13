@@ -24,25 +24,22 @@ module.exports = function createRouteLookup() {
             parseRoute(key, config[key]);
         }
         logger.silly('Mocked routes configured', routes);
+        //console.log(require('util').inspect(routes, true, 5))
     }
 
     /**
      *   Looks up a route and returns object with info if present.
      */
     function lookUpRoute(path, method, params) {
-        if(params === undefined) params = [];
-        if(routes[method].has(path) === true) {
-            var info = routes[method].get(path);
-            params.reverse();
-            info.paramValues = {};
-            info.params.forEach((par, index) => {
-                info.paramValues[par] = params[index];
-            });
+        if (params === undefined) params = [];
+        if (routes[method].has(path) === true) {
+            var infoArray = routes[method].get(path);
+            var info = createInfoFromArray(infoArray, path, params);
             return info;
-        } else  {
+        } else {
 
             //If path is still 2+ deep.
-            if(/^\/.*\/.+/.test(path)) {
+            if (/^\/.*\/.+/.test(path)) {
                 var parts = path.split('/');
                 var lastParam = parts.pop().replace(/\//g, '');
                 params.push(lastParam);
@@ -52,6 +49,26 @@ module.exports = function createRouteLookup() {
                 return undefined;
             }
         }
+    }
+
+    /**
+     *  From an array of possible info objects finds the right one and adds paramValues.
+     */
+    function createInfoFromArray(infoArray, path, params) {
+        var info = null;
+        infoArray.forEach(inf => {
+            if (inf.params.length === params.length) {
+                info = inf;
+            }
+        });
+        if (info !== null) {
+            params.reverse();
+            info.paramValues = {};
+            info.params.forEach((par, index) => {
+                info.paramValues[par] = params[index];
+            });
+        }
+        return info;
     }
 
     /**
@@ -72,7 +89,12 @@ module.exports = function createRouteLookup() {
         })
 
         //Add this route and it's function to the router;
-        routes[method].set(info.path, info);
+        if (!routes[method].has(info.path)) {
+            routes[method].set(info.path, [info]);
+        } else {
+            routes[method].get(info.path).push(info);
+        }
+
     }
 
     /**

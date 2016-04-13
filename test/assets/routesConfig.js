@@ -22,5 +22,8 @@ module.exports = {
     },
     'GET /user/:id/:name': function() {
         return true;
+    },
+    'GET /user/:id': function() {
+        return false;
     }
 }
