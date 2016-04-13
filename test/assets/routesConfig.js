@@ -20,7 +20,7 @@ module.exports = {
     'GET /test': function() {
         throw(new Error('Test error'));
     },
-    'GET /user/:id': function() {
+    'GET /user/:id/:name': function() {
         return true;
     }
 }
