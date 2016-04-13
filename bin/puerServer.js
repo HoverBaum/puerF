@@ -18,11 +18,6 @@
 
 */
 
-//TODO handle requests to something/:param
-//maybe let express get the params for us, cut the url and only register listeners on something.
-//conflict with comething/:one/:two
-//try using inbuild mocking of puer more and only mock routes for freemarker templates myself, maybe that works better.
-
 //NOTE maybe replace puer with a live-reloader as we are only using it for that, could solve bugs in test with server not closing
 
 //NOTE using express starts to seem like an overhead that is unneded.
@@ -107,7 +102,6 @@ function startPuerServer(routesFile, options, callback) {
         });
 
         //Create routes for everything in our combined routes file.
-        //NOTE test/ gives 404 while /test gives error
         app.use('/*', function(req, res, next) {
             var method = req.method.toLowerCase();
             var url = req.originalUrl.replace(/\?.*=.*$/, '');
