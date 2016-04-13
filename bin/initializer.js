@@ -13,8 +13,6 @@
 
 */
 
-//TODO give better feedback when files already exist.
-
 var path = require('path');
 var fs = require('fs');
 var logger = require('./logger');
@@ -77,6 +75,7 @@ module.exports = function createInitializer() {
     function createFileIfNotExist(file, contents) {
         try {
             fs.accessSync(file);
+            logger.info(`${file} already exists, will not be overwritten`);
         } catch (e) {
             fs.writeFileSync(file, contents);
         }
