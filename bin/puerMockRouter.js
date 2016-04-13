@@ -71,7 +71,7 @@ module.exports = function createRouteLookup() {
         })
 
         //Add this route and it's function to the router;
-        routes[method].set(path, info);
+        routes[method].set(info.path, info);
     }
 
     /**

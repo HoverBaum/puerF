@@ -19,5 +19,8 @@ module.exports = {
     },
     'GET /test': function() {
         throw(new Error('Test error'));
+    },
+    'GET /user/:id': function() {
+        return true;
     }
 }
