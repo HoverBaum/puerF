@@ -23,7 +23,7 @@ module.exports = function createRouteLookup() {
         for (key in config) {
             parseRoute(key, config[key]);
         }
-        logger.silly('Moked routes configured', routes);
+        logger.silly('Mocked routes configured', routes);
     }
 
     /**
