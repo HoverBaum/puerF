@@ -112,9 +112,8 @@ function startPuerServer(routesFile, options, callback) {
             var url = req.originalUrl.replace(/\?.*=.*$/, '');
             logger.silly('Now looking up info object', url);
             var info = mocks.lookUp(url, method);
+            console.log(info);
             logger.silly('Looked up info object', info);
-            req.params = info.paramValues;
-            var handler = info.call;
             logger.silly('Request to server', {
                 time: Date.now(),
                 originalUrl: req.originalUrl,
@@ -123,7 +122,10 @@ function startPuerServer(routesFile, options, callback) {
                 infoObj: info
             });
             this.fm = fm;
-            if (handler !== undefined) {
+            if (info !== undefined) {
+                console.log('info not undefined');
+                req.params = info.paramValues;
+                var handler = info.call;
                 logger.silly('Mocking route ', {
                     url: url,
                     method: method
@@ -132,7 +134,8 @@ function startPuerServer(routesFile, options, callback) {
                 //Call handler with this as context so that fm is present.
                 handler(req, res, next, fm);
             } else {
-                next();
+                console.log('404');
+                res.status(404).end();
             }
         });
     }

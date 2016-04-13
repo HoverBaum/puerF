@@ -57,7 +57,7 @@ module.exports = function createRouteLookup() {
      *  From an array of possible info objects finds the right one and adds paramValues.
      */
     function createInfoFromArray(infoArray, path, params) {
-        var info = null;
+        var info;
         infoArray.forEach(inf => {
             if (inf.params.length === params.length) {
                 info = inf;

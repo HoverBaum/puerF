@@ -33,6 +33,14 @@ module.exports = function(test) {
         t.ok(challow.paramValues.id, 'challow route, works as well');
         t.equal(challow.paramValues.id, '12345', 'challow route, has right paramValue');
 
+        //Make sure unexisting routes are undefined
+        var notThere = mock.lookUp('/this/route/does/not/exist/for/sure', 'get');
+        t.equal(notThere, undefined, 'Non existing routes are undefined');
+
+        //Check that routes can be without the / at the beginning/
+        var wrongInput = mock.lookUp('lala', 'get');
+        t.equal(wrongInput, undefined, 'Gradually fail input without / to undefined')
+
         t.end();
     });
 
