@@ -3,7 +3,7 @@
 */
 module.exports = {
     'GET /': function() {
-
+        throw(new Error('Got home'));
     },
     'PUT /': function() {
 
