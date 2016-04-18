@@ -86,9 +86,12 @@ Real world applications might use query parameters to get specific results from 
 
 ### FreeMarker routes
 
-The file containing routes for FreeMarker should export a single object containing key like a standard puer routes mock file but provide objects as values for those keys. These 'route configurations' should have two properties:
+The file containing routes for FreeMarker should export a single object containing key like a standard puer routes mock file but provide objects as values for those keys. These 'route configurations' can have the following properties:
 - template:     The template to use.
 - data:         Data that should be handed to the template.
+- jsonData:     Path to a json file with data for this route.
+
+If both the `data` and `jsonFile` attributes are provided the `data` field will be preferred.
 
 Note that if `data` has an attribute called `user` the template will get a variable called `user` passed to it.
 
@@ -97,13 +100,13 @@ module.exports = {
     'GET /test': {
         template: 'test.ftl',
         data: {
-            name: 'value',
-            objName: {
-                property: 'someValue',
-                number: 13
-            }
+            name: 'value'
         }
     },
+    'GET /json': {
+        template: 'test.ftl',
+        jsonFile: '../data/test.json'
+    }
     //....
 }
 ```
