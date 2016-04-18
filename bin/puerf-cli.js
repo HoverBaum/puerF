@@ -26,7 +26,7 @@ cli
     .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored')
     .option('-r, --root <folder>', 'The root folder that files should be served from')
     .option('-p, --port <number>', 'Specific port to use')
-    .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml')
+    .option('-w, --watch <files>', 'Filetypes to watch, defaults to js|css|html|xhtml|ftl')
     .option('-x, --exclude <files>', 'Exclude files from being watched for updates')
     .option('-l, --localhost', 'Use "localhost" instead of "127.0.0.1"')
     .option('--no-browser', 'Do not autimatically open a brwoser')

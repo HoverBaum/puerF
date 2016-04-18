@@ -56,7 +56,7 @@ function startPuerServer(routesFile, options, callback) {
     var port = options.port || 8080;
     var dir = options.dir || './';
     var ignored = options.ignored || /node_modules/;
-    var filetype = options.watch || 'js|css|html|xhtml';
+    var filetype = options.watch || 'js|css|html|xhtml|ftl';
 
     //Express app and http server.
     var app = express();
