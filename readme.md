@@ -36,7 +36,7 @@ Options:
     -t, --templates <path>   Path to folder in which FreeMarker templates are stored
     -r, --root <folder>      The root folder that files should be served from
     -p, --port <number>      Specific port to use
-    -w, --watch <files>      Filetypes to watch, defaults to js|css|html|xhtml
+    -w, --watch <files>      Filetypes to watch, defaults to js|css|html|xhtml|ftl
     -x, --exclude <files>    Exclude files from being watched for updates
     -l, --localhost          Use "localhost" instead of "127.0.0.1"
     --no-browser             Do not autimatically open a brwoser
@@ -71,49 +71,45 @@ puerF will automatically look for two route files. `mock/routes.js` and `mock/ft
 
 Should you wish to use files from a different location you can do so useing the `-m` and `-f` options.
 
+### Syntax for routes
+
+All routes should be described as a String identifying the route and a `routeObject` containing information about how to mock that route. The `routeObject` may have any of the following properties:
+
+| Property | Description                                                     |
+|----------|-----------------------------------------------------------------|
+| handler  | A function that handles this route                              |
+| template | A FreeMarker template to be rendered for this route             |
+| data     | An object to be returned at this route or used for the template |
+| jsonFile | The path to a file containing the `data` for this route         |
+
+When a route is called puerF resolves the `routeObject` as such:
+
+- If a handler is present, it is executed
+- Else if a template is specified it is parsed
+- If none of the above are true the data is returned
+
 ### Working with query parameters
 
 Real world applications might use query parameters to get specific results from a URL. You can easily mock those requests as well. To mock a route like `/example/some?user=name`, inside your regular routes file, you can simply access `req.query.user` to get the users name.
 
 ``` javascript
-"GET /example/some": function(req, res, next) {
-    var name = req.query.user;
+"GET /example/some": {
+    handler: function(req, res, next) {
+        var name = req.query.user;
 
-    //Do something with the name, like sending it back.
-    res.status(200).send(name).end();
-}
-```
-
-### FreeMarker routes
-
-The file containing routes for FreeMarker should export a single object containing key like a standard puer routes mock file but provide objects as values for those keys. These 'route configurations' can have the following properties:
-- template:     The template to use.
-- data:         Data that should be handed to the template.
-- jsonData:     Path to a json file with data for this route.
-
-If both the `data` and `jsonFile` attributes are provided the `data` field will be preferred.
-
-Note that if `data` has an attribute called `user` the template will get a variable called `user` passed to it.
-
-``` javascript
-module.exports = {     
-    'GET /test': {
-        template: 'test.ftl',
-        data: {
-            name: 'value'
-        }
-    },
-    'GET /json': {
-        template: 'test.ftl',
-        jsonFile: '../data/test.json'
+        //Do something with the name, like sending it back.
+        res.status(200).send(name).end();
     }
-    //....
 }
 ```
 
-#### FreeMarker templates
+### FreeMarker templates
 
 By default puerF will look for FreeMarker templates in `./templates`. To specify another folder you can use `-t`. Read the guid to [author FreeMarker templates](http://freemarker.org/docs/dgui.html).
+
+### An example routes.js file
+
+[coming coon TM]
 
 ## Testing
 
