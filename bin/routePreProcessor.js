@@ -54,6 +54,9 @@ module.exports = function routePreProcessor() {
                 } else {
                     logger.debug('FreeMarker said', out);
                 }
+                if(err) {
+                    throw err;
+                }
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
                 });
