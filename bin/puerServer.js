@@ -115,7 +115,6 @@ function startPuerServer(routesFile, options, callback) {
                 method: req.method,
                 infoObj: info
             });
-            this.fm = fm;
             if (info !== undefined) {
                 req.params = info.paramValues;
                 var handler = info.call;
