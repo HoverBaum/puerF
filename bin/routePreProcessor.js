@@ -38,7 +38,7 @@ module.exports = function routePreProcessor() {
     /**
     *   Parse a single route, turn a routeObject into a function to be called.
     */
-    parseRoute(route, filePath) {
+    function parseRoute(route, filePath) {
         if(route.handler) {
             return routes.handler;
         } else if(route.template) {

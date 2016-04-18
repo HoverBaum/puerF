@@ -12,7 +12,7 @@ var tmpPath = path.join(__dirname, 'tmp');
 
 //Test helper functionalities
 var helperTest = require('./testHelper');
-helperTest(test, tmpPath);
+//helperTest(test, tmpPath);
 
 //Test initialization script
 var initializationTest = require('./testInitializer');
@@ -20,7 +20,7 @@ var initializationTest = require('./testInitializer');
 
 //Test generation of lookp for mocked routes
 var mockRouterTest = require('./testMockRouter');
-mockRouterTest(test);
+//mockRouterTest(test);
 
 //Test PreProcessing module
 var preProcessorTest = require('./testPreProcessor');
