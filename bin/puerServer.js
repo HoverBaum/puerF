@@ -128,6 +128,7 @@ function startPuerServer(routesFile, options, callback) {
                 //Set up the required context.
                 this.fs = fs;
                 this.fm = fm;
+                this.logger = logger;
 
                 //Call handler with this as context so that fm is present.
                 handler.call(this, req, res, next);

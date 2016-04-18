@@ -49,6 +49,11 @@ module.exports = function routePreProcessor() {
         return `function(req, res, next) {
             ${dataString}
             fm.render('${config.template}', fmData, function(err, data, out) {
+                if(out !== '*** DONE ***') {
+                    logger.warn('FreeMarker said', out);
+                } else {
+                    logger.debug('FreeMarker said', out);
+                }
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
                 });
