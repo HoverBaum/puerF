@@ -49,10 +49,10 @@ module.exports = function routePreProcessor() {
         return `function(req, res, next) {
             ${dataString}
             fm.render('${config.template}', fmData, function(err, data, out) {
-                if(out !== '*** DONE ***') {
-                    logger.warn('FreeMarker said', out);
-                } else {
+                if(/.+DONE.+/.test(out)) {
                     logger.debug('FreeMarker said', out);
+                } else {
+                    logger.warn('FreeMarker said', out);
                 }
                 if(err) {
                     throw err;
