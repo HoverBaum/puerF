@@ -25,6 +25,7 @@
 //Include dependencies.
 var express = require('express');
 var path = require('path');
+var fs = require('fs');
 var puer = require('puer');
 var http = require('http');
 var open = require('open');
@@ -115,6 +116,7 @@ function startPuerServer(routesFile, options, callback) {
                 method: req.method,
                 infoObj: info
             });
+
             if (info !== undefined) {
                 req.params = info.paramValues;
                 var handler = info.call;
@@ -123,8 +125,12 @@ function startPuerServer(routesFile, options, callback) {
                     method: method
                 });
 
+                //Set up the required context.
+                this.fs = fs;
+                this.fm = fm;
+
                 //Call handler with this as context so that fm is present.
-                handler(req, res, next, fm);
+                handler.call(this, req, res, next);
             } else {
                 res.status(404).end();
             }

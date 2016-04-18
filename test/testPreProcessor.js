@@ -69,7 +69,9 @@ module.exports = function(test, tmpPath) {
                     rightJSONData();
                 }
             }
-            mod['GET /ftl'](null, fakeRes, null, fakeFM);
+            this.fm = fakeFM;
+            this.fs = fs;
+            mod['GET /ftl'].call(this, null, fakeRes, null);
         }
 
         function rightJSONData(){
@@ -82,7 +84,9 @@ module.exports = function(test, tmpPath) {
                     routesEmpty();
                 }
             }
-            mod['GET /json'](null, fakeRes, null, fakeFM);
+            this.fm = fakeFM;
+            this.fs = fs;
+            mod['GET /json'].call(this, null, fakeRes, null);
         }
 
         //Test empty routes file

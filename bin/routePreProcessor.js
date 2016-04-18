@@ -2,11 +2,6 @@
 
     A module to process routes.js and tflRoutes.js files into a single file.
 
-    Call process with the following options:
-    routesFile      File to puerRoutes
-    ftlRoutesFile   File for ftl routesFile
-    combinedFile    File in which to combine routes
-
 */
 
 //Required packages for this to work.
@@ -41,16 +36,19 @@ module.exports = function routePreProcessor() {
      *   Converts a ftlRoutes config object so that it can be added into the combined routes file.
      */
     function convertFtl(config, ftlRoutesFile) {
-        var data = {};
+        var dataString = '';
         if(config.data) {
-            data = config.data;
+            dataString = `var fmData = JSON.parse('${JSON.stringify(config.data)}');`;
         } else if(config.jsonFile) {
             var absPath = path.resolve(path.dirname(ftlRoutesFile), config.jsonFile).replace(/\.json$/, '');
-            data = require(absPath);
+
+            //We read the file in and parse it to make sure we have the up to date version of mocked data.
+            dataString = `var fileData = fs.readFileSync('${absPath.replace(/\\/g, '\\\\')}.json');
+            var fmData = JSON.parse(fileData);`;
         }
-        return `function(req, res, next, fm) {
-            var data = JSON.parse('${JSON.stringify(data)}');
-            fm.render('${config.template}', data, function(err, data, out) {
+        return `function(req, res, next) {
+            ${dataString}
+            fm.render('${config.template}', fmData, function(err, data, out) {
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
                 });
