@@ -106,11 +106,10 @@ function runPuerF(cli, callback) {
      *   Process both route files with given config.
      */
     function processRouteFiles(callback) {
-        processor.process({
+        processor.process([
             routesFile,
-            ftlRoutesFile,
-            combinedFile
-        }, callback);
+            ftlRoutesFile
+        ], combinedFile, callback);
     }
 
     /**
