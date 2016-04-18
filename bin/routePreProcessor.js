@@ -24,7 +24,7 @@ module.exports = function routePreProcessor() {
             logger.debug('Including routes from', absPath);
             var routes = helper.loadModule(absPath);
             for(key in routes) {
-                if(combined[key]) {
+                if(allRoutes[key]) {
                     logger.warn('A route got defined in multiple files', key);
                 }
                 allRoutes[key] = parseRoute(routes[key], absPath);
@@ -40,7 +40,7 @@ module.exports = function routePreProcessor() {
     */
     function parseRoute(route, filePath) {
         if(route.handler) {
-            return routes.handler;
+            return route.handler;
         } else if(route.template) {
             return parseFtlRoute(route, filePath);
         } else if(route.data) {
