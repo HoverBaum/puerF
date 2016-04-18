@@ -2,6 +2,8 @@
 /**
     Commandline interface for puerF.
 */
+//TODO update optionrs
+//TODO enable the use of a config file
 
 //Use commander to handle commanline interaction.
 var cli = require('commander');

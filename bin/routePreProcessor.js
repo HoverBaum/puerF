@@ -13,37 +13,80 @@ var logger = require('./logger');
 module.exports = function routePreProcessor() {
 
     /**
-     *   Process both the regular and the ftlRoutes file into a single one.
+     *   Process all routes files into a combined one.
      */
-    function processFiles(options, callback) {
-        helper.guarantyFolder(options.combinedFile);
-        var routesFile = options.routesFile;
-        var ftlRoutesFile = options.ftlRoutesFile;
-        var combinedFile = options.combinedFile;
-        var routes = helper.loadModule(helper.absolutePath(routesFile));
-        logger.debug('Routes file loaded', helper.absolutePath(routesFile));
-        var ftlRoutes = helper.loadModule(helper.absolutePath(ftlRoutesFile));
-        logger.debug('FTLRoutes loaded', helper.absolutePath(ftlRoutesFile));
-        for (key in ftlRoutes) {
-            routes[key] = convertFtl(ftlRoutes[key], ftlRoutesFile);
-        }
-        var combined = createCombinedFile(routes);
+    function processFiles(routeFilePaths, combinedFilePath, callback) {
+        logger.debug('Combining routes into', combinedFilePath)
+        helper.guarantyFolder(combinedFilePath);
+        var allRoutes = {};
+        routeFilePaths.forEach(filePath => {
+            var absPath = helper.absolutePath(filePath);
+            logger.debug('Including routes from', absPath);
+            var routes = helper.loadModule(absPath);
+            for(key in routes) {
+                if(combined[key]) {
+                    logger.warn('A route got defined in multiple files', key);
+                }
+                allRoutes[key] = parseRoute(routes[key], absPath);
+            }
+        });
+        var combinedFile = createCombinedFile(allRoutes);
         logger.debug('Routes files got combined');
-        saveCombined(combined, combinedFile, callback)
+        saveCombined(combinedFile, combinedFilePath, callback)
+    }
+
+    /**
+    *   Parse a single route, turn a routeObject into a function to be called.
+    */
+    parseRoute(route, filePath) {
+        if(route.handler) {
+            return routes.handler;
+        } else if(route.template) {
+            return parseFtlRoute(route, filePath);
+        } else if(route.data) {
+            return parseDataRoute(route);
+        } else if(route.jsonFile) {
+            return parseJSONRoute(route, filePath);
+        } else {
+            logger.warn('A route seems to have no configuration.', {file: filePath});
+            return `function() {}`;
+        }
+    }
+
+    /**
+    *   Parse a route which provides data.
+    */
+    function parseDataRoute(route) {
+        var dataString = JSON.stringify(route.data);
+        return `function(req, res, next) {
+            res.send(JSON.parse('${dataString.replace(/\\/g, '\\\\')}'));
+        }`;
+    }
+
+    /**
+    *   Parse a route which provides data from a json file.
+    */
+    function parseJSONRoute(route, filePath) {
+        var absPath = path.resolve(path.dirname(filePath), config.jsonFile);
+        return `function(req, res, next) {
+            var fileData = fs.readFileSync('${absPath.replace(/\\/g, '\\\\')}');
+            var data = JSON.parse(fileData);
+            res.send(data);
+        }`;
     }
 
     /**
      *   Converts a ftlRoutes config object so that it can be added into the combined routes file.
      */
-    function convertFtl(config, ftlRoutesFile) {
+    function parseFtlRoute(config, ftlRoutesFile) {
         var dataString = '';
-        if(config.data) {
+        if (config.data) {
             dataString = `var fmData = JSON.parse('${JSON.stringify(config.data)}');`;
-        } else if(config.jsonFile) {
-            var absPath = path.resolve(path.dirname(ftlRoutesFile), config.jsonFile).replace(/\.json$/, '');
+        } else if (config.jsonFile) {
+            var absPath = path.resolve(path.dirname(ftlRoutesFile), config.jsonFile);
 
             //We read the file in and parse it to make sure we have the up to date version of mocked data.
-            dataString = `var fileData = fs.readFileSync('${absPath.replace(/\\/g, '\\\\')}.json');
+            dataString = `var fileData = fs.readFileSync('${absPath.replace(/\\/g, '\\\\')}');
             var fmData = JSON.parse(fileData);`;
         }
         return `function(req, res, next) {
@@ -96,7 +139,7 @@ module.exports = function routePreProcessor() {
      */
     function saveCombined(content, filePath, callback) {
         fs.writeFile(filePath, content, function() {
-            if(callback !== undefined) {
+            if (callback !== undefined) {
                 callback();
             }
         });
