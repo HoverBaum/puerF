@@ -21,7 +21,9 @@ module.exports = function(test, tmpPath) {
         var initializer = require('../bin/initializer');
         var options = {
             mockFolder: mockFolder,
-            templateFolder: templateFolder
+            templateFolder: templateFolder,
+            mock: true,
+            template: true
         }
 
         //Fist basic setup, only set paths for files into tmp dir.
@@ -41,7 +43,8 @@ module.exports = function(test, tmpPath) {
         //Check noMock option works
         function noMock() {
             fs.removeSync(tmpPath);
-            options.noMock = true;
+            options.mock = false;
+            options.template = true;
             initializer.init(options, function() {
                 fs.stat(routesFile, function(err, stats) {
                     t.notOk(stats, 'noMock init, routes don\'t exist');
@@ -59,8 +62,8 @@ module.exports = function(test, tmpPath) {
         //Check noTemplates works
         function noTemplate() {
             fs.removeSync(tmpPath);
-            options.noMock = false;
-            options.noTemplate = true;
+            options.mock = true;
+            options.template = false;
             initializer.init(options, function() {
                 fs.stat(routesFile, function(err, stats) {
                     t.ok(stats.isFile(), 'noTeamplte init, routes exist');

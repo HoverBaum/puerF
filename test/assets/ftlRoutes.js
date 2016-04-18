@@ -5,5 +5,9 @@ module.exports = {
             testOK: true,
             name: 'Tester'
         }
+    },
+    'GET /json': {
+        template: 'test',
+        jsonFile: './data.json'
     }
 }

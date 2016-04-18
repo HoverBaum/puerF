@@ -6,5 +6,6 @@
     </head>
     <body>
         <span id="test">${name}</span>
+        <#if !testOK><span id="jsonWorks">yes</span></#if>
     </body>
 </html>

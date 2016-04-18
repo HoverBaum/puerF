@@ -16,6 +16,7 @@ module.exports = function(test, tmpPath) {
         if(fs.existsSync(tmpPath)) fs.removeSync(tmpPath);
         fs.copySync(path.join(__dirname, 'assets', 'routes.js'), path.join(__dirname, 'tmp', 'routes.js'));
         fs.copySync(path.join(__dirname, 'assets', 'ftlRoutes.js'), path.join(__dirname, 'tmp', 'ftlRoutes.js'));
+        fs.copySync(path.join(__dirname, 'assets', 'someJSON.json'), path.join(__dirname, 'tmp', 'data.json'));
 
         var config = {
             routesFile: path.join(__dirname, 'tmp', 'routes.js'),
@@ -31,10 +32,61 @@ module.exports = function(test, tmpPath) {
             processor.process(config, function() {
                 t.ok(fs.existsSync(config.combinedFile), 'both files filled, combined file exists');
                 var mod = helper.loadModule(config.combinedFile);
-                var value = mod['GET /test'] && mod['GET /ftl'];
-                t.ok(value, 'both files filled, combined file has methods from both files');
-                routesEmpty();
+                t.ok(mod['GET /test'], 'both files filled, combined file has routes file methods');
+                t.ok(mod['GET /ftl'], 'both files filled, combined file has ftl methods');
+                rightData();
             });
+        }
+
+        //Test that normal puer routes have the right data after combining.
+        function rightData() {
+            var mod = helper.loadModule(config.combinedFile);
+            var fakeRes = {
+                writeHeader: function(){},
+                end: function(){},
+                send: function(data) {
+                    t.ok(data.dataFound, 'data for puer routes, correct data send');
+                    rightftlData()
+                }
+            }
+            mod['GET /data'](null, fakeRes, null);
+        }
+
+        var fakeFM = {
+            render: function(string, data, callback) {
+                callback(null, data);
+            }
+        }
+
+        //Make sure routs actually return the right data.
+        function rightftlData() {
+            var mod = helper.loadModule(config.combinedFile);
+            var fakeRes = {
+                writeHeader: function(){},
+                end: function(){},
+                write: function(data) {
+                    t.ok(data.testOK, 'data for ftl routes, plain data route is correct');
+                    rightJSONData();
+                }
+            }
+            this.fm = fakeFM;
+            this.fs = fs;
+            mod['GET /ftl'].call(this, null, fakeRes, null);
+        }
+
+        function rightJSONData(){
+            var mod = helper.loadModule(config.combinedFile);
+            var fakeRes = {
+                writeHeader: function(){},
+                end: function(){},
+                write: function(data) {
+                    t.notOk(data.testOK, 'data for ftl routes, JSON data is correct');
+                    routesEmpty();
+                }
+            }
+            this.fm = fakeFM;
+            this.fs = fs;
+            mod['GET /json'].call(this, null, fakeRes, null);
         }
 
         //Test empty routes file

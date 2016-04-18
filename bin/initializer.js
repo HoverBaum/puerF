@@ -75,6 +75,7 @@ module.exports = function createInitializer() {
     function createFileIfNotExist(file, contents) {
         try {
             fs.accessSync(file);
+            logger.info(`${file} already exists, will not be overwritten`);
         } catch (e) {
             fs.writeFileSync(file, contents);
         }
@@ -92,7 +93,7 @@ module.exports = function createInitializer() {
         res.send({
             title: "title here",
             id: req.params.id
-        })
+        });
 
     },
     // PUT POST DELETE is the same

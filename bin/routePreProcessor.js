@@ -2,11 +2,6 @@
 
     A module to process routes.js and tflRoutes.js files into a single file.
 
-    Call process with the following options:
-    routesFile      File to puerRoutes
-    ftlRoutesFile   File for ftl routesFile
-    combinedFile    File in which to combine routes
-
 */
 
 //Required packages for this to work.
@@ -26,25 +21,34 @@ module.exports = function routePreProcessor() {
         var ftlRoutesFile = options.ftlRoutesFile;
         var combinedFile = options.combinedFile;
         var routes = helper.loadModule(helper.absolutePath(routesFile));
-        logger.silly('Routes file loaded', routes);
+        logger.debug('Routes file loaded', helper.absolutePath(routesFile));
         var ftlRoutes = helper.loadModule(helper.absolutePath(ftlRoutesFile));
-        logger.silly('FTLRoutes loaded', ftlRoutes);
+        logger.debug('FTLRoutes loaded', helper.absolutePath(ftlRoutesFile));
         for (key in ftlRoutes) {
-            routes[key] = convertFtl(ftlRoutes[key]);
+            routes[key] = convertFtl(ftlRoutes[key], ftlRoutesFile);
         }
         var combined = createCombinedFile(routes);
         logger.debug('Routes files got combined');
-        logger.silly('New combined routes file', combined);
         saveCombined(combined, combinedFile, callback)
     }
 
     /**
      *   Converts a ftlRoutes config object so that it can be added into the combined routes file.
      */
-    function convertFtl(config) {
+    function convertFtl(config, ftlRoutesFile) {
+        var dataString = '';
+        if(config.data) {
+            dataString = `var fmData = JSON.parse('${JSON.stringify(config.data)}');`;
+        } else if(config.jsonFile) {
+            var absPath = path.resolve(path.dirname(ftlRoutesFile), config.jsonFile).replace(/\.json$/, '');
+
+            //We read the file in and parse it to make sure we have the up to date version of mocked data.
+            dataString = `var fileData = fs.readFileSync('${absPath.replace(/\\/g, '\\\\')}.json');
+            var fmData = JSON.parse(fileData);`;
+        }
         return `function(req, res, next) {
-            var data = JSON.parse('${JSON.stringify(config.data)}');
-            fm.render('${config.template}', data, function(err, data, out) {
+            ${dataString}
+            fm.render('${config.template}', fmData, function(err, data, out) {
                 res.writeHeader(200, {
                     "Content-Type": "text/html"
                 });
@@ -58,7 +62,6 @@ module.exports = function routePreProcessor() {
      *   Uses all routes to write a file that can be used with puer.
      */
     function createCombinedFile(routes) {
-        logger.silly('Creating combined file', routes);
         var start = `module.exports = {`;
         var end = `}`;
         var middle = createMiddleString(routes);
@@ -77,7 +80,6 @@ module.exports = function routePreProcessor() {
 
         //Remove the last ','.
         string = string.replace(new RegExp(',' + '$'), '\n');
-        logger.silly('Middlestring for combined routes', string);
         return string;
     }
 
