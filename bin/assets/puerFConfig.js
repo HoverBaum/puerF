@@ -15,7 +15,10 @@ module.exports = {
     */
     //routes: ['mock/routes.js', 'mock/ftlRoutes.js'];
 
-    allRoutes
+    /**
+        The file in which to save combined routes.
+    */
+    //allRoutes: 'mock/allRoutes.js';
 
     /**
         Folder in which FTL templates are stored.
