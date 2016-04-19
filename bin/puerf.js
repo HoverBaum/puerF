@@ -66,7 +66,7 @@ function runPuerF(cli, callback) {
     var routeFiles = cli.routes || ['mock/ftlRoutes.js', 'mock/routes.js'];
 
     //Path to combined file.
-    var combinedFile = cli.allRoutes || 'mock/allRoutes.js';
+    var combinedFile = 'mock/allPuerFRoutes.js';
 
     //Root directory for templates.
     var templatesPath = cli.templates || 'templates';
