@@ -6,6 +6,7 @@
     Please see the cli for available options.
 
 */
+//NEXT use config file.
 
 //Dependencies.
 var fs = require('fs');
@@ -39,7 +40,11 @@ function startPuerF(options, callback) {
         logger.enableDebug();
     }
 
-    runPuerF(options, callback)
+    if (options.config) {
+        loadConfiguration(callback);
+    } else {
+        runPuerF(options, callback);
+    }
 }
 
 /**
@@ -55,6 +60,17 @@ function closePuerF(callback) {
     server.close(function() {
         callback();
     });
+}
+
+/**
+ *   Loads the config file and starts puerF.
+ */
+function loadConfiguration(callback) {
+    logger.info('Loading config file');
+    var path = require('path');
+    var configPath = path.join(process.cwd(), 'puerFConfig.js');
+    var options = require(configPath);
+    runPuerF(options, callback);
 }
 
 /**
@@ -109,13 +125,14 @@ function runPuerF(cli, callback) {
     //Initially parse the routes files and start the puer server.
     processRouteFiles(function() {
         logger.info('Initially compiled routes, starting server...')
+        var noBrowser = (cli.browser === undefined) ? true : cli.browser;
         server = startPuer(combinedFile, {
             port: cli.port,
             dir: cli.root,
             ignored: cli.exclude,
             watch: cli.watch,
             localhost: cli.localhost,
-            browser: cli.browser,
+            browser: noBrowser,
             templatesPath: templatesPath
         }, callback);
     });
