@@ -20,7 +20,7 @@ var initializationTest = require('./testInitializer');
 
 //Test generation of lookp for mocked routes
 var mockRouterTest = require('./testMockRouter');
-//mockRouterTest(test);
+mockRouterTest(test);
 
 //Test PreProcessing module
 var preProcessorTest = require('./testPreProcessor');

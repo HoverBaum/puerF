@@ -105,6 +105,8 @@ function startPuerServer(routesFile, options, callback) {
         //Create routes for everything in our combined routes file.
         app.use('/*', function(req, res, next) {
             var method = req.method.toLowerCase();
+
+            //URL with query parameters removed from it.
             var url = req.originalUrl.replace(/\?.*=.*$/, '');
             logger.silly('Now looking up info object', url);
             var info = mocks.lookUp(url, method);

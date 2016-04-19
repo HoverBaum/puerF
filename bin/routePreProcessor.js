@@ -59,7 +59,8 @@ module.exports = function routePreProcessor() {
     function parseDataRoute(route) {
         var dataString = JSON.stringify(route.data);
         return `function(req, res, next) {
-            res.send(JSON.parse('${dataString.replace(/\\/g, '\\\\')}'));
+            var data = JSON.parse('${dataString.replace(/\\/g, '\\\\')}');
+            res.send(data);
         }`;
     }
 
