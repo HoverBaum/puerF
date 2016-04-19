@@ -1,0 +1,8 @@
+{
+    "greeting": "Welcome to puerF",
+    "routes": [
+        "/simpleData",
+        "/user/123",
+        "/json"
+    ]
+}
