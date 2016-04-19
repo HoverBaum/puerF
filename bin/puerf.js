@@ -19,7 +19,7 @@ var logger = require('./logger');
 var server = null;
 
 //Keep track of all watcher we started so we can close them later.
-var watcher = [];
+var watchers = [];
 
 /**
  *   Just runs the initializer.
@@ -48,7 +48,7 @@ function startPuerF(options, callback) {
 */
 function closePuerF(callback) {
     logger.debug('Stopping file watchers');
-    watcher.forEach(watcher => {
+    watchers.forEach(watcher => {
         watcher.close();
     });
     logger.debug('Stopping server');
@@ -62,11 +62,8 @@ function closePuerF(callback) {
  */
 function runPuerF(cli, callback) {
 
-    //Path to ftlRoutes file.
-    var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
-
-    //Path to routes file.
-    var routesFile = cli.mock || 'mock/routes.js';
+    //The files containing information about mocked routes.
+    var routeFiles = cli.routes || ['mock/ftlRoutes.js', 'mock/routes.js'];
 
     //Path to combined file.
     var combinedFile = cli.combined || 'mock/allRoutes.js';
@@ -75,19 +72,14 @@ function runPuerF(cli, callback) {
     var templatesPath = cli.templates || 'templates';
 
     //Watch route files for changes and act upon them.
-    if (fs.existsSync(ftlRoutesFile)) {
-        var ftlWatcher = fs.watch(ftlRoutesFile, (event, filename) => {
-            onRoutesChange();
-        });
-        watcher.push(ftlWatcher);
-    }
-    if (fs.existsSync(routesFile)) {
-        var routesWatcher = fs.watch(routesFile, (event, filename) => {
-            onRoutesChange();
-        });
-        watcher.push(routesWatcher);
-    }
-
+    routeFiles.forEach(file => {
+        if (fs.existsSync(file)) {
+            var watcher = fs.watch(file, (event, filename) => {
+                onRoutesChange();
+            });
+            watchers.push(watcher);
+        }
+    });
 
     /**
      *   A function to be called when routes change.
@@ -106,10 +98,7 @@ function runPuerF(cli, callback) {
      *   Process both route files with given config.
      */
     function processRouteFiles(callback) {
-        processor.process([
-            routesFile,
-            ftlRoutesFile
-        ], combinedFile, callback);
+        processor.process(routeFiles, combinedFile, callback);
     }
 
     /**

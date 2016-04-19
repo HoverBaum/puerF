@@ -67,7 +67,7 @@ module.exports = function routePreProcessor() {
     *   Parse a route which provides data from a json file.
     */
     function parseJSONRoute(route, filePath) {
-        var absPath = path.resolve(path.dirname(filePath), config.jsonFile);
+        var absPath = path.resolve(path.dirname(filePath), route.jsonFile);
         return `function(req, res, next) {
             var fileData = fs.readFileSync('${absPath.replace(/\\/g, '\\\\')}');
             var data = JSON.parse(fileData);
