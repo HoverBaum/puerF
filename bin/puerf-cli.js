@@ -24,7 +24,6 @@ cli
     .description('Start a puer Server, easily mock routes and render FreeMarker templates')
     .option('-r, --routes <file>', 'Configuration file for mocked routes (multiple possible)') //TODO implement this!
     .option('-c, --config', 'If a config file should be used')
-    .option('-a, --all-routes', 'Where to store the file with all routes (default: mock/allRoutes.js)')
     .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored')
     .option('-r, --root <folder>', 'The root folder that files should be served from')
     .option('-p, --port <number>', 'Specific port to use')
