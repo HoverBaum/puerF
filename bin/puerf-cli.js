@@ -2,6 +2,7 @@
 /**
     Commandline interface for puerF.
 */
+//TODO enable the use of a config file
 
 //Use commander to handle commanline interaction.
 var cli = require('commander');
@@ -20,9 +21,8 @@ cli
     .version(package.version)
     .usage('[cmd] [options]')
     .description('Start a puer Server, easily mock routes and render FreeMarker templates')
-    .option('-f, --freemarker <file>', 'Mock file for Freemarker routes')
-    .option('-m, --mock <file>', 'Your standard puer mock file')
-    .option('-c, --combined <file>', 'Where to save the combined file, defaults to "mock/allRoutes.js"')
+    .option('-r, --routes <file>', 'Configuration file for mocked routes (multiple possible)') //TODO implement this!
+    .option('-c, --config', 'If a config file should be used')
     .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored')
     .option('-r, --root <folder>', 'The root folder that files should be served from')
     .option('-p, --port <number>', 'Specific port to use')
@@ -36,11 +36,8 @@ cli
 cli
     .command('init')
     .usage('[options]')
-    .description('Set up basic folders and files tow ork with puerf')
-    .option('-M, --mock-folder <folder>', 'Specify the folder for mock files')
-    .option('--no-mock', 'Disables generating mock files')
-    .option('-T, --template-folder <folder>', 'Specify the folder for FreeMarker templates')
-    .option('--no-template', 'Disables generating template files')
+    .description('Set up basic folders and files to work with puerf')
+    .option('--only-config', 'Only generate a config file')
     .action(function(options) {
         puerf.init(options);
     });

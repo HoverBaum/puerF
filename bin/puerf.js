@@ -6,6 +6,7 @@
     Please see the cli for available options.
 
 */
+//NEXT use config file.
 
 //Dependencies.
 var fs = require('fs');
@@ -19,7 +20,7 @@ var logger = require('./logger');
 var server = null;
 
 //Keep track of all watcher we started so we can close them later.
-var watcher = [];
+var watchers = [];
 
 /**
  *   Just runs the initializer.
@@ -39,7 +40,11 @@ function startPuerF(options, callback) {
         logger.enableDebug();
     }
 
-    runPuerF(options, callback)
+    if (options.config) {
+        loadConfiguration(callback);
+    } else {
+        runPuerF(options, callback);
+    }
 }
 
 /**
@@ -48,7 +53,7 @@ function startPuerF(options, callback) {
 */
 function closePuerF(callback) {
     logger.debug('Stopping file watchers');
-    watcher.forEach(watcher => {
+    watchers.forEach(watcher => {
         watcher.close();
     });
     logger.debug('Stopping server');
@@ -58,36 +63,39 @@ function closePuerF(callback) {
 }
 
 /**
+ *   Loads the config file and starts puerF.
+ */
+function loadConfiguration(callback) {
+    logger.info('Loading config file');
+    var path = require('path');
+    var configPath = path.join(process.cwd(), 'puerFConfig.js');
+    var options = require(configPath);
+    runPuerF(options, callback);
+}
+
+/**
  *   Actually start the core application.
  */
 function runPuerF(cli, callback) {
 
-    //Path to ftlRoutes file.
-    var ftlRoutesFile = cli.freemarker || 'mock/ftlRoutes.js';
-
-    //Path to routes file.
-    var routesFile = cli.mock || 'mock/routes.js';
+    //The files containing information about mocked routes.
+    var routeFiles = cli.routes || ['mock/ftlRoutes.js', 'mock/routes.js'];
 
     //Path to combined file.
-    var combinedFile = cli.combined || 'mock/allRoutes.js';
+    var combinedFile = 'mock/allPuerFRoutes.js';
 
     //Root directory for templates.
     var templatesPath = cli.templates || 'templates';
 
     //Watch route files for changes and act upon them.
-    if (fs.existsSync(ftlRoutesFile)) {
-        var ftlWatcher = fs.watch(ftlRoutesFile, (event, filename) => {
-            onRoutesChange();
-        });
-        watcher.push(ftlWatcher);
-    }
-    if (fs.existsSync(routesFile)) {
-        var routesWatcher = fs.watch(routesFile, (event, filename) => {
-            onRoutesChange();
-        });
-        watcher.push(routesWatcher);
-    }
-
+    routeFiles.forEach(file => {
+        if (fs.existsSync(file)) {
+            var watcher = fs.watch(file, (event, filename) => {
+                onRoutesChange();
+            });
+            watchers.push(watcher);
+        }
+    });
 
     /**
      *   A function to be called when routes change.
@@ -106,11 +114,7 @@ function runPuerF(cli, callback) {
      *   Process both route files with given config.
      */
     function processRouteFiles(callback) {
-        processor.process({
-            routesFile,
-            ftlRoutesFile,
-            combinedFile
-        }, callback);
+        processor.process(routeFiles, combinedFile, callback);
     }
 
     /**
@@ -121,13 +125,14 @@ function runPuerF(cli, callback) {
     //Initially parse the routes files and start the puer server.
     processRouteFiles(function() {
         logger.info('Initially compiled routes, starting server...')
+        var noBrowser = (cli.browser === undefined) ? true : cli.browser;
         server = startPuer(combinedFile, {
             port: cli.port,
             dir: cli.root,
             ignored: cli.exclude,
             watch: cli.watch,
             localhost: cli.localhost,
-            browser: cli.browser,
+            browser: noBrowser,
             templatesPath: templatesPath
         }, callback);
     });

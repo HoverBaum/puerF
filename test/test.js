@@ -12,7 +12,7 @@ var tmpPath = path.join(__dirname, 'tmp');
 
 //Test helper functionalities
 var helperTest = require('./testHelper');
-helperTest(test, tmpPath);
+//helperTest(test, tmpPath);
 
 //Test initialization script
 var initializationTest = require('./testInitializer');

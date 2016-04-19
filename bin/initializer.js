@@ -3,13 +3,8 @@
     Module to create basic working environment for puerf.
     Will create a folder for route files and create basic version.
 
-    options {
-        mockFolder,     Specifies the folder to use for mock files (default: mock)
-        mock,           Create mock files
-        templateFolder, Specifies the folder to use for template files (default: templates)
-        template        Create template files
-    }
-
+    Possible options:
+    onlyConfig      Only generate a configuration file.
 
 */
 
@@ -25,18 +20,15 @@ module.exports = function createInitializer() {
      */
     function startInitialization(options, callback) {
         logger.info('Initializing a basic setup for puerf');
-        if (options.mock) {
+        if (options.onlyConfig) {
+            logger.info('Will only generate a config file');
+        } else {
             createMockFiles(options.mockFolder);
-        } else {
-            logger.info('Will not create mock files')
-        }
-        if (options.template) {
             createTemplateFiles(options.templateFolder);
-        } else {
-            logger.info('Will not create template files')
         }
+        createConfigFile();
         logger.info(`Finished setting up, let's role`);
-        if(callback) callback();
+        if (callback) callback();
     }
 
     /**
@@ -50,8 +42,11 @@ module.exports = function createInitializer() {
         helper.guarantyFolder(folderPath);
         var routesFile = path.join(folderPath, 'routes.js');
         var ftlRoutesFile = path.join(folderPath, 'ftlRoutes.js');
-        createFileIfNotExist(routesFile, stdRoutesContent);
-        createFileIfNotExist(ftlRoutesFile, stdFtlContent);
+        var assetRoutes = path.join(__dirname, 'assets', 'mock', 'routes.js');
+        var assetFTLRoutes = path.join(__dirname, 'assets', 'mock', 'ftlRoutes.js');
+        createFileIfNotExist(routesFile, assetRoutes);
+        createFileIfNotExist(ftlRoutesFile, assetFTLRoutes);
+        createDataFile('data.json');
         logger.info('Created basic mock files');
     }
 
@@ -64,61 +59,45 @@ module.exports = function createInitializer() {
         }
         var folderPath = helper.absolutePath(folder);
         helper.guarantyFolder(folderPath);
-        var testTemplate = path.join(folderPath, 'test.ftl');
-        createFileIfNotExist(testTemplate, testTemplContent);
-        logger.info('Created template basics')
+        var testTemplate = path.join(folderPath, 'home.ftl');
+        var assetTemplate = path.join(__dirname, 'assets', 'templates', 'home.ftl');
+        createFileIfNotExist(testTemplate, assetTemplate);
+        createDataFile('home.json');
+        logger.info('Created template basics');
+    }
+
+    /**
+     *   Copies a data file.
+     */
+    function createDataFile(dataFile) {
+        var folder = path.join(process.cwd(), 'data');
+        helper.guarantyFolder(folder);
+        var filePath = path.join(folder, dataFile);
+        var assetFile = path.join(__dirname, 'assets', 'data', dataFile);
+        createFileIfNotExist(filePath, assetFile);
+    }
+
+    /**
+     *   Creates the configuration file.
+     */
+    function createConfigFile() {
+        var filePath = path.join(process.cwd(), 'puerFConfig.js');
+        var assetFile = path.join(__dirname, 'assets', 'puerFConfig.js');
+        createFileIfNotExist(filePath, assetFile);
+        logger.info('Created config file');
     }
 
     /**
      *   Saves a file if no such file exists.
      */
-    function createFileIfNotExist(file, contents) {
+    function createFileIfNotExist(file, fromFile) {
         try {
             fs.accessSync(file);
             logger.info(`${file} already exists, will not be overwritten`);
         } catch (e) {
-            fs.writeFileSync(file, contents);
+            fs.createReadStream(fromFile).pipe(fs.createWriteStream(file));
         }
     }
-
-    /*
-        Initial contents for files.
-    */
-
-    var stdRoutesContent = `module.exports = {
-
-    "GET /test/:id": function(req, res, next){
-
-        // response json format
-        res.send({
-            title: "title here",
-            id: req.params.id
-        });
-
-    },
-    // PUT POST DELETE is the same
-    "PUT /test/:id": function(){
-
-    }\n\n};`;
-
-    var stdFtlContent = `module.exports = {
-
-    'GET /': {
-        template: 'test.ftl',
-        data: {
-            name: 'THE USERS NAME'
-        }
-    }\n\n};`;
-
-    var templateString = '${name}';
-    var testTemplContent = `<html>
-    <head>
-      <title>Welcome!</title>
-    </head>
-    <body>
-      <h1>Welcome ${templateString}!</h1>
-      <p>Enjoy using puerF, it does work for you ;)</p>
-    </body>\n</html>`;
 
     return {
         init: startInitialization
