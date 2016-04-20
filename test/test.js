@@ -16,7 +16,7 @@ helperTest(test, tmpPath);
 
 //Test initialization script
 var initializationTest = require('./testInitializer');
-//initializationTest(test, tmpPath);
+initializationTest(test, tmpPath);
 
 //Test generation of lookp for mocked routes
 var mockRouterTest = require('./testMockRouter');
