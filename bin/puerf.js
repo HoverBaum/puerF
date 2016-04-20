@@ -7,7 +7,7 @@
 var cli = require('commander');
 
 //Get the npm packe so we can read from it.
-var package = require('./../package.json');
+var packageInfo = require('./../package.json');
 
 //Log output.
 var logger = require('./logger');
@@ -25,7 +25,7 @@ function collectRoutes(val, all) {
 
 //Configure commandline usage.
 cli
-    .version(package.version)
+    .version(packageInfo.version)
     .usage('[cmd] [options]')
     .description('Start a puer Server, easily mock routes and render FreeMarker templates')
     .option('-r, --routes <file>', 'Configuration file for mocked routes (multiple possible)', collectRoutes, [])

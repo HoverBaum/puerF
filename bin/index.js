@@ -3,7 +3,7 @@
     puerF, a cimple tool to run a live reloading server
     with mocked routes and FreeMarker tmeplates.
 
-    Please see the cli for available options.
+    @module puer-freemarker
 
 */
 //IDEA hook to Ctrl+C to delte files and do some clean up.
@@ -23,17 +23,24 @@ var server = null;
 var watchers = [];
 
 /**
- *   Just runs the initializer.
+ *  Runs the initializer.
+ *  Will output basic files to the current working directory.
+ *
+ *  @param options {object} Options for the initializer.
+ *  @param callback {function} Function to call once done.
  */
-function runInitializer(options, callback) {
+exports.init = function runInitializer(options, callback) {
     var initializer = require('./initializer');
     initializer.init(options, callback);
 }
 
 /**
- *   Starts teh core application.
+ *  Starts the core application.
+ *
+ *  @param options {object} An object containing options.
+ *  @param callback {function} Function to call once started.
  */
-function startPuerF(options, callback) {
+exports.start = function startPuerF(options, callback) {
 
     //Check if we should enable debug.
     if (options.debug) {
@@ -49,9 +56,11 @@ function startPuerF(options, callback) {
 
 /**
 *   Programatically closes puerF.
-    //FIXME this is not working, see https://github.com/leeluolee/puer/issues/30
+*
+*   @param callback {function} Function to call once done.
 */
-function closePuerF(callback) {
+//FIXME this is not working, see https://github.com/leeluolee/puer/issues/30
+exports.close = function closePuerF(callback) {
     logger.debug('Stopping file watchers');
     watchers.forEach(watcher => {
         watcher.close();
@@ -62,7 +71,7 @@ function closePuerF(callback) {
     });
 }
 
-/**
+/*
  *   Loads the config file and starts puerF.
  */
 function loadConfiguration(callback) {
@@ -73,7 +82,7 @@ function loadConfiguration(callback) {
     runPuerF(options, callback);
 }
 
-/**
+/*
  *   Actually start the core application.
  */
 function runPuerF(cli, callback) {
@@ -97,7 +106,7 @@ function runPuerF(cli, callback) {
         }
     });
 
-    /**
+    /*
      *   A function to be called when routes change.
      *   Will parse them again and tell the server to update routes.
      */
@@ -110,14 +119,14 @@ function runPuerF(cli, callback) {
         });
     }
 
-    /**
+    /*
      *   Process both route files with given config.
      */
     function processRouteFiles(callback) {
         processor.process(routeFiles, combinedFile, callback);
     }
 
-    /**
+    /*
      *   This is where the script starts.
      */
     logger.info('Starting up...');
@@ -137,9 +146,3 @@ function runPuerF(cli, callback) {
         }, callback);
     });
 };
-
-module.exports = {
-    start: startPuerF,
-    close: closePuerF,
-    init: runInitializer
-}

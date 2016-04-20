@@ -18,11 +18,14 @@
     "puerf": "./bin/puerf.js"
   },
   "scripts": {
-    "test": "node test/test.js"
+    "test": "node test/test.js",
+    "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
   },
   "devDependencies": {
     "cheerio": "^0.20.0",
     "fs-extra": "^0.26.7",
+    "jsdoc": "^3.4.0",
+    "minami": "^1.1.1",
     "request": "^2.70.0",
     "tape": "^4.5.1"
   }
