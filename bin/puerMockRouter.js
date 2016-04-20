@@ -4,6 +4,7 @@
 
     Returns an object in which one can look up what to do on which route.
 
+    @module puerMockRouter
 */
 var logger = require('./logger');
 module.exports = function createRouteLookup() {

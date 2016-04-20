@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-/**
+/*
     Commandline interface for puerF.
 */
 
@@ -15,7 +15,7 @@ var logger = require('./logger');
 //The actual application this is a cli interface for.
 var puerf = require('./index');
 
-/**
+/*
  *   Helper function to collect repeated arguments
  */
 function collectRoutes(val, all) {

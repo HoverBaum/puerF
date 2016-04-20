@@ -2,6 +2,7 @@
 
     A module to process routes.js and tflRoutes.js files into a single file.
 
+    @module routePreProcessor
 */
 
 //Required packages for this to work.
