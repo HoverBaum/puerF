@@ -13,7 +13,7 @@ var package = require('./../package.json');
 var logger = require('./logger');
 
 //The actual application this is a cli interface for.
-var puerf = require('./puerf');
+var puerf = require('./index');
 
 /**
  *   Helper function to collect repeated arguments
