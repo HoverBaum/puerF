@@ -16,15 +16,15 @@ var helperTest = require('./testHelper');
 
 //Test initialization script
 var initializationTest = require('./testInitializer');
-//initializationTest(test, tmpPath);
+initializationTest(test, tmpPath);
 
 //Test generation of lookp for mocked routes
 var mockRouterTest = require('./testMockRouter');
-mockRouterTest(test);
+//mockRouterTest(test);
 
 //Test PreProcessing module
 var preProcessorTest = require('./testPreProcessor');
-preProcessorTest(test, tmpPath);
+//preProcessorTest(test, tmpPath);
 
 //Test running a server.
 var serverTest = require('./testServer');

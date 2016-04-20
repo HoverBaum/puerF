@@ -5,6 +5,7 @@
 
     Possible options:
     onlyConfig      Only generate a configuration file.
+    root            The root folder for initialization (mainly for testing).
 
 */
 
@@ -20,13 +21,16 @@ module.exports = function createInitializer() {
      */
     function startInitialization(options, callback) {
         logger.info('Initializing a basic setup for puerf');
+        if (options.root === undefined) {
+            options.root = process.cwd();
+        }
         if (options.onlyConfig) {
             logger.info('Will only generate a config file');
         } else {
-            createMockFiles(options.mockFolder);
-            createTemplateFiles(options.templateFolder);
+            createMockFiles(options.root);
+            createTemplateFiles(options.root);
         }
-        createConfigFile();
+        createConfigFile(options.root);
         logger.info(`Finished setting up, let's role`);
         if (callback) callback();
     }
@@ -34,10 +38,8 @@ module.exports = function createInitializer() {
     /**
      *   Creates std. mock files if none exist.
      */
-    function createMockFiles(folder) {
-        if (folder === undefined) {
-            folder = 'mock';
-        }
+    function createMockFiles(root) {
+        var folder = path.join(root, 'mock');
         var folderPath = helper.absolutePath(folder);
         helper.guarantyFolder(folderPath);
         var routesFile = path.join(folderPath, 'routes.js');
@@ -46,31 +48,29 @@ module.exports = function createInitializer() {
         var assetFTLRoutes = path.join(__dirname, 'assets', 'mock', 'ftlRoutes.js');
         createFileIfNotExist(routesFile, assetRoutes);
         createFileIfNotExist(ftlRoutesFile, assetFTLRoutes);
-        createDataFile('data.json');
+        createDataFile('data.json', root);
         logger.info('Created basic mock files');
     }
 
     /**
      *   Creates a std. template file.
      */
-    function createTemplateFiles(folder) {
-        if (folder === undefined) {
-            folder = 'templates';
-        }
+    function createTemplateFiles(root) {
+        var folder = path.join(root, 'templates');
         var folderPath = helper.absolutePath(folder);
         helper.guarantyFolder(folderPath);
         var testTemplate = path.join(folderPath, 'home.ftl');
         var assetTemplate = path.join(__dirname, 'assets', 'templates', 'home.ftl');
         createFileIfNotExist(testTemplate, assetTemplate);
-        createDataFile('home.json');
+        createDataFile('home.json', root);
         logger.info('Created template basics');
     }
 
     /**
      *   Copies a data file.
      */
-    function createDataFile(dataFile) {
-        var folder = path.join(process.cwd(), 'data');
+    function createDataFile(dataFile, root) {
+        var folder = path.join(root, 'data');
         helper.guarantyFolder(folder);
         var filePath = path.join(folder, dataFile);
         var assetFile = path.join(__dirname, 'assets', 'data', dataFile);
@@ -80,8 +80,8 @@ module.exports = function createInitializer() {
     /**
      *   Creates the configuration file.
      */
-    function createConfigFile() {
-        var filePath = path.join(process.cwd(), 'puerFConfig.js');
+    function createConfigFile(folder) {
+        var filePath = path.join(folder, 'puerFConfig.js');
         var assetFile = path.join(__dirname, 'assets', 'puerFConfig.js');
         createFileIfNotExist(filePath, assetFile);
         logger.info('Created config file');

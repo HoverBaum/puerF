@@ -6,7 +6,6 @@
     Please see the cli for available options.
 
 */
-//NEXT use config file.
 
 //Dependencies.
 var fs = require('fs');
