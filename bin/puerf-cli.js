@@ -2,7 +2,6 @@
 /**
     Commandline interface for puerF.
 */
-//TODO enable the use of a config file
 
 //Use commander to handle commanline interaction.
 var cli = require('commander');
@@ -16,12 +15,20 @@ var logger = require('./logger');
 //The actual application this is a cli interface for.
 var puerf = require('./puerf');
 
+/**
+ *   Helper function to collect repeated arguments
+ */
+function collectRoutes(val, all) {
+    all.push(val);
+    return all;
+}
+
 //Configure commandline usage.
 cli
     .version(package.version)
     .usage('[cmd] [options]')
     .description('Start a puer Server, easily mock routes and render FreeMarker templates')
-    .option('-r, --routes <file>', 'Configuration file for mocked routes (multiple possible)') //TODO implement this!
+    .option('-r, --routes <file>', 'Configuration file for mocked routes (multiple possible)', collectRoutes, [])
     .option('-c, --config', 'If a config file should be used')
     .option('-t, --templates <path>', 'Path to folder in which Freemarker templates are stored')
     .option('-r, --root <folder>', 'The root folder that files should be served from')
