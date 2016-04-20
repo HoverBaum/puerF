@@ -6,6 +6,7 @@
     Please see the cli for available options.
 
 */
+//IDEA hook to Ctrl+C to delte files and do some clean up.
 
 //Dependencies.
 var fs = require('fs');
