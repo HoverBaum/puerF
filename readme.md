@@ -42,11 +42,11 @@ Options:
    --debug                 Display debug messages
 ```
 
-## Use as a package
+## Use as a dependency
 
 Instead of using `puer-freemarker` as a commandline tool, you might also use it as a dependency in your development pipeline. For instance in your gulpfile.
 
-To do so simply `var puerf = require('puer-freemarker')`. Methods provided take the same options as the commandline interface, though dashes are converted to camelCase, meaning `no-browser` turns into `noBrowser`;
+To do so simply `var puerf = require('puer-freemarker')`. Methods provided take the same options as the commandline interface, though `no-browser` turns into `browser`;
 
 ### Methods
 
@@ -64,11 +64,11 @@ Closes the server down and calls the callback once that is done. (As of now this
 
 ## Mocking requests
 
-This is what puerF is really all about. Making it as easy as possible for you to "fake" a backend. To achieve this puerF builds upon [puers mocking of request](https://github.com/leeluolee/puer#mock-request). And simplefies the use of FreeMarker templates for those requests.
+This is what puerF is really all about. Making it as easy as possible for you to "fake" a backend. To achieve this puerF builds upon [puers mocking of request](https://github.com/leeluolee/puer#mock-request). And simplifies the use of FreeMarker templates for those requests.
 
-puerF will automatically look for two route files. `mock/routes.js` and `mock/ftlRoutes.js`. While `routes.js` should follow the [puer documentation](https://github.com/leeluolee/puer#mock-request) and can mock any kind of route, the `ftlRoutes.js` file can only contain FreeMarker routes.
+To mock requests create modules that export a single object following the syntax outlined below. You may split your routes over as many files as and modules as you which, puerF will combine them for you. `demos` contains a sample file.
 
-Should you wish to use files from a different location you can do so useing the `-m` and `-f` options.
+By default puerF will assume that you spread your routes over two files `mock/routes.js` and `mock/ftlRoutes.js`.Should you wish to use files from a different location you can do so using the `-r` option.
 
 ### Syntax for routes
 
@@ -105,10 +105,6 @@ Real world applications might use query parameters to get specific results from 
 ### FreeMarker templates
 
 By default puerF will look for FreeMarker templates in `./templates`. To specify another folder you can use `-t`. Read the guid to [author FreeMarker templates](http://freemarker.org/docs/dgui.html).
-
-### An example routes.js file
-
-[coming coon TM]
 
 ## Testing
 
