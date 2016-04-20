@@ -5,7 +5,7 @@
     Currently abstracts winston
     https://github.com/winstonjs/winston
 
-    @module puer-freemarker/logger
+    @module logger
     @version 1.0.0
 */
 
