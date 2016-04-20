@@ -78,7 +78,7 @@ function loadConfiguration(callback) {
 function runPuerF(cli, callback) {
 
     //The files containing information about mocked routes.
-    var routeFiles = cli.routes || ['mock/ftlRoutes.js', 'mock/routes.js'];
+    var routeFiles = (cli.routes.length >= 1) ? cli.routes : ['mock/ftlRoutes.js', 'mock/routes.js'];
 
     //Path to combined file.
     var combinedFile = 'mock/allPuerFRoutes.js';

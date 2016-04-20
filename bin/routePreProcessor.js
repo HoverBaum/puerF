@@ -16,7 +16,7 @@ module.exports = function routePreProcessor() {
      *   Process all routes files into a combined one.
      */
     function processFiles(routeFilePaths, combinedFilePath, callback) {
-        logger.debug('Combining routes into', combinedFilePath)
+        logger.debug('Combining routes', {combinedFilePath, routeFilePaths});
         helper.guarantyFolder(combinedFilePath);
         var allRoutes = {};
         routeFilePaths.forEach(filePath => {
