@@ -3,18 +3,7 @@
 
     This module provides a single function to start a puer Server.
 
-    routesFile: relativ path to combined file, from current working directory.
-
-    You can hand it an options object or use the default options.
-    options = {
-        port,           Specific port to use
-        dir,            Root directory for serving static files
-        ignored,        Files to ignore
-        filetype,       Filetypes to watch
-        localhost,      Wether to use localhost instead of 127.0.0.1
-        browser,        If the browser should be opened automatically
-        templatesPath   The path where templates can be found
-    }
+    @module puerServer
 
 */
 
@@ -38,8 +27,23 @@ var Freemarker = require('freemarker.js');
 
 /**
  *   Start a puer server to serve files and watch for changes.
+ *
+ *   @param routesFile {array} All files containing info about mocked routes.
+            Paths need to be relative to current working directory.
+ *   @param options {object} Options to run the server with.
+
+         options = {
+             port,           Specific port to use
+             dir,            Root directory for serving static files
+             ignored,        Files to ignore
+             filetype,       Filetypes to watch
+             localhost,      Wether to use localhost instead of 127.0.0.1
+             browser,        If the browser should be opened automatically
+             templatesPath   The path where templates can be found
+         }
+ *   @param callback {function} Function to call once done.
  */
-function startPuerServer(routesFile, options, callback) {
+module.exports = function startPuerServer(routesFile, options, callback) {
 
     //Disable console.log while server is starting, to prevent puer logs.
     var oldConsole = console.log;
@@ -66,7 +70,7 @@ function startPuerServer(routesFile, options, callback) {
     setupMockRoutes(startServer);
 
 
-    /**
+    /*
      *   Set up the express server and configure routing.
      */
     function configureServer() {
@@ -140,7 +144,7 @@ function startPuerServer(routesFile, options, callback) {
         });
     }
 
-    /**
+    /*
      *   Actually start the server.
      */
     function startServer() {
@@ -169,7 +173,7 @@ function startPuerServer(routesFile, options, callback) {
     }
 
 
-    /**
+    /*
      *   Will parse the combined routes file into actual routes.
      */
     function setupMockRoutes(callback) {
@@ -185,7 +189,7 @@ function startPuerServer(routesFile, options, callback) {
         }
     }
 
-    /**
+    /*
      *   Closes the server down.
      */
     function closeServer(callback) {
@@ -204,4 +208,3 @@ function startPuerServer(routesFile, options, callback) {
     }
 
 };
-module.exports = startPuerServer;
