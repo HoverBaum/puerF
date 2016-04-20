@@ -22,25 +22,24 @@ Usage: puerf [cmd] [options]
 
 Commands:
 
-    init [options]   Set up basic folders and files tow ork with puerf
+   init [options]   Set up basic folders and files to work with puerf
 
 Start a puer Server, easily mock routes and render FreeMarker templates
 
 Options:
 
-    -h, --help               output usage information
-    -V, --version            output the version number
-    -f, --freemarker <file>  Mock file for FreeMarker routes
-    -m, --mock <file>        Your standard puer mock file
-    -c, --combined <file>    Where to save the combined file, defaults to "mock/allRoutes.js"
-    -t, --templates <path>   Path to folder in which FreeMarker templates are stored
-    -r, --root <folder>      The root folder that files should be served from
-    -p, --port <number>      Specific port to use
-    -w, --watch <files>      Filetypes to watch, defaults to js|css|html|xhtml|ftl
-    -x, --exclude <files>    Exclude files from being watched for updates
-    -l, --localhost          Use "localhost" instead of "127.0.0.1"
-    --no-browser             Do not autimatically open a brwoser
-    --debug                  Display debug messages
+   -h, --help              output usage information
+   -V, --version           output the version number
+   -r, --routes <file>     Configuration file for mocked routes (multiple possible)
+   -c, --config            If a config file should be used
+   -t, --templates <path>  Path to folder in which Freemarker templates are stored
+   -r, --root <folder>     The root folder that files should be served from
+   -p, --port <number>     Specific port to use
+   -w, --watch <files>     Filetypes to watch, defaults to js|css|html|xhtml|ftl
+   -x, --exclude <files>   Exclude files from being watched for updates
+   -l, --localhost         Use "localhost" instead of "127.0.0.1"
+   --no-browser            Do not autimatically open a brwoser
+   --debug                 Display debug messages
 ```
 
 ## Use as a package

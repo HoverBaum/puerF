@@ -2,7 +2,7 @@
   "name": "puer-freemarker",
   "version": "0.4.2",
   "description": "Use puer with Freemarker templates.",
-  "main": "./bin/puerf.js",
+  "main": "./bin/index.js",
   "repository": "https://github.com/HoverBaum/puerF",
   "author": "Hendrik Wallbaum <hzhendrikwallbaum@corp.netease.com>",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "winston": "^2.2.0"
   },
   "bin": {
-    "puerf": "./bin/puerf-cli.js"
+    "puerf": "./bin/puerf.js"
   },
   "scripts": {
     "test": "node test/test.js"
