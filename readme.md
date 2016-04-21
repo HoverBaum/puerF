@@ -42,26 +42,6 @@ Options:
    --debug                 Display debug messages
 ```
 
-## Use as a dependency
-
-Instead of using `puer-freemarker` as a commandline tool, you might also use it as a dependency in your development pipeline. For instance in your gulpfile.
-
-To do so simply `var puerf = require('puer-freemarker')`. Methods provided take the same options as the commandline interface, though `no-browser` turns into `browser`. The full API docs may be found [here](http://hoverbaum.github.io/puerF) or at the bottom fo this document.
-
-### Methods
-
-#### puerf.init(options, callback)
-
-Runs the initialization script.
-
-#### puerf.start(options, callback)
-
-Starts puerF, will looks for files to serve and mocked routes. The callback is called, once the puer server is up and running.
-
-#### puerf.close(callback)
-
-Closes the server down and calls the callback once that is done. (As of now this does not quite work, see this [issue](https://github.com/leeluolee/puer/issues/30) for more information)
-
 ## Mocking requests
 
 This is what puerF is really all about. Making it as easy as possible for you to "fake" a backend. To achieve this puerF builds upon [puers mocking of request](https://github.com/leeluolee/puer#mock-request). And simplifies the use of FreeMarker templates for those requests.
@@ -106,11 +86,11 @@ Real world applications might use query parameters to get specific results from 
 
 By default puerF will look for FreeMarker templates in `./templates`. To specify another folder you can use `-t`. Read the guid to [author FreeMarker templates](http://freemarker.org/docs/dgui.html).
 
-## Testing
+# Use as a dependency
 
-This module utilizes [tape](https://github.com/substack/tape) for testing. Install development dependencies and run `npm test` to run the tests.
+Instead of using `puer-freemarker` as a commandline tool, you might also use it as a dependency in your development pipeline. For instance in your gulpfile.
 
-# Full API
+To do so simply `var puerf = require('puer-freemarker')`. The full docs may be found [here](http://hoverbaum.github.io/puerF). Below is the public API of puerF.
 
 <a name="module_puer-freemarker"></a>
 
@@ -171,3 +151,7 @@ Programatically closes puerF.
 | Param | Type | Description |
 | --- | --- | --- |
 | callback | <code>function</code> | Function to call once done. |
+
+# Testing
+
+puerF utilizes [tape](https://github.com/substack/tape) for testing. Install development dependencies and run `npm test` to run the tests.
