@@ -2,7 +2,7 @@
 
 This is the documentation of puerFs API as well as of all public functions and attributes of its sub-modules.
 
-The documentation is generated using [jdsocs](https://github.com/jsdoc3/jsdoc) for which the complete manual may be found at [usejsdoc.org](http://usejsdoc.org/). To make the docs look better we use [docdash](https://github.com/clenemt/docdash) and [jsdoc-to-markdown](https://github.com/jsdoc2md/jsdoc-to-markdown) for the summary you see below.
+The documentation is generated using [jdsocs](https://github.com/jsdoc3/jsdoc) for which the complete manual may be found at [usejsdoc.org](http://usejsdoc.org/). To make the docs look better we use [docdash](https://github.com/clenemt/docdash) and [jsdoc-to-markdown](https://github.com/jsdoc2md/jsdoc-to-markdown) for the summary in the main readme.
 
 # API
 Including `puer-freemarker` gives you the following API:
@@ -30,9 +30,8 @@ To see them:
 ```
 npm run serve-docs
 ```
-Make sure you have all development dependencies installed.
-
 To create the API docs as markdown:
 ```
 npm run api-docs
 ```
+Make sure you have all development dependencies installed.
