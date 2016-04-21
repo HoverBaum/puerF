@@ -27,20 +27,22 @@ var Freemarker = require('freemarker.js');
 
 /**
  *   Start a puer server to serve files and watch for changes.
- *
- *   @param routesFile {array} All files containing info about mocked routes.
-            Paths need to be relative to current working directory.
- *   @param options {object} Options to run the server with.
-
-         options = {
-             port,           Specific port to use
-             dir,            Root directory for serving static files
-             ignored,        Files to ignore
-             filetype,       Filetypes to watch
-             localhost,      Wether to use localhost instead of 127.0.0.1
-             browser,        If the browser should be opened automatically
-             templatesPath   The path where templates can be found
-         }
+ *   @param {array} routesFile - All files containing info about mocked routes.
+ *    Paths need to be relative to current working directory.
+ *   @param {object} options - Options to run the server with.
+ *   @param {string} [options.templatesPath] - Root folder for FTL template
+ *    files.
+ *   @param {string} [options.dir] - Root folder for static files to serve.
+ *   @param {number} [options.port=8080] - The port to use for the server.
+ *   @param {string}
+ *    [options.watch='js css html xhtml ftl'] - Filetypes
+ *    (seperate them by pipes) to watch for changes.
+ *   @param {regEx} [options.ignored=/node_modules/] - Files to exclude from
+ *    watching.
+ *   @param {boolean} [options.localhost=false] - Use `localhost` instead of
+ *    `127.0.0.1`.
+ *   @param {boolean} [options.browser] - Automatically open a browser for the
+ *    user.
  *   @param callback {function} Function to call once done.
  */
 module.exports = function startPuerServer(routesFile, options, callback) {

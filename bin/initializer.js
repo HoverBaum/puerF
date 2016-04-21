@@ -13,8 +13,8 @@ var helper = require('./helper');
 
 /**
  *   Starts setting up basic files to work with puerF.
- *
- *   @param options {object} Options for the intializer. The only possible one is "onlyConfig".
+ *   @param options {object} Options for the intializer. The only possible one
+ *    is "onlyConfig".
  *   @param callback {function} Function to call once done.
  */
 module.exports.init = function startInitialization(options, callback) {
@@ -35,7 +35,7 @@ module.exports.init = function startInitialization(options, callback) {
 
 /**
  *   Creates std. mock files if none exist.
- *  @private
+ *   @private
  */
 function createMockFiles(root) {
     var folder = path.join(root, 'mock');
@@ -53,7 +53,7 @@ function createMockFiles(root) {
 
 /**
  *   Creates a std. template file.
- *  @private
+ *   @private
  */
 function createTemplateFiles(root) {
     var folder = path.join(root, 'templates');
@@ -68,7 +68,7 @@ function createTemplateFiles(root) {
 
 /**
  *   Copies a data file.
- *  @private
+ *   @private
  */
 function createDataFile(dataFile, root) {
     var folder = path.join(root, 'data');
@@ -80,7 +80,7 @@ function createDataFile(dataFile, root) {
 
 /**
  *   Creates the configuration file.
- *  @private
+ *   @private
  */
 function createConfigFile(folder) {
     var filePath = path.join(folder, 'puerFConfig.js');
@@ -91,7 +91,7 @@ function createConfigFile(folder) {
 
 /**
  *   Saves a file if no such file exists.
- *  @private
+ *   @private
  */
 function createFileIfNotExist(file, fromFile) {
     try {

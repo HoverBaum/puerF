@@ -17,20 +17,25 @@ var routes = {
 }
 
 /**
- *   Looks up a route and returns object with info if present.
- *  @param path {string} The path for which to find an info object.
- *  @param method {string} Identifier for the method used, one of:
-            - get
-            - post
-            - put
-            - delete
- *  @param params {array} Parameters already found
- *  @return An object with infos about the found route or `undefined`
+ *   @typedef Info
+ *   @type Object
+ *   @property {function} call - Function to call for this route.
+ *   @property {object} paramValues - Values for parameters, asign this to
+ *    req.params.
+ *   @property {string} path - The path this object represents.
+ *   @property {array} params - Parameter awaited on this route.
+ */
 
-    info.call            Function to call for this route
-    info.paramValues     Values for parameters, asign this to req.params
-    info.path            The path this object represents
-    info.params          Parameters this path expects
+/**
+ *   Looks up a route and returns object with info if present.
+ *   @param path {string} The path for which to find an info object.
+ *   @param method {string} Identifier for the method used, one of:
+ *    - get
+ *    - post
+ *    - put
+ *    - delete
+ *   @param params {array} Parameters already found
+ *   @return {Info} An object with infos about the found route or `undefined`
  */
 exports.lookUp = function lookUpRoute(path, method, params) {
     if (params === undefined) params = [];

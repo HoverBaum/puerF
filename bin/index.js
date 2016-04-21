@@ -22,13 +22,12 @@ var server = null;
 var watchers = [];
 
 /**
- *  Runs the initializer.
- *  Will output basic files to the current working directory.
- *
- *  @param {object} options - Options for the initializer.
- *  @param {boolean} [options.onlyConfig=false] - Only create the config file.
- *  @see initializer
- *  @param {function} callback - Function to call once done.
+ *   Runs the initializer. Will output basic files to the current working
+ *    directory.
+ *   @param {object} options - Options for the initializer.
+ *   @param {boolean} [options.onlyConfig=false] - Only create the config file.
+ *   @see initializer
+ *   @param {function} callback - Function to call once done.
  */
 exports.init = function runInitializer(options, callback) {
     var initializer = require('./initializer');
@@ -36,20 +35,28 @@ exports.init = function runInitializer(options, callback) {
 }
 
 /**
- *  Starts the core application.
- *
- *  @param {object} options - An object containing options.
- *  @param {array} [options.routes=['mock/ftlRoutes.js', 'mock/routes.js']] - An array of paths to all files containing mocked routes.
- *  @param {boolean} [options.config=false] - Use config file.
- *  @param {string} [options.templates='templates'] - Root folder for FTL template files.
- *  @param {string} [options.root='./'] - Root folder for static files to serve.
- *  @param {number} [options.port=8080] - The port to use for the server.
- *  @param {string} [options.watch='js&#124;css&#124;html&#124;xhtml&#124;ftl'] - Filetypes to watch for changes.
- *  @param {regEx} [options.exclude=/node_modules/] - Files to exclude from watching.
- *  @param {boolean} [options.localhost=false] - Use `localhost` instead of `127.0.0.1`.
- *  @param {boolean} [options.browser=true] - Automatically open a browser for the user.
- *  @param {boolean} [options.debug=false] - Enable debugging output and log file.
- *  @param callback {function} Function to call once started.
+ *   Starts the core application.
+ *   @param {object} options - An object containing options.
+ *   @param {array} [options.routes=['mock/ftlRoutes.js', 'mock/routes.js']] -
+ *    An array of paths to all files containing mocked routes.
+ *   @param {boolean} [options.config=false] - Use config file.
+ *   @param {string} [options.templates='templates'] - Root folder for FTL
+ *    template files.
+ *   @param {string} [options.root='./'] - Root folder for static files to
+ *    serve.
+ *   @param {number} [options.port=8080] - The port to use for the server.
+ *   @param {string}
+ *    [options.watch='js css html xhtml ftl'] - Filetypes
+ *    (seperate them by pipes) to watch for changes.
+ *   @param {regEx} [options.exclude=/node_modules/] - Files to exclude from
+ *    watching.
+ *   @param {boolean} [options.localhost=false] - Use `localhost` instead of
+ *    `127.0.0.1`.
+ *   @param {boolean} [options.browser=true] - Automatically open a browser for
+ *    the user.
+ *   @param {boolean} [options.debug=false] - Enable debugging output and log
+ *    file.
+ *   @param callback {function} Function to call once started.
  */
 exports.start = function startPuerF(options, callback) {
 
@@ -67,7 +74,6 @@ exports.start = function startPuerF(options, callback) {
 
 /**
  *   Programatically closes puerF.
- *
  *   @param {function} callback - Function to call once done.
  */
 //FIXME this is not working, see https://github.com/leeluolee/puer/issues/30

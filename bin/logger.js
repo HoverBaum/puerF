@@ -54,10 +54,9 @@ var disabled = false;
 
 /**
  *   Logs a message, this is an alias for ".info".
- *
- *   @param level {string} The level at which to log.
- *   @param text {string} The message to log.
- *   @param more {object} Data to log along with the message.
+ *   @param {string} level - The level at which to log.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
  */
 exports.log = function log(level, text, more) {
     if (disabled) {
@@ -76,8 +75,8 @@ exports.log = function log(level, text, more) {
 /**
  *   Logs a message at the error level.
  *
- *   @param text {string} The message to log.
- *   @param more {object} Data to log along with the message.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
  */
 exports.error = function error(text, more) {
     if (disabled) {
@@ -92,8 +91,8 @@ exports.error = function error(text, more) {
 /**
  *   Logs a message at the warn level.
  *
- *   @param text {string} The message to log.
- *   @param more {object} Data to log along with the message.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
  */
 exports.warn = function warn(text, more) {
     if (disabled) {
@@ -107,9 +106,8 @@ exports.warn = function warn(text, more) {
 
 /**
  *   Logs a message at the info level.
- *
- *   @param text {string} The message to log.
- *   @param more {object} Data to log along with the message.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
  */
 exports.info = function info(text, more) {
     if (disabled) {
@@ -123,9 +121,8 @@ exports.info = function info(text, more) {
 
 /**
  *   Logs a message at the debug level.
- *
- *   @param text {string} The message to log.
- *   @param more {object} Data to log along with the message.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
  */
 exports.debug = function debug(text, more) {
     if (disabled) {
@@ -139,9 +136,8 @@ exports.debug = function debug(text, more) {
 
 /**
  *   Logs a message at the silly level.
- *
- *   @param text {string} The message to log.
- *   @param more {object} Data to log along with the message.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
  */
 exports.silly = function silly(text, more) {
     if (disabled) {
