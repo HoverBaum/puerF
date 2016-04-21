@@ -2,7 +2,7 @@
 
 This is the documentation of puerFs API as well as of all public functions and attributes of its sub-modules.
 
-The documentation is generated using [jdsocs](https://github.com/jsdoc3/jsdoc) for which the complete manual may be found at [usejsdoc.org](http://usejsdoc.org/). To make the docs look better we use [docdash](https://github.com/clenemt/docdash)
+The documentation is generated using [jdsocs](https://github.com/jsdoc3/jsdoc) for which the complete manual may be found at [usejsdoc.org](http://usejsdoc.org/). To make the docs look better we use [docdash](https://github.com/clenemt/docdash).
 
 # API
 

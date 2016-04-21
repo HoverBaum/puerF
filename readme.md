@@ -46,7 +46,7 @@ Options:
 
 Instead of using `puer-freemarker` as a commandline tool, you might also use it as a dependency in your development pipeline. For instance in your gulpfile.
 
-To do so simply `var puerf = require('puer-freemarker')`. Methods provided take the same options as the commandline interface, though `no-browser` turns into `browser`;
+To do so simply `var puerf = require('puer-freemarker')`. Methods provided take the same options as the commandline interface, though `no-browser` turns into `browser`. The full API docs may be found [here](http://hoverbaum.github.io/puerF).
 
 ### Methods
 

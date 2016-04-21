@@ -27,6 +27,9 @@ var watchers = [];
  *  Will output basic files to the current working directory.
  *
  *  @param options {object} Options for the initializer.
+
+    onlyConfig      If true will only generate the config file.
+ *  @see initializer
  *  @param callback {function} Function to call once done.
  */
 exports.init = function runInitializer(options, callback) {
@@ -38,6 +41,20 @@ exports.init = function runInitializer(options, callback) {
  *  Starts the core application.
  *
  *  @param options {object} An object containing options.
+
+ | Options   | Description                                             | Default                                     |
+ |:----------|---------------------------------------------------------|---------------------------------------------|
+ | routes    | An array of paths to all files containing mocked routes | ['mock/ftlRoutes.js', 'mock/routes.js']     |
+ | config    | Where to find the config file                           | './puerFConfig.js'                          |
+ | templates | Path to base for templates                              | './templates'                               |
+ | root      | Root folder for static files                            | './'                                        |
+ | port      | The port to use                                         | 8080                                        |
+ | watch     | Filetypes to watch, default:                            | 'js&#124;css&#124;html&#124;xhtml&#124;ftl' |
+ | exclude   | Files to exclude from watch                             | /node_modules/                              |
+ | localhost | If true will use localhost instead of 127.0.0.1         | false                                       |
+ | browser   | If browser should be opened                             | true                                        |
+ | debug     | Enable debug output                                     | false                                       |
+
  *  @param callback {function} Function to call once started.
  */
 exports.start = function startPuerF(options, callback) {
