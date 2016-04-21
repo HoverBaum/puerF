@@ -17,7 +17,7 @@ var helper = require('./helper');
  *   @param options {object} Options for the intializer. The only possible one is "onlyConfig".
  *   @param callback {function} Function to call once done.
  */
-module.exports = function startInitialization(options, callback) {
+module.exports.init = function startInitialization(options, callback) {
     logger.info('Initializing a basic setup for puerf');
     if (options.root === undefined) {
         options.root = process.cwd();

@@ -6,7 +6,6 @@
     @module puer-freemarker
 
 */
-//NEXT hook to Ctrl+C to delte files and do some clean up.
 
 //Dependencies.
 var fs = require('fs');
@@ -160,5 +159,14 @@ function runPuerF(cli, callback) {
             browser: noBrowser,
             templatesPath: templatesPath
         }, callback);
+    });
+
+    /*
+     *   Handle Ctrl + C
+     */
+    process.on('SIGINT', function() {
+        fs.unlink('combinedFile', function() {
+            logger.info('Now exiting, goodby.');
+        });
     });
 };

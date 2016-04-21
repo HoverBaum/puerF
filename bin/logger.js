@@ -158,7 +158,7 @@ exports.silly = function silly(text, more) {
  */
 exports.enableDebug = function enableDebug() {
     debugging = true;
-    info('Enabling debugging output');
+    exports.info('Enabling debugging output');
 }
 
 /**

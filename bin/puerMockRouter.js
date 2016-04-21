@@ -54,12 +54,27 @@ exports.lookUp = function lookUpRoute(path, method, params) {
 }
 
 /**
+ *   Parse a config object into a routes store.
+ *   @param {object} config - Configuration object to use, should be allRoutes.
+ */
+exports.configure = function parseRoutes(config) {
+    logger.silly('Creating a route lookup object', config);
+
+    //Iterate over all configured routes.
+    for (key in config) {
+        parseRoute(key, config[key]);
+    }
+    logger.silly('Mocked routes configured', routes);
+}
+
+/**
  *   Take an identifier and a function to be called for a route.
+ *   @param private
  *   @param identifier   Describes the route, such as "GET /index".
  *   @param call         The function to call when route is accessed.
  */
-exports.configure = function parseRoute(identifier, call) {
-    identifiers = identifier.split(' ');
+function parseRoute(identifier, call) {
+    var identifiers = identifier.split(' ');
     var method = identifiers[0].toLowerCase();
     var path = identifiers[1];
     var info = createPathObject(path);
@@ -77,20 +92,6 @@ exports.configure = function parseRoute(identifier, call) {
         routes[method].get(info.path).push(info);
     }
 
-}
-
-/**
- *   Parse a config object into a routes store.
- *  @private
- */
-function parseRoutes(config) {
-    logger.silly('Creating a route lookup object', config);
-
-    //Iterate over all configured routes.
-    for (key in config) {
-        parseRoute(key, config[key]);
-    }
-    logger.silly('Mocked routes configured', routes);
 }
 
 /**
