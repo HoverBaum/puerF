@@ -32,3 +32,8 @@ To see them:
 npm run serve-docs
 ```
 Make sure you have all development dependencies installed.
+
+To create the API docs as markdown:
+```
+npm run api-docs
+```
