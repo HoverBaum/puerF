@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>puerMockRouter.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-helper.html">helper</a><ul class='methods'><li data-type='method'><a href="module-helper.html#.absolutePath">absolutePath</a></li><li data-type='method'><a href="module-helper.html#.guarantyFolder">guarantyFolder</a></li><li data-type='method'><a href="module-helper.html#.loadModule">loadModule</a></li></ul></li><li><a href="module-initializer.html">initializer</a></li><li><a href="module-logger.html">logger</a><ul class='methods'><li data-type='method'><a href="module-logger.html#.debug">debug</a></li><li data-type='method'><a href="module-logger.html#.disable">disable</a></li><li data-type='method'><a href="module-logger.html#.enable">enable</a></li><li data-type='method'><a href="module-logger.html#.enableDebug">enableDebug</a></li><li data-type='method'><a href="module-logger.html#.error">error</a></li><li data-type='method'><a href="module-logger.html#.info">info</a></li><li data-type='method'><a href="module-logger.html#.log">log</a></li><li data-type='method'><a href="module-logger.html#.silly">silly</a></li><li data-type='method'><a href="module-logger.html#.warn">warn</a></li></ul></li><li><a href="module-puer-freemarker.html">puer-freemarker</a><ul class='methods'><li data-type='method'><a href="module-puer-freemarker.html#.close">close</a></li><li data-type='method'><a href="module-puer-freemarker.html#.init">init</a></li><li data-type='method'><a href="module-puer-freemarker.html#.start">start</a></li></ul></li><li><a href="module-puerMockRouter.html">puerMockRouter</a><ul class='methods'><li data-type='method'><a href="module-puerMockRouter.html#.configure">configure</a></li><li data-type='method'><a href="module-puerMockRouter.html#.lookUp">lookUp</a></li></ul></li><li><a href="module-puerServer.html">puerServer</a></li><li><a href="module-routePreProcessor.html">routePreProcessor</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">puerMockRouter.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+
+    puer mock router module for puerFreemarker.
+
+    Returns an object in which one can look up what to do on which route.
+
+    @module puerMockRouter
+*/
+var logger = require('./logger');
+
+//The store of what to do for which route.
+var routes = {
+    get: new Map(),
+    post: new Map(),
+    delete: new Map(),
+    put: new Map()
+}
+
+/**
+ *   Looks up a route and returns object with info if present.
+ *  @param path {string} The path for which to find an info object.
+ *  @param method {string} Identifier for the method used, one of:
+            - get
+            - post
+            - put
+            - delete
+ *  @param params {array} Parameters already found
+ *  @return An object with infos about the found route or `undefined`
+
+    info.call            Function to call for this route
+    info.paramValues     Values for parameters, asign this to req.params
+    info.path            The path this object represents
+    info.params          Parameters this path expects
+ */
+exports.lookUp = function lookUpRoute(path, method, params) {
+    if (params === undefined) params = [];
+    if (routes[method].has(path) === true) {
+        var infoArray = routes[method].get(path);
+        var info = createInfoFromArray(infoArray, path, params);
+        return info;
+    } else {
+
+        //If path is still 2+ deep.
+        if (/^\/.*\/.+/.test(path)) {
+            var parts = path.split('/');
+            var lastParam = parts.pop().replace(/\//g, '');
+            params.push(lastParam);
+            var challowerPath = parts.join('/');
+            return lookUpRoute(challowerPath, method, params);
+        } else {
+            return undefined;
+        }
+    }
+}
+
+/**
+ *   Take an identifier and a function to be called for a route.
+ *   @param identifier   Describes the route, such as "GET /index".
+ *   @param call         The function to call when route is accessed.
+ */
+exports.configure = function parseRoute(identifier, call) {
+    identifiers = identifier.split(' ');
+    var method = identifiers[0].toLowerCase();
+    var path = identifiers[1];
+    var info = createPathObject(path);
+    info.call = call;
+    logger.silly('Parsed a route for mocking', {
+        method,
+        path,
+        call
+    })
+
+    //Add this route and it's function to the router;
+    if (!routes[method].has(info.path)) {
+        routes[method].set(info.path, [info]);
+    } else {
+        routes[method].get(info.path).push(info);
+    }
+
+}
+
+/**
+ *   Parse a config object into a routes store.
+ *  @private
+ */
+function parseRoutes(config) {
+    logger.silly('Creating a route lookup object', config);
+
+    //Iterate over all configured routes.
+    for (key in config) {
+        parseRoute(key, config[key]);
+    }
+    logger.silly('Mocked routes configured', routes);
+}
+
+/**
+ *  From an array of possible info objects finds the right one and adds paramValues.
+ *  @private
+ */
+function createInfoFromArray(infoArray, path, params) {
+    var info;
+    infoArray.forEach(inf => {
+        if (inf.params.length === params.length) {
+            info = inf;
+        }
+    });
+    if (info !== undefined) {
+        params.reverse();
+        info.paramValues = {};
+        info.params.forEach((par, index) => {
+            info.paramValues[par] = params[index];
+        });
+    }
+    return info;
+}
+
+/**
+ *   Create an object that rpresents a URL and possible parameters in the it.
+ *  @private
+ */
+function createPathObject(path) {
+    var obj = {
+        path: '',
+        params: []
+    }
+    if (/:/g.test(path)) {
+        var parts = path.split(':');
+        obj.path = parts.shift().replace(/\/$/, '');
+        parts.forEach(param => {
+            obj.params.push(param.replace(/\/$/, ''));
+        });
+    } else {
+        obj.path = path;
+    }
+    return obj;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Apr 21 2016 10:21:55 GMT+0800 (中国标准时间) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

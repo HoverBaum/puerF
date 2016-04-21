@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>initializer.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-helper.html">helper</a><ul class='methods'><li data-type='method'><a href="module-helper.html#.absolutePath">absolutePath</a></li><li data-type='method'><a href="module-helper.html#.guarantyFolder">guarantyFolder</a></li><li data-type='method'><a href="module-helper.html#.loadModule">loadModule</a></li></ul></li><li><a href="module-initializer.html">initializer</a></li><li><a href="module-logger.html">logger</a><ul class='methods'><li data-type='method'><a href="module-logger.html#.debug">debug</a></li><li data-type='method'><a href="module-logger.html#.disable">disable</a></li><li data-type='method'><a href="module-logger.html#.enable">enable</a></li><li data-type='method'><a href="module-logger.html#.enableDebug">enableDebug</a></li><li data-type='method'><a href="module-logger.html#.error">error</a></li><li data-type='method'><a href="module-logger.html#.info">info</a></li><li data-type='method'><a href="module-logger.html#.log">log</a></li><li data-type='method'><a href="module-logger.html#.silly">silly</a></li><li data-type='method'><a href="module-logger.html#.warn">warn</a></li></ul></li><li><a href="module-puer-freemarker.html">puer-freemarker</a><ul class='methods'><li data-type='method'><a href="module-puer-freemarker.html#.close">close</a></li><li data-type='method'><a href="module-puer-freemarker.html#.init">init</a></li><li data-type='method'><a href="module-puer-freemarker.html#.start">start</a></li></ul></li><li><a href="module-puerMockRouter.html">puerMockRouter</a><ul class='methods'><li data-type='method'><a href="module-puerMockRouter.html#.configure">configure</a></li><li data-type='method'><a href="module-puerMockRouter.html#.lookUp">lookUp</a></li></ul></li><li><a href="module-puerServer.html">puerServer</a></li><li><a href="module-routePreProcessor.html">routePreProcessor</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">initializer.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+    Module to create basic working environment for puerf.
+    Will create folders and files to demonstrate features.
+
+    @module initializer
+*/
+
+var path = require('path');
+var fs = require('fs');
+var logger = require('./logger');
+var helper = require('./helper');
+
+
+/**
+ *   Starts setting up basic files to work with puerF.
+ *
+ *   @param options {object} Options for the intializer. The only possible one is "onlyConfig".
+ *   @param callback {function} Function to call once done.
+ */
+module.exports = function startInitialization(options, callback) {
+    logger.info('Initializing a basic setup for puerf');
+    if (options.root === undefined) {
+        options.root = process.cwd();
+    }
+    if (options.onlyConfig) {
+        logger.info('Will only generate a config file');
+    } else {
+        createMockFiles(options.root);
+        createTemplateFiles(options.root);
+    }
+    createConfigFile(options.root);
+    logger.info(`Finished setting up, let's role`);
+    if (callback) callback();
+}
+
+/**
+ *   Creates std. mock files if none exist.
+ *  @private
+ */
+function createMockFiles(root) {
+    var folder = path.join(root, 'mock');
+    var folderPath = helper.absolutePath(folder);
+    helper.guarantyFolder(folderPath);
+    var routesFile = path.join(folderPath, 'routes.js');
+    var ftlRoutesFile = path.join(folderPath, 'ftlRoutes.js');
+    var assetRoutes = path.join(__dirname, 'assets', 'mock', 'routes.js');
+    var assetFTLRoutes = path.join(__dirname, 'assets', 'mock', 'ftlRoutes.js');
+    createFileIfNotExist(routesFile, assetRoutes);
+    createFileIfNotExist(ftlRoutesFile, assetFTLRoutes);
+    createDataFile('data.json', root);
+    logger.info('Created basic mock files');
+}
+
+/**
+ *   Creates a std. template file.
+ *  @private
+ */
+function createTemplateFiles(root) {
+    var folder = path.join(root, 'templates');
+    var folderPath = helper.absolutePath(folder);
+    helper.guarantyFolder(folderPath);
+    var testTemplate = path.join(folderPath, 'home.ftl');
+    var assetTemplate = path.join(__dirname, 'assets', 'templates', 'home.ftl');
+    createFileIfNotExist(testTemplate, assetTemplate);
+    createDataFile('home.json', root);
+    logger.info('Created template basics');
+}
+
+/**
+ *   Copies a data file.
+ *  @private
+ */
+function createDataFile(dataFile, root) {
+    var folder = path.join(root, 'data');
+    helper.guarantyFolder(folder);
+    var filePath = path.join(folder, dataFile);
+    var assetFile = path.join(__dirname, 'assets', 'data', dataFile);
+    createFileIfNotExist(filePath, assetFile);
+}
+
+/**
+ *   Creates the configuration file.
+ *  @private
+ */
+function createConfigFile(folder) {
+    var filePath = path.join(folder, 'puerFConfig.js');
+    var assetFile = path.join(__dirname, 'assets', 'puerFConfig.js');
+    createFileIfNotExist(filePath, assetFile);
+    logger.info('Created config file');
+}
+
+/**
+ *   Saves a file if no such file exists.
+ *  @private
+ */
+function createFileIfNotExist(file, fromFile) {
+    try {
+        fs.accessSync(file);
+        logger.info(`${file} already exists, will not be overwritten`);
+    } catch (e) {
+        fs.createReadStream(fromFile).pipe(fs.createWriteStream(file));
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Apr 21 2016 10:21:55 GMT+0800 (中国标准时间) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
