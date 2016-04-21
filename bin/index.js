@@ -55,10 +55,10 @@ exports.start = function startPuerF(options, callback) {
 }
 
 /**
-*   Programatically closes puerF.
-*
-*   @param callback {function} Function to call once done.
-*/
+ *   Programatically closes puerF.
+ *
+ *   @param callback {function} Function to call once done.
+ */
 //FIXME this is not working, see https://github.com/leeluolee/puer/issues/30
 exports.close = function closePuerF(callback) {
     logger.debug('Stopping file watchers');
@@ -71,8 +71,9 @@ exports.close = function closePuerF(callback) {
     });
 }
 
-/*
+/**
  *   Loads the config file and starts puerF.
+ *  @private
  */
 function loadConfiguration(callback) {
     logger.info('Loading config file');
@@ -82,8 +83,9 @@ function loadConfiguration(callback) {
     runPuerF(options, callback);
 }
 
-/*
+/**
  *   Actually start the core application.
+ *  @private
  */
 function runPuerF(cli, callback) {
 
@@ -106,9 +108,10 @@ function runPuerF(cli, callback) {
         }
     });
 
-    /*
+    /**
      *   A function to be called when routes change.
      *   Will parse them again and tell the server to update routes.
+     *  @private
      */
     function onRoutesChange() {
         processRouteFiles(function() {
@@ -119,8 +122,9 @@ function runPuerF(cli, callback) {
         });
     }
 
-    /*
-     *   Process both route files with given config.
+    /**
+     *   Process all route files with given config.
+     *  @private
      */
     function processRouteFiles(callback) {
         processor.process(routeFiles, combinedFile, callback);

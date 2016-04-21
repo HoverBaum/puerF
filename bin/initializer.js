@@ -33,8 +33,9 @@ module.exports = function startInitialization(options, callback) {
     if (callback) callback();
 }
 
-/*
+/**
  *   Creates std. mock files if none exist.
+ *  @private
  */
 function createMockFiles(root) {
     var folder = path.join(root, 'mock');
@@ -50,8 +51,9 @@ function createMockFiles(root) {
     logger.info('Created basic mock files');
 }
 
-/*
+/**
  *   Creates a std. template file.
+ *  @private
  */
 function createTemplateFiles(root) {
     var folder = path.join(root, 'templates');
@@ -64,8 +66,9 @@ function createTemplateFiles(root) {
     logger.info('Created template basics');
 }
 
-/*
+/**
  *   Copies a data file.
+ *  @private
  */
 function createDataFile(dataFile, root) {
     var folder = path.join(root, 'data');
@@ -75,8 +78,9 @@ function createDataFile(dataFile, root) {
     createFileIfNotExist(filePath, assetFile);
 }
 
-/*
+/**
  *   Creates the configuration file.
+ *  @private
  */
 function createConfigFile(folder) {
     var filePath = path.join(folder, 'puerFConfig.js');
@@ -85,8 +89,9 @@ function createConfigFile(folder) {
     logger.info('Created config file');
 }
 
-/*
+/**
  *   Saves a file if no such file exists.
+ *  @private
  */
 function createFileIfNotExist(file, fromFile) {
     try {

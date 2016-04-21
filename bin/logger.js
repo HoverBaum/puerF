@@ -153,16 +153,6 @@ exports.silly = function silly(text, more) {
     getLogger().silly(text, more);
 }
 
-/*
- *   Returns the logger that should currently be used.
- */
-function getLogger() {
-    var loggerName = (debugging) ? 'debug' : 'standard';
-    var logger = winston.loggers.get(loggerName);
-    logger.cli();
-    return logger;
-}
-
 /**
  *   Sets up a logger for debugging.
  */
@@ -184,4 +174,15 @@ exports.disable = function disableLogging() {
  */
 exports.enable = function enableLogging() {
     disabled = false;
+}
+
+/**
+ *   Returns the logger that should currently be used.
+ *   @private
+ */
+function getLogger() {
+    var loggerName = (debugging) ? 'debug' : 'standard';
+    var logger = winston.loggers.get(loggerName);
+    logger.cli();
+    return logger;
 }
