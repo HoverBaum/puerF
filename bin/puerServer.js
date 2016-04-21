@@ -149,7 +149,6 @@ module.exports = function startPuerServer(routesFile, options, callback) {
      */
     function startServer() {
 
-        //TODO check if port available, try different one otherwise.
         var listener = server.listen(port, function() {
             var usedPort = listener.address().port
             logger.info(`Server running on port: ${usedPort}`);
