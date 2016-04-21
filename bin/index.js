@@ -6,7 +6,7 @@
     @module puer-freemarker
 
 */
-//IDEA hook to Ctrl+C to delte files and do some clean up.
+//NEXT hook to Ctrl+C to delte files and do some clean up.
 
 //Dependencies.
 var fs = require('fs');
