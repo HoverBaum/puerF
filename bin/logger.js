@@ -1,13 +1,12 @@
 /**
-
-    Abstraction for the used logger.
-
-    Currently abstracts winston
-    https://github.com/winstonjs/winston
-
-    @module logger
-    @version 1.0.0
-*/
+ *
+ *   Abstraction for the used logger.
+ *
+ *   Currently abstracts [winston](https://github.com/winstonjs/winston)
+ *
+ *   @module logger
+ *   @version 1.0.0
+ */
 
 //Dependencies
 var winston = require('winston');

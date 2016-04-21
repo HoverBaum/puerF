@@ -1,11 +1,11 @@
 /**
-
-    puerF, a simple tool to run a live reloading server
-    with mocked routes and FreeMarker templates.
-
-    @module puer-freemarker
-
-*/
+ *
+ *   puerF, a simple tool to run a live reloading server
+ *   with mocked routes and FreeMarker templates.
+ *
+ *   @module puer-freemarker
+ *
+ */
 
 //Dependencies.
 var fs = require('fs');

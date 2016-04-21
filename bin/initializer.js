@@ -1,9 +1,10 @@
 /**
-    Module to create basic working environment for puerf.
-    Will create folders and files to demonstrate features.
-
-    @module initializer
-*/
+ *   Module to create basic working environment for puerf.
+ *
+ *   Will create folders and files to demonstrate features.
+ *
+ *   @module initializer
+ */
 
 var path = require('path');
 var fs = require('fs');

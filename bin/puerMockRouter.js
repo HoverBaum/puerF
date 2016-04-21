@@ -1,11 +1,11 @@
 /**
-
-    puer mock router module for puerFreemarker.
-
-    Returns an object in which one can look up what to do on which route.
-
-    @module puerMockRouter
-*/
+ *
+ *   puer mock router module for puerFreemarker.
+ *
+ *   Returns an object in which one can look up what to do on which route.
+ *   
+ *   @module puerMockRouter
+ */
 var logger = require('./logger');
 
 //The store of what to do for which route.

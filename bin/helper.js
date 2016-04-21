@@ -1,9 +1,9 @@
 /**
-
-    This module provides helper function for puerF.
-
-    @module helper
-*/
+ *
+ *   This module provides helper function for puerF.
+ *
+ *   @module helper
+ */
 
 //dependencies
 var fs = require('fs');

@@ -1,11 +1,11 @@
 /**
-    puerServer module for puerFreemarker.
-
-    This module provides a single function to start a puer Server.
-
-    @module puerServer
-
-*/
+ *   puerServer module for puerFreemarker.
+ *
+ *   This module provides a single function to start a puer Server.
+ *   
+ *   @module puerServer
+ *
+ */
 
 //NOTE maybe replace puer with a live-reloader as we are only using it for that, could solve bugs in test with server not closing
 
