@@ -164,7 +164,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line80">line 80</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -297,7 +297,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line35">line 35</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -400,7 +400,75 @@
             
 
             <td class="description last"><p>Options for the initializer.</p>
-<pre class="prettyprint source"><code>onlyConfig      If true will only generate the config file.</code></pre></td>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>onlyConfig</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Only create the config file.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -462,7 +530,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line60">line 60</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -557,67 +625,426 @@
             
 
             <td class="description last"><p>An object containing options.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Options</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">routes</td>
-<td>An array of paths to all files containing mocked routes</td>
-<td>['mock/ftlRoutes.js', 'mock/routes.js']</td>
-</tr>
-<tr>
-<td style="text-align:left">config</td>
-<td>Where to find the config file</td>
-<td>'./puerFConfig.js'</td>
-</tr>
-<tr>
-<td style="text-align:left">templates</td>
-<td>Path to base for templates</td>
-<td>'./templates'</td>
-</tr>
-<tr>
-<td style="text-align:left">root</td>
-<td>Root folder for static files</td>
-<td>'./'</td>
-</tr>
-<tr>
-<td style="text-align:left">port</td>
-<td>The port to use</td>
-<td>8080</td>
-</tr>
-<tr>
-<td style="text-align:left">watch</td>
-<td>Filetypes to watch, default:</td>
-<td>'js&#124;css&#124;html&#124;xhtml&#124;ftl'</td>
-</tr>
-<tr>
-<td style="text-align:left">exclude</td>
-<td>Files to exclude from watch</td>
-<td>/node_modules/</td>
-</tr>
-<tr>
-<td style="text-align:left">localhost</td>
-<td>If true will use localhost instead of 127.0.0.1</td>
-<td>false</td>
-</tr>
-<tr>
-<td style="text-align:left">browser</td>
-<td>If browser should be opened</td>
-<td>true</td>
-</tr>
-<tr>
-<td style="text-align:left">debug</td>
-<td>Enable debug output</td>
-<td>false</td>
-</tr>
-</tbody>
-</table></td>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>routes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ['mock/ftlRoutes.js', 'mock/routes.js']
+                
+                </td>
+            
+
+            <td class="description last"><p>An array of paths to all files containing mocked routes.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Use config file.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>templates</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'templates'
+                
+                </td>
+            
+
+            <td class="description last"><p>Root folder for FTL template files.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>root</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    './'
+                
+                </td>
+            
+
+            <td class="description last"><p>Root folder for static files to serve.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>port</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    8080
+                
+                </td>
+            
+
+            <td class="description last"><p>The port to use for the server.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>watch</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'js&amp;#124;css&amp;#124;html&amp;#124;xhtml&amp;#124;ftl'
+                
+                </td>
+            
+
+            <td class="description last"><p>Filetypes to watch for changes.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>exclude</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">regEx</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    /node_modules/
+                
+                </td>
+            
+
+            <td class="description last"><p>Files to exclude from watching.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>localhost</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Use <code>localhost</code> instead of <code>127.0.0.1</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>browser</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last"><p>Automatically open a browser for the user.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>debug</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Enable debugging output and log file.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -680,7 +1107,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Apr 21 2016 11:06:43 GMT+0800 (中国标准时间) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Apr 21 2016 11:56:12 GMT+0800 (中国标准时间) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
