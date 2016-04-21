@@ -1,7 +1,7 @@
 /**
 
-    puerF, a cimple tool to run a live reloading server
-    with mocked routes and FreeMarker tmeplates.
+    puerF, a simple tool to run a live reloading server
+    with mocked routes and FreeMarker templates.
 
     @module puer-freemarker
 
