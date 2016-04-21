@@ -104,7 +104,7 @@ function runPuerF(cli, callback) {
     var routeFiles = (cli.routes.length >= 1) ? cli.routes : ['mock/ftlRoutes.js', 'mock/routes.js'];
 
     //Path to combined file.
-    var combinedFile = 'mock/allPuerFRoutes.js';
+    var combinedFile = 'allPuerFRoutes.js';
 
     //Root directory for templates.
     var templatesPath = cli.templates || 'templates';
@@ -165,7 +165,7 @@ function runPuerF(cli, callback) {
      *   Handle Ctrl + C
      */
     process.on('SIGINT', function() {
-        fs.unlink('combinedFile', function() {
+        fs.unlink(combinedFile, function() {
             logger.info('Now exiting, goodby.');
         });
     });
