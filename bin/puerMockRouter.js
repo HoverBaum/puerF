@@ -1,11 +1,11 @@
 /**
-
-    puer mock router module for puerFreemarker.
-
-    Returns an object in which one can look up what to do on which route.
-
-    @module puerMockRouter
-*/
+ *
+ *   puer mock router module for puerFreemarker.
+ *
+ *   Returns an object in which one can look up what to do on which route.
+ *   
+ *   @module puerMockRouter
+ */
 var logger = require('./logger');
 
 //The store of what to do for which route.
@@ -17,20 +17,25 @@ var routes = {
 }
 
 /**
- *   Looks up a route and returns object with info if present.
- *  @param path {string} The path for which to find an info object.
- *  @param method {string} Identifier for the method used, one of:
-            - get
-            - post
-            - put
-            - delete
- *  @param params {array} Parameters already found
- *  @return An object with infos about the found route or `undefined`
+ *   @typedef Info
+ *   @type Object
+ *   @property {function} call - Function to call for this route.
+ *   @property {object} paramValues - Values for parameters, asign this to
+ *    req.params.
+ *   @property {string} path - The path this object represents.
+ *   @property {array} params - Parameter awaited on this route.
+ */
 
-    info.call            Function to call for this route
-    info.paramValues     Values for parameters, asign this to req.params
-    info.path            The path this object represents
-    info.params          Parameters this path expects
+/**
+ *   Looks up a route and returns object with info if present.
+ *   @param path {string} The path for which to find an info object.
+ *   @param method {string} Identifier for the method used, one of:
+ *    - get
+ *    - post
+ *    - put
+ *    - delete
+ *   @param params {array} Parameters already found
+ *   @return {Info} An object with infos about the found route or `undefined`
  */
 exports.lookUp = function lookUpRoute(path, method, params) {
     if (params === undefined) params = [];
@@ -54,12 +59,27 @@ exports.lookUp = function lookUpRoute(path, method, params) {
 }
 
 /**
+ *   Parse a config object into a routes store.
+ *   @param {object} config - Configuration object to use, should be allRoutes.
+ */
+exports.configure = function parseRoutes(config) {
+    logger.silly('Creating a route lookup object', config);
+
+    //Iterate over all configured routes.
+    for (key in config) {
+        parseRoute(key, config[key]);
+    }
+    logger.silly('Mocked routes configured', routes);
+}
+
+/**
  *   Take an identifier and a function to be called for a route.
+ *   @param private
  *   @param identifier   Describes the route, such as "GET /index".
  *   @param call         The function to call when route is accessed.
  */
-exports.configure = function parseRoute(identifier, call) {
-    identifiers = identifier.split(' ');
+function parseRoute(identifier, call) {
+    var identifiers = identifier.split(' ');
     var method = identifiers[0].toLowerCase();
     var path = identifiers[1];
     var info = createPathObject(path);
@@ -77,20 +97,6 @@ exports.configure = function parseRoute(identifier, call) {
         routes[method].get(info.path).push(info);
     }
 
-}
-
-/**
- *   Parse a config object into a routes store.
- *  @private
- */
-function parseRoutes(config) {
-    logger.silly('Creating a route lookup object', config);
-
-    //Iterate over all configured routes.
-    for (key in config) {
-        parseRoute(key, config[key]);
-    }
-    logger.silly('Mocked routes configured', routes);
 }
 
 /**
