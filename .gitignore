@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 bin/debug.log
 test/tmp
+docs/puer-freemarker

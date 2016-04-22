@@ -1,11 +1,11 @@
 /**
-
-    puerF, a cimple tool to run a live reloading server
-    with mocked routes and FreeMarker tmeplates.
-
-    Please see the cli for available options.
-
-*/
+ *
+ *   puerF, a simple tool to run a live reloading server
+ *   with mocked routes and FreeMarker templates.
+ *
+ *   @module puer-freemarker
+ *
+ */
 
 //Dependencies.
 var fs = require('fs');
@@ -22,17 +22,43 @@ var server = null;
 var watchers = [];
 
 /**
- *   Just runs the initializer.
+ *   Runs the initializer. Will output basic files to the current working
+ *    directory.
+ *   @param {object} options - Options for the initializer.
+ *   @param {boolean} [options.onlyConfig=false] - Only create the config file.
+ *   @see initializer
+ *   @param {function} callback - Function to call once done.
  */
-function runInitializer(options, callback) {
+exports.init = function runInitializer(options, callback) {
     var initializer = require('./initializer');
     initializer.init(options, callback);
 }
 
 /**
- *   Starts teh core application.
+ *   Starts the core application.
+ *   @param {object} options - An object containing options.
+ *   @param {array} [options.routes=['mock/ftlRoutes.js', 'mock/routes.js']] -
+ *    An array of paths to all files containing mocked routes.
+ *   @param {boolean} [options.config=false] - Use config file.
+ *   @param {string} [options.templates='templates'] - Root folder for FTL
+ *    template files.
+ *   @param {string} [options.root='./'] - Root folder for static files to
+ *    serve.
+ *   @param {number} [options.port=8080] - The port to use for the server.
+ *   @param {string}
+ *    [options.watch='js css html xhtml ftl'] - Filetypes
+ *    (seperate them by pipes) to watch for changes.
+ *   @param {regEx} [options.exclude=/node_modules/] - Files to exclude from
+ *    watching.
+ *   @param {boolean} [options.localhost=false] - Use `localhost` instead of
+ *    `127.0.0.1`.
+ *   @param {boolean} [options.browser=true] - Automatically open a browser for
+ *    the user.
+ *   @param {boolean} [options.debug=false] - Enable debugging output and log
+ *    file.
+ *   @param callback {function} Function to call once started.
  */
-function startPuerF(options, callback) {
+exports.start = function startPuerF(options, callback) {
 
     //Check if we should enable debug.
     if (options.debug) {
@@ -47,10 +73,11 @@ function startPuerF(options, callback) {
 }
 
 /**
-*   Programatically closes puerF.
-    //FIXME this is not working, see https://github.com/leeluolee/puer/issues/30
-*/
-function closePuerF(callback) {
+ *   Programatically closes puerF.
+ *   @param {function} callback - Function to call once done.
+ */
+//FIXME this is not working, see https://github.com/leeluolee/puer/issues/30
+exports.close = function closePuerF(callback) {
     logger.debug('Stopping file watchers');
     watchers.forEach(watcher => {
         watcher.close();
@@ -63,6 +90,7 @@ function closePuerF(callback) {
 
 /**
  *   Loads the config file and starts puerF.
+ *  @private
  */
 function loadConfiguration(callback) {
     logger.info('Loading config file');
@@ -74,6 +102,7 @@ function loadConfiguration(callback) {
 
 /**
  *   Actually start the core application.
+ *  @private
  */
 function runPuerF(cli, callback) {
 
@@ -81,7 +110,7 @@ function runPuerF(cli, callback) {
     var routeFiles = (cli.routes.length >= 1) ? cli.routes : ['mock/ftlRoutes.js', 'mock/routes.js'];
 
     //Path to combined file.
-    var combinedFile = 'mock/allPuerFRoutes.js';
+    var combinedFile = 'allPuerFRoutes.js';
 
     //Root directory for templates.
     var templatesPath = cli.templates || 'templates';
@@ -99,6 +128,7 @@ function runPuerF(cli, callback) {
     /**
      *   A function to be called when routes change.
      *   Will parse them again and tell the server to update routes.
+     *  @private
      */
     function onRoutesChange() {
         processRouteFiles(function() {
@@ -110,13 +140,14 @@ function runPuerF(cli, callback) {
     }
 
     /**
-     *   Process both route files with given config.
+     *   Process all route files with given config.
+     *  @private
      */
     function processRouteFiles(callback) {
         processor.process(routeFiles, combinedFile, callback);
     }
 
-    /**
+    /*
      *   This is where the script starts.
      */
     logger.info('Starting up...');
@@ -135,10 +166,13 @@ function runPuerF(cli, callback) {
             templatesPath: templatesPath
         }, callback);
     });
-};
 
-module.exports = {
-    start: startPuerF,
-    close: closePuerF,
-    init: runInitializer
-}
+    /*
+     *   Handle Ctrl + C
+     */
+    process.on('SIGINT', function() {
+        fs.unlink(combinedFile, function() {
+            logger.info('Now exiting, goodby.');
+        });
+    });
+};

@@ -1,20 +1,12 @@
 /**
-
-    Abstraction for the used logger.
-
-    Provides:
-        .error
-        .warn
-        .info
-        .debug
-        .silly
-        .log        Defaults to 'info'
-
-
-    Currently abstracts winston
-    https://github.com/winstonjs/winston
-
-*/
+ *
+ *   Abstraction for the used logger.
+ *
+ *   Currently abstracts [winston](https://github.com/winstonjs/winston)
+ *
+ *   @module logger
+ *   @version 1.0.0
+ */
 
 //Dependencies
 var winston = require('winston');
@@ -52,122 +44,140 @@ winston.loggers.add('debug', {
     ]
 });
 
-module.exports = function createLogger() {
 
-    //If debugging level is activated.
-    var debugging = false;
+//If debugging level is activated.
+var debugging = false;
 
-    //Wether logging is currently disabled.
-    var disabled = false;
+//Wether logging is currently disabled.
+var disabled = false;
 
-
-    function log(level, text, more) {
-        if(disabled) {
-            return;
-        }
-        if (text === undefined) {
-            text = level;
-            level = 'info';
-        }
-        if (more === undefined) {
-            more = '';
-        }
-        getLogger().log(level, text, more);
+/**
+ *   Logs a message, this is an alias for ".info".
+ *   @param {string} level - The level at which to log.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.log = function log(level, text, more) {
+    if (disabled) {
+        return;
     }
-
-    function error(text, more) {
-        if(disabled) {
-            return;
-        }
-        if (more === undefined) {
-            more = '';
-        }
-        getLogger().error(text, more);
+    if (text === undefined) {
+        text = level;
+        level = 'info';
     }
-
-    function warn(text, more) {
-        if(disabled) {
-            return;
-        }
-        if (more === undefined) {
-            more = '';
-        }
-        getLogger().warn(text, more);
+    if (more === undefined) {
+        more = '';
     }
+    getLogger().log(level, text, more);
+}
 
-    function info(text, more) {
-        if(disabled) {
-            return;
-        }
-        if (more === undefined) {
-            more = '';
-        }
-        getLogger().info(text, more);
+/**
+ *   Logs a message at the error level.
+ *
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.error = function error(text, more) {
+    if (disabled) {
+        return;
     }
-
-    function debug(text, more) {
-        if(disabled) {
-            return;
-        }
-        if (more === undefined) {
-            more = '';
-        }
-        getLogger().debug(text, more);
+    if (more === undefined) {
+        more = '';
     }
+    getLogger().error(text, more);
+}
 
-    function silly(text, more) {
-        if(disabled) {
-            return;
-        }
-        if (more === undefined) {
-            more = '';
-        }
-        getLogger().silly(text, more);
+/**
+ *   Logs a message at the warn level.
+ *
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.warn = function warn(text, more) {
+    if (disabled) {
+        return;
     }
-
-    /**
-     *   Returns the logger that should currently be used.
-     */
-    function getLogger() {
-        var loggerName = (debugging) ? 'debug' : 'standard';
-        var logger = winston.loggers.get(loggerName);
-        logger.cli();
-        return logger;
+    if (more === undefined) {
+        more = '';
     }
+    getLogger().warn(text, more);
+}
 
-    /**
-     *   Sets up a logger for debugging.
-     */
-    function enableDebug() {
-        debugging = true;
-        info('Enabling debugging output');
+/**
+ *   Logs a message at the info level.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.info = function info(text, more) {
+    if (disabled) {
+        return;
     }
-
-    /**
-     *   Will disable any logging.
-     *   Meant for testing where we don't want logs.
-     */
-    function disableLogging() {
-        disabled = true;
+    if (more === undefined) {
+        more = '';
     }
+    getLogger().info(text, more);
+}
 
-    /**
-     *   Will enable loggong, as it is by default.
-     */
-    function enableLogging() {
-        disabled = false;
+/**
+ *   Logs a message at the debug level.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.debug = function debug(text, more) {
+    if (disabled) {
+        return;
     }
-
-    return {
-        log: log,
-        debug: debug,
-        info: info,
-        error: error,
-        warn: warn,
-        silly: silly,
-        enableDebug: enableDebug,
-        disable: disableLogging,
-        enable: enableLogging
+    if (more === undefined) {
+        more = '';
     }
+    getLogger().debug(text, more);
+}
 
-}();
+/**
+ *   Logs a message at the silly level.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.silly = function silly(text, more) {
+    if (disabled) {
+        return;
+    }
+    if (more === undefined) {
+        more = '';
+    }
+    getLogger().silly(text, more);
+}
+
+/**
+ *   Sets up a logger for debugging.
+ */
+exports.enableDebug = function enableDebug() {
+    debugging = true;
+    exports.info('Enabling debugging output');
+}
+
+/**
+ *   Will disable any logging.
+ *   Meant for testing where we don't want logs.
+ */
+exports.disable = function disableLogging() {
+    disabled = true;
+}
+
+/**
+ *   Will enable loggong, as it is by default.
+ */
+exports.enable = function enableLogging() {
+    disabled = false;
+}
+
+/**
+ *   Returns the logger that should currently be used.
+ *   @private
+ */
+function getLogger() {
+    var loggerName = (debugging) ? 'debug' : 'standard';
+    var logger = winston.loggers.get(loggerName);
+    logger.cli();
+    return logger;
+}

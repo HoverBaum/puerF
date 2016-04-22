@@ -1,22 +1,11 @@
 /**
-    puerServer module for puerFreemarker.
-
-    This module provides a single function to start a puer Server.
-
-    routesFile: relativ path to combined file, from current working directory.
-
-    You can hand it an options object or use the default options.
-    options = {
-        port,           Specific port to use
-        dir,            Root directory for serving static files
-        ignored,        Files to ignore
-        filetype,       Filetypes to watch
-        localhost,      Wether to use localhost instead of 127.0.0.1
-        browser,        If the browser should be opened automatically
-        templatesPath   The path where templates can be found
-    }
-
-*/
+ *   puerServer module for puerFreemarker.
+ *
+ *   This module provides a single function to start a puer Server.
+ *   
+ *   @module puerServer
+ *
+ */
 
 //NOTE maybe replace puer with a live-reloader as we are only using it for that, could solve bugs in test with server not closing
 
@@ -38,8 +27,25 @@ var Freemarker = require('freemarker.js');
 
 /**
  *   Start a puer server to serve files and watch for changes.
+ *   @param {array} routesFile - All files containing info about mocked routes.
+ *    Paths need to be relative to current working directory.
+ *   @param {object} options - Options to run the server with.
+ *   @param {string} [options.templatesPath] - Root folder for FTL template
+ *    files.
+ *   @param {string} [options.dir] - Root folder for static files to serve.
+ *   @param {number} [options.port=8080] - The port to use for the server.
+ *   @param {string}
+ *    [options.watch='js css html xhtml ftl'] - Filetypes
+ *    (seperate them by pipes) to watch for changes.
+ *   @param {regEx} [options.ignored=/node_modules/] - Files to exclude from
+ *    watching.
+ *   @param {boolean} [options.localhost=false] - Use `localhost` instead of
+ *    `127.0.0.1`.
+ *   @param {boolean} [options.browser] - Automatically open a browser for the
+ *    user.
+ *   @param callback {function} Function to call once done.
  */
-function startPuerServer(routesFile, options, callback) {
+module.exports = function startPuerServer(routesFile, options, callback) {
 
     //Disable console.log while server is starting, to prevent puer logs.
     var oldConsole = console.log;
@@ -66,7 +72,7 @@ function startPuerServer(routesFile, options, callback) {
     setupMockRoutes(startServer);
 
 
-    /**
+    /*
      *   Set up the express server and configure routing.
      */
     function configureServer() {
@@ -140,12 +146,11 @@ function startPuerServer(routesFile, options, callback) {
         });
     }
 
-    /**
+    /*
      *   Actually start the server.
      */
     function startServer() {
 
-        //TODO check if port available, try different one otherwise.
         var listener = server.listen(port, function() {
             var usedPort = listener.address().port
             logger.info(`Server running on port: ${usedPort}`);
@@ -169,7 +174,7 @@ function startPuerServer(routesFile, options, callback) {
     }
 
 
-    /**
+    /*
      *   Will parse the combined routes file into actual routes.
      */
     function setupMockRoutes(callback) {
@@ -185,7 +190,7 @@ function startPuerServer(routesFile, options, callback) {
         }
     }
 
-    /**
+    /*
      *   Closes the server down.
      */
     function closeServer(callback) {
@@ -204,4 +209,3 @@ function startPuerServer(routesFile, options, callback) {
     }
 
 };
-module.exports = startPuerServer;
