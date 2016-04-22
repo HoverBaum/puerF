@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>logger.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-helper.html">helper</a><ul class='methods'><li data-type='method'><a href="module-helper.html#.absolutePath">absolutePath</a></li><li data-type='method'><a href="module-helper.html#.guarantyFolder">guarantyFolder</a></li><li data-type='method'><a href="module-helper.html#.loadModule">loadModule</a></li></ul></li><li><a href="module-initializer.html">initializer</a><ul class='methods'><li data-type='method'><a href="module-initializer.html#.init">init</a></li></ul></li><li><a href="module-logger.html">logger</a><ul class='methods'><li data-type='method'><a href="module-logger.html#.debug">debug</a></li><li data-type='method'><a href="module-logger.html#.disable">disable</a></li><li data-type='method'><a href="module-logger.html#.enable">enable</a></li><li data-type='method'><a href="module-logger.html#.enableDebug">enableDebug</a></li><li data-type='method'><a href="module-logger.html#.error">error</a></li><li data-type='method'><a href="module-logger.html#.info">info</a></li><li data-type='method'><a href="module-logger.html#.log">log</a></li><li data-type='method'><a href="module-logger.html#.silly">silly</a></li><li data-type='method'><a href="module-logger.html#.warn">warn</a></li></ul></li><li><a href="module-puer-freemarker.html">puer-freemarker</a><ul class='methods'><li data-type='method'><a href="module-puer-freemarker.html#.close">close</a></li><li data-type='method'><a href="module-puer-freemarker.html#.init">init</a></li><li data-type='method'><a href="module-puer-freemarker.html#.start">start</a></li></ul></li><li><a href="module-puerMockRouter.html">puerMockRouter</a><ul class='methods'><li data-type='method'><a href="module-puerMockRouter.html#.configure">configure</a></li><li data-type='method'><a href="module-puerMockRouter.html#.lookUp">lookUp</a></li><li data-type='method'><a href="module-puerMockRouter.html#~parseRoute">parseRoute</a></li></ul></li><li><a href="module-puerServer.html">puerServer</a></li><li><a href="module-routePreProcessor.html">routePreProcessor</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">logger.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *
+ *   Abstraction for the used logger.
+ *
+ *   Currently abstracts [winston](https://github.com/winstonjs/winston)
+ *
+ *   @module logger
+ *   @version 1.0.0
+ */
+
+//Dependencies
+var winston = require('winston');
+var path = require('path');
+
+//Configure Standard logger.
+winston.loggers.add('standard', {
+    console: {
+        level: 'info',
+        colorize: true
+    },
+    file: {
+        level: 'error',
+        filename: 'puerf-error.log'
+    }
+});
+
+//Configure Debug logger.
+winston.loggers.add('debug', {
+    transports: [
+        new(winston.transports.Console)({
+            level: 'debug',
+            colorize: true
+        }),
+        new(winston.transports.File)({
+            name: 'debug-file',
+            filename: 'puerf-debug.log',
+            level: 'silly'
+        }),
+        new(winston.transports.File)({
+            name: 'error-file',
+            filename: 'puerf-error.log',
+            level: 'error'
+        })
+    ]
+});
+
+
+//If debugging level is activated.
+var debugging = false;
+
+//Wether logging is currently disabled.
+var disabled = false;
+
+/**
+ *   Logs a message, this is an alias for ".info".
+ *   @param {string} level - The level at which to log.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.log = function log(level, text, more) {
+    if (disabled) {
+        return;
+    }
+    if (text === undefined) {
+        text = level;
+        level = 'info';
+    }
+    if (more === undefined) {
+        more = '';
+    }
+    getLogger().log(level, text, more);
+}
+
+/**
+ *   Logs a message at the error level.
+ *
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.error = function error(text, more) {
+    if (disabled) {
+        return;
+    }
+    if (more === undefined) {
+        more = '';
+    }
+    getLogger().error(text, more);
+}
+
+/**
+ *   Logs a message at the warn level.
+ *
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.warn = function warn(text, more) {
+    if (disabled) {
+        return;
+    }
+    if (more === undefined) {
+        more = '';
+    }
+    getLogger().warn(text, more);
+}
+
+/**
+ *   Logs a message at the info level.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.info = function info(text, more) {
+    if (disabled) {
+        return;
+    }
+    if (more === undefined) {
+        more = '';
+    }
+    getLogger().info(text, more);
+}
+
+/**
+ *   Logs a message at the debug level.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.debug = function debug(text, more) {
+    if (disabled) {
+        return;
+    }
+    if (more === undefined) {
+        more = '';
+    }
+    getLogger().debug(text, more);
+}
+
+/**
+ *   Logs a message at the silly level.
+ *   @param {string} text - The message to log.
+ *   @param {object} more - Data to log along with the message.
+ */
+exports.silly = function silly(text, more) {
+    if (disabled) {
+        return;
+    }
+    if (more === undefined) {
+        more = '';
+    }
+    getLogger().silly(text, more);
+}
+
+/**
+ *   Sets up a logger for debugging.
+ */
+exports.enableDebug = function enableDebug() {
+    debugging = true;
+    exports.info('Enabling debugging output');
+}
+
+/**
+ *   Will disable any logging.
+ *   Meant for testing where we don't want logs.
+ */
+exports.disable = function disableLogging() {
+    disabled = true;
+}
+
+/**
+ *   Will enable loggong, as it is by default.
+ */
+exports.enable = function enableLogging() {
+    disabled = false;
+}
+
+/**
+ *   Returns the logger that should currently be used.
+ *   @private
+ */
+function getLogger() {
+    var loggerName = (debugging) ? 'debug' : 'standard';
+    var logger = winston.loggers.get(loggerName);
+    logger.cli();
+    return logger;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Apr 22 2016 10:04:46 GMT+0800 (中国标准时间) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

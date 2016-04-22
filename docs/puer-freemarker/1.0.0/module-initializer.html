@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>initializer - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-helper.html">helper</a><ul class='methods'><li data-type='method'><a href="module-helper.html#.absolutePath">absolutePath</a></li><li data-type='method'><a href="module-helper.html#.guarantyFolder">guarantyFolder</a></li><li data-type='method'><a href="module-helper.html#.loadModule">loadModule</a></li></ul></li><li><a href="module-initializer.html">initializer</a><ul class='methods'><li data-type='method'><a href="module-initializer.html#.init">init</a></li></ul></li><li><a href="module-logger.html">logger</a><ul class='methods'><li data-type='method'><a href="module-logger.html#.debug">debug</a></li><li data-type='method'><a href="module-logger.html#.disable">disable</a></li><li data-type='method'><a href="module-logger.html#.enable">enable</a></li><li data-type='method'><a href="module-logger.html#.enableDebug">enableDebug</a></li><li data-type='method'><a href="module-logger.html#.error">error</a></li><li data-type='method'><a href="module-logger.html#.info">info</a></li><li data-type='method'><a href="module-logger.html#.log">log</a></li><li data-type='method'><a href="module-logger.html#.silly">silly</a></li><li data-type='method'><a href="module-logger.html#.warn">warn</a></li></ul></li><li><a href="module-puer-freemarker.html">puer-freemarker</a><ul class='methods'><li data-type='method'><a href="module-puer-freemarker.html#.close">close</a></li><li data-type='method'><a href="module-puer-freemarker.html#.init">init</a></li><li data-type='method'><a href="module-puer-freemarker.html#.start">start</a></li></ul></li><li><a href="module-puerMockRouter.html">puerMockRouter</a><ul class='methods'><li data-type='method'><a href="module-puerMockRouter.html#.configure">configure</a></li><li data-type='method'><a href="module-puerMockRouter.html#.lookUp">lookUp</a></li><li data-type='method'><a href="module-puerMockRouter.html#~parseRoute">parseRoute</a></li></ul></li><li><a href="module-puerServer.html">puerServer</a></li><li><a href="module-routePreProcessor.html">routePreProcessor</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">initializer</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Module to create basic working environment for puerf.</p>
+<p>  Will create folders and files to demonstrate features.</p></div>
+        
+
+        
+            
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="initializer.js.html">initializer.js</a>, <a href="initializer.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".init"><span class="type-signature">(static) </span>init<span class="signature">(options, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="initializer.js.html">initializer.js</a>, <a href="initializer.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Starts setting up basic files to work with puerF.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Options for the intializer. The only possible one
+   is &quot;onlyConfig&quot;.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to call once done.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Apr 22 2016 10:04:46 GMT+0800 (中国标准时间) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
