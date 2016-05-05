@@ -1,7 +1,7 @@
 /**
  *
  *   A module to process routes.js and tflRoutes.js files into a single file.
- *   
+ *
  *   @module routePreProcessor
  */
 
@@ -13,10 +13,13 @@ var logger = require('./logger');
 
 module.exports = function routePreProcessor() {
 
+    var templatePath = 'templates';
+
     /**
      *   Process all routes files into a combined one.
      */
-    function processFiles(routeFilePaths, combinedFilePath, callback) {
+    function processFiles(routeFilePaths, combinedFilePath, templateBasePath, callback) {
+        templatePath = templateBasePath;
         logger.debug('Combining routes', {
             combinedFilePath,
             routeFilePaths
@@ -88,17 +91,24 @@ module.exports = function routePreProcessor() {
     function parseFtlRoute(config, ftlRoutesFile) {
         var dataString = '';
         if (config.data) {
-            dataString = `var fmData = JSON.parse('${JSON.stringify(config.data)}');`;
+            dataString = `var fmData = {puerFDataObject: ${JSON.stringify(config.data)}};`;
         } else if (config.jsonFile) {
             var absPath = path.resolve(path.dirname(ftlRoutesFile), config.jsonFile);
 
             //We read the file in and parse it to make sure we have the up to date version of mocked data.
+            var partString = "`${fileData}`";
             dataString = `var fileData = fs.readFileSync('${absPath.replace(/\\/g, '\\\\')}');
-            var fmData = JSON.parse(fileData);`;
+            var fmData = {puerFDataObject: ${partString}}`;
         }
+        var ftlTemplate = path.join(path.parse(config.template).dir, path.parse(config.template).name += '_puerF').replace(/\\/g, '\\\\') + '.ftl';
+        createpuerFTLTemplate(ftlTemplate, config.template);
+        //FIXME the fm.render turns chinese characters wrong.
         return `function(req, res, next) {
             ${dataString}
-            fm.render('${config.template}', fmData, function(err, data, out) {
+            console.log(fmData);
+            fm.render('${ftlTemplate}', fmData, function(err, data, out) {
+                console.log('---------------------------------');
+                console.log(data);
                 if(/.+DONE.+/.test(out)) {
                     logger.debug('FreeMarker said', out);
                 } else {
@@ -108,12 +118,35 @@ module.exports = function routePreProcessor() {
                     throw err;
                 }
                 res.writeHeader(200, {
-                    "Content-Type": "text/html"
+                    "Content-Type": "text/html; charset=utf-8"
                 });
                 res.write(data);
                 res.end();
             });
         }`;
+    }
+
+    /**
+     *   Creates a new version of the template to handle variables.
+     */
+    function createpuerFTLTemplate(pathTo, pathFrom) {
+        fs.readFile(path.join(templatePath, pathFrom), function(err, data) {
+            var prefix = `<#assign puerFJSONData=puerFDataObject?eval />
+            <@createGlobals/>
+            <#macro createGlobals>
+                <#list puerFJSONData?keys as x>
+                    <#if x!='class' && puerFJSONData[x]?? && !puerFJSONData[x]?is_method>
+                        <@'<#assign ${'${x}'} = puerFJSONData[x]>'?interpret />
+                    </#if>
+                </#list>
+            </#macro>
+            `;
+            var newData = prefix + data;
+            var filePath = path.join(templatePath, pathTo);
+            fs.writeFile(filePath, newData, 'utf8', function() {
+
+            });
+        });
     }
 
     /**
