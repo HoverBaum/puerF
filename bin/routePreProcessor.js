@@ -105,6 +105,18 @@ module.exports = function routePreProcessor() {
         //FIXME the fm.render turns chinese characters wrong.
         return `function(req, res, next) {
             ${dataString}
+            function convertChinese(chinese) {
+                var converted = '';
+                for(i=0; i < chinese.length; i++) {
+                    if(chinese.charCodeAt(i)>127) {
+                        converted += '&#' + chinese.charCodeAt(i) + ';';
+                    } else {
+                        converted += chinese.charAt(i);
+                    }
+                }
+                return converted;
+            }
+            //fmData.puerFDataObject = convertChinese(fmData.puerFDataObject);
             console.log(fmData);
             fm.render('${ftlTemplate}', fmData, function(err, data, out) {
                 console.log('---------------------------------');
@@ -118,7 +130,7 @@ module.exports = function routePreProcessor() {
                     throw err;
                 }
                 res.writeHeader(200, {
-                    "Content-Type": "text/html; charset=utf-8"
+                    "Content-Type": "text/html"
                 });
                 res.write(data);
                 res.end();
