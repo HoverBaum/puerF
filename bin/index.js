@@ -144,7 +144,7 @@ function runPuerF(cli, callback) {
      *  @private
      */
     function processRouteFiles(callback) {
-        processor.process(routeFiles, combinedFile, callback);
+        processor.process(routeFiles, combinedFile, templatesPath, callback);
     }
 
     /*
@@ -171,8 +171,8 @@ function runPuerF(cli, callback) {
      *   Handle Ctrl + C
      */
     process.on('SIGINT', function() {
-        fs.unlink(combinedFile, function() {
+        /*fs.unlink(combinedFile, function() {
             logger.info('Now exiting, goodby.');
-        });
+        });*/
     });
 };
