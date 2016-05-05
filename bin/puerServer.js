@@ -2,7 +2,7 @@
  *   puerServer module for puerFreemarker.
  *
  *   This module provides a single function to start a puer Server.
- *   
+ *
  *   @module puerServer
  *
  */
