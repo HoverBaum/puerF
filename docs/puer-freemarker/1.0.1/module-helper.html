@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>puerMockRouter - Documentation</title>
+    <title>helper - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">puerMockRouter</h1>
+    <h1 class="page-title">helper</h1>
     
 
     
@@ -50,8 +50,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>puer mock router module for puerFreemarker.</p>
-<p>  Returns an object in which one can look up what to do on which route.</p></div>
+            <div class="description"><p>This module provides helper function for puerF.</p></div>
         
 
         
@@ -65,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puerMockRouter.js.html">puerMockRouter.js</a>, <a href="puerMockRouter.js.html#line1">line 1</a>
+        <a href="helper.js.html">helper.js</a>, <a href="helper.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -152,7 +151,7 @@
 
     
 
-    <h4 class="name" id=".configure"><span class="type-signature">(static) </span>configure<span class="signature">(config)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".absolutePath"><span class="type-signature">(static) </span>absolutePath<span class="signature">(uri)</span><span class="type-signature"></span></h4>
 
     
 
@@ -164,7 +163,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puerMockRouter.js.html">puerMockRouter.js</a>, <a href="puerMockRouter.js.html#line65">line 65</a>
+        <a href="helper.js.html">helper.js</a>, <a href="helper.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -204,7 +203,7 @@
 
 
 <div class="description">
-    <p>Parse a config object into a routes store.</p>
+    <p>Returns the absolute path, relative paths are resolved relative to executing dir.</p>
 </div>
 
 
@@ -242,140 +241,7 @@
 
         <tr>
             
-                <td class="name"><code>config</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Configuration object to use, should be allRoutes.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".lookUp"><span class="type-signature">(static) </span>lookUp<span class="signature">(path, method, params)</span><span class="type-signature"> &rarr; {Info}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puerMockRouter.js.html">puerMockRouter.js</a>, <a href="puerMockRouter.js.html#line40">line 40</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Looks up a route and returns object with info if present.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>path</code></td>
+                <td class="name"><code>uri</code></td>
             
 
             <td class="type">
@@ -391,59 +257,7 @@
 
             
 
-            <td class="description last"><p>The path for which to find an info object.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>method</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Identifier for the method used, one of:</p>
-<ul>
-<li>get</li>
-<li>post</li>
-<li>put</li>
-<li>delete</li>
-</ul></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>params</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Parameters already found</p></td>
+            <td class="description last"><p>The path to make absolute.</p></td>
         </tr>
 
     
@@ -467,22 +281,10 @@
 
         
 <div class="param-desc">
-    <p>An object with infos about the found route or <code>undefined</code></p>
+    <p>The uri as an absolute path.</p>
 </div>
 
 
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Info</span>
-
-
-    </dd>
-</dl>
 
     
 
@@ -492,7 +294,7 @@
 
     
 
-    <h4 class="name" id="~parseRoute"><span class="type-signature">(inner) </span>parseRoute<span class="signature">(private, identifier, call)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".guarantyFolder"><span class="type-signature">(static) </span>guarantyFolder<span class="signature">(pathToCheck)</span><span class="type-signature"></span></h4>
 
     
 
@@ -504,7 +306,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puerMockRouter.js.html">puerMockRouter.js</a>, <a href="puerMockRouter.js.html#line81">line 81</a>
+        <a href="helper.js.html">helper.js</a>, <a href="helper.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -544,7 +346,7 @@
 
 
 <div class="description">
-    <p>Take an identifier and a function to be called for a route.</p>
+    <p>Makes sure that a path exists, not a file but the deepest folder.</p>
 </div>
 
 
@@ -582,10 +384,15 @@
 
         <tr>
             
-                <td class="name"><code>private</code></td>
+                <td class="name"><code>pathToCheck</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
             
             </td>
 
@@ -593,43 +400,7 @@
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>identifier</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Describes the route, such as &quot;GET /index&quot;.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>call</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The function to call when route is accessed.</p></td>
+            <td class="description last"><p>Path for which all folders up to it should exist.</p></td>
         </tr>
 
     
@@ -652,15 +423,13 @@
 
 
         
-    
+            
 
     
-        <h3 class="subsection-title">Type Definitions</h3>
 
-        
-                
-<h4 class="name" id="~Info">Info</h4>
+    <h4 class="name" id=".loadModule"><span class="type-signature">(static) </span>loadModule<span class="signature">(path)</span><span class="type-signature"></span></h4>
 
+    
 
 
 
@@ -670,7 +439,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puerMockRouter.js.html">puerMockRouter.js</a>, <a href="puerMockRouter.js.html#line19">line 19</a>
+        <a href="helper.js.html">helper.js</a>, <a href="helper.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -707,11 +476,26 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+
+<div class="description">
+    <p>Load a module without using a cache.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -733,53 +517,6 @@
 
         <tr>
             
-                <td class="name"><code>call</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Function to call for this route.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>paramValues</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Values for parameters, asign this to
-   req.params.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>path</code></td>
             
 
@@ -796,30 +533,7 @@
 
             
 
-            <td class="description last"><p>The path this object represents.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>params</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Parameter awaited on this route.</p></td>
+            <td class="description last"><p>Absolute path to module to load.</p></td>
         </tr>
 
     
@@ -833,22 +547,17 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
 
 
 
 
 
 
-            
+
+
+        
+    
+
     
 
     
@@ -864,7 +573,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu May 05 2016 16:26:07 GMT+0800 (中国标准时间) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu May 05 2016 16:26:25 GMT+0800 (中国标准时间) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

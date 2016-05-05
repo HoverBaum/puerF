@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>puerServer - Documentation</title>
+    <title>puer-freemarker - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">puerServer</h1>
+    <h1 class="page-title">puer-freemarker</h1>
     
 
     
@@ -43,8 +43,6 @@
         
             
         
-            
-        
     
 </header>
 
@@ -52,8 +50,8 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>puerServer module for puerFreemarker.</p>
-<p>  This module provides a single function to start a puer Server.</p></div>
+            <div class="description"><p>puerF, a simple tool to run a live reloading server
+  with mocked routes and FreeMarker templates.</p></div>
         
 
         
@@ -67,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puerServer.js.html">puerServer.js</a>, <a href="puerServer.js.html#line1">line 1</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -131,11 +129,30 @@
 
 
         
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
             
 
     
 
-    <h4 class="name" id="module:puerServer"><span class="type-signature"></span>(require("puerServer"))<span class="signature">(routesFile, options, callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".close"><span class="type-signature">(static) </span>close<span class="signature">(callback)</span><span class="type-signature"></span></h4>
 
     
 
@@ -147,7 +164,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="puerServer.js.html">puerServer.js</a>, <a href="puerServer.js.html#line48">line 48</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -187,7 +204,7 @@
 
 
 <div class="description">
-    <p>Start a puer server to serve files and watch for changes.</p>
+    <p>Programatically closes puerF.</p>
 </div>
 
 
@@ -225,13 +242,13 @@
 
         <tr>
             
-                <td class="name"><code>routesFile</code></td>
+                <td class="name"><code>callback</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">function</span>
 
 
             
@@ -241,10 +258,127 @@
 
             
 
-            <td class="description last"><p>All files containing info about mocked routes.
-   Paths need to be relative to current working directory.</p></td>
+            <td class="description last"><p>Function to call once done.</p></td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".init"><span class="type-signature">(static) </span>init<span class="signature">(options, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>initializer</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Runs the initializer. Will output basic files to the current working
+   directory.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
@@ -265,7 +399,7 @@
 
             
 
-            <td class="description last"><p>Options to run the server with.</p>
+            <td class="description last"><p>Options for the initializer.</p>
                 <h6>Properties</h6>
                 
 
@@ -295,13 +429,13 @@
 
         <tr>
             
-                <td class="name"><code>templatesPath</code></td>
+                <td class="name"><code>onlyConfig</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -322,18 +456,283 @@
             
                 <td class="default">
                 
+                    false
+                
                 </td>
             
 
-            <td class="description last"><p>Root folder for FTL template
-   files.</p></td>
+            <td class="description last"><p>Only create the config file.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>dir</code></td>
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Function to call once done.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".start"><span class="type-signature">(static) </span>start<span class="signature">(options, callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Starts the core application.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An object containing options.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>routes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ['mock/ftlRoutes.js', 'mock/routes.js']
+                
+                </td>
+            
+
+            <td class="description last"><p>An array of paths to all files containing mocked routes.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Use config file.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>templates</code></td>
             
 
             <td class="type">
@@ -360,10 +759,53 @@
             
                 <td class="default">
                 
+                    'templates'
+                
                 </td>
             
 
-            <td class="description last"><p>Root folder for static files to serve.</p></td>
+            <td class="description last"><p>Root folder for FTL
+   template files.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>root</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    './'
+                
+                </td>
+            
+
+            <td class="description last"><p>Root folder for static files to
+   serve.</p></td>
         </tr>
 
     
@@ -449,7 +891,7 @@
 
         <tr>
             
-                <td class="name"><code>ignored</code></td>
+                <td class="name"><code>exclude</code></td>
             
 
             <td class="type">
@@ -556,11 +998,53 @@
             
                 <td class="default">
                 
+                    true
+                
                 </td>
             
 
-            <td class="description last"><p>Automatically open a browser for the
-   user.</p></td>
+            <td class="description last"><p>Automatically open a browser for
+   the user.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>debug</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Enable debugging output and log
+   file.</p></td>
         </tr>
 
     
@@ -590,7 +1074,7 @@
 
             
 
-            <td class="description last"><p>Function to call once done.</p></td>
+            <td class="description last"><p>Function to call once started.</p></td>
         </tr>
 
     
@@ -614,21 +1098,6 @@
 
         
     
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
 
     
 
@@ -645,7 +1114,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu May 05 2016 16:26:07 GMT+0800 (中国标准时间) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu May 05 2016 16:26:25 GMT+0800 (中国标准时间) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
