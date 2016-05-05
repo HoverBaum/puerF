@@ -49,3 +49,16 @@ Commonly we will work on the `development` branch, or we may create an extra bra
 ## errors
 
 An error that was stumbled upon multiple times so far is `can not set displayName of undefined` or something of the likes. In this case make sure all variables are defined. That is probably where the error occurs.
+
+## Bugs and issues
+
+We track issues on Git :)   
+There are currently two major knows issues
+
+### puer closing
+
+The middleware for puer can not be closed programatically which results in us not being able to test a lot of things.
+
+### FTL variables
+
+Suspect a bug in freemarker.js not handing variables correctly.
