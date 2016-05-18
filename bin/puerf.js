@@ -15,6 +15,8 @@ var logger = require('./logger');
 //The actual application this is a cli interface for.
 var puerf = require('./index');
 
+var converter = require('./converter');
+
 /*
  *   Helper function to collect repeated arguments
  */
@@ -47,6 +49,15 @@ cli
     .option('--only-config', 'Only generate a config file')
     .action(function(options) {
         puerf.init(options);
+    });
+
+//Define convert command
+cli
+    .command('convert')
+    .usage('<routesFile> <templateRoot> <targetFolder>')
+    .description('Convert FreeMarker templates into static HTML using mock data.')
+    .action(function(routesFile, templateRoot, targetFolder) {
+        converter(routesFile, templateRoot, targetFolder);
     });
 
 //Give some more help text

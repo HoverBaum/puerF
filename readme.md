@@ -22,26 +22,28 @@ puerF requires that you have Java installed as it is needed to render FreeMarker
 ```
 Usage: puerf [cmd] [options]
 
+
 Commands:
 
-   init [options]   Set up basic folders and files to work with puerf
+    init [options]   Set up basic folders and files to work with puerf
+    convert          Convert FreeMarker templates into static HTML using mock data.
 
-Start a puer Server, easily mock routes and render FreeMarker templates
+  Start a puer Server, easily mock routes and render FreeMarker templates
 
 Options:
 
-   -h, --help              output usage information
-   -V, --version           output the version number
-   -r, --routes <file>     Configuration file for mocked routes (multiple possible)
-   -c, --config            If a config file should be used
-   -t, --templates <path>  Path to folder in which Freemarker templates are stored
-   -r, --root <folder>     The root folder that files should be served from
-   -p, --port <number>     Specific port to use
-   -w, --watch <files>     Filetypes to watch, defaults to js|css|html|xhtml|ftl
-   -x, --exclude <files>   Exclude files from being watched for updates
-   -l, --localhost         Use "localhost" instead of "127.0.0.1"
-   --no-browser            Do not autimatically open a brwoser
-   --debug                 Display debug messages
+    -h, --help              output usage information
+    -V, --version           output the version number
+    -r, --routes <file>     Configuration file for mocked routes (multiple possible)
+    -c, --config            If a config file should be used
+    -t, --templates <path>  Path to folder in which Freemarker templates are stored
+    -r, --root <folder>     The root folder that files should be served from
+    -p, --port <number>     Specific port to use
+    -w, --watch <files>     Filetypes to watch, defaults to js|css|html|xhtml|ftl
+    -x, --exclude <files>   Exclude files from being watched for updates
+    -l, --localhost         Use "localhost" instead of "127.0.0.1"
+    --no-browser            Do not autimatically open a brwoser
+    --debug                 Display debug messages
 ```
 
 ## Mocking requests
@@ -87,6 +89,14 @@ Real world applications might use query parameters to get specific results from 
 ### FreeMarker templates
 
 By default puerF will look for FreeMarker templates in `./templates`. To specify another folder you can use `-t`. Read the guid to [author FreeMarker templates](http://freemarker.org/docs/dgui.html).
+
+## FreeMarker to static HTML
+
+puerF can also convert FreeMarker templates into static HTML using mock data provided in a routes file. This needs the `routesFile` from which to take the templates to make static. `templateRoot` the root folder in which FreeMarker templates are and `targetFolder` in which to export the static HTML files.
+
+```
+Usage: puerf convert <routesFile> <templateRoot> <targetFolder>
+```
 
 # Use as a dependency
 
