@@ -10,6 +10,12 @@ var Freemarker = require('freemarker.js');
 var fs = require('fs');
 var path = require('path');
 
+/**
+ *   Convert all templates within a routes file.
+ *   @param  {String} routesFile   - Path to routes file relative to current working directory.
+ *   @param  {String} ftlRoot      - Root folder for FTL templates in the routes File.
+ *   @param  {String} targetFolder - Folder in which to output the static HTML.
+ */
 module.exports = function convertTemplates(routesFile, ftlRoot, targetFolder) {
 
 	logger.info(`Now converting FreeMarker routes in "${routesFile}" to static HTML in "${targetFolder}"`);
@@ -30,17 +36,24 @@ module.exports = function convertTemplates(routesFile, ftlRoot, targetFolder) {
 	logger.info(`Found ${max} ${max === 1 ? 'route' : 'routes'} to process.`)
 	toProcess.forEach(route => {
 		convertRoute(routes[route], fm, absRoutesFile, function(html) {
-			saveHtml(routes[route], html, helper.absolutePath(targetFolder), function() {
+			saveHtml(routes[route].template, html, helper.absolutePath(targetFolder), function() {
 				processed += 1;
 				logger.info(`Processed ${processed}/${max} - ${routes[route].template}`);
 				if(processed === max) {
-					logger.info(`Finished converting all templates in routes file.`);
+					logger.info(`Finished converting all templates in "${routesFile}".`);
 				}
 			});
 		});
 	});
 }
 
+/**
+ *   Convert a routes template to static HTML.
+ *   @param  {Object}   route         - Routes object.
+ *   @param  {freemarker.js}   fm     - Instance of FreeMarker.js to use.
+ *   @param  {String}   absRoutesFile - Abs path to routes file used
+ *   @param  {Function} callback      - Called once finished with html.
+ */
 function convertRoute(route, fm, absRoutesFile, callback) {
 	var ftlData = route.jsonFile ? require(path.resolve(path.dirname(absRoutesFile), route.jsonFile)) : route.data;
 	fm.render(route.template, ftlData, function(err, data, out) {
@@ -56,8 +69,15 @@ function convertRoute(route, fm, absRoutesFile, callback) {
 	});
 }
 
-function saveHtml(route, html, targetFolder, callback) {
-	var htmlPath = route.template.replace(/ftl$/, 'html');
+/**
+ *   Save a static html file.
+ *   @param  {String}   templatePath - Path to the template
+ *   @param  {String}   html         - The html to save
+ *   @param  {String}   targetFolder - Folder in which to save
+ *   @param  {Function} callback     - Called once finished
+ */
+function saveHtml(templatePath, html, targetFolder, callback) {
+	var htmlPath = templatePath.replace(/ftl$/, 'html');
 	var destination = path.join(targetFolder, htmlPath);
 	fs.writeFile(destination, html, callback);
 }
