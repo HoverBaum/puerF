@@ -1,6 +1,6 @@
 {
   "name": "puer-freemarker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Use puer with Freemarker templates.",
   "main": "./bin/index.js",
   "repository": "https://github.com/HoverBaum/puerF",
