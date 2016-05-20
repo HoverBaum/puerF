@@ -117,10 +117,7 @@ module.exports = function routePreProcessor() {
                 return converted;
             }
             //fmData.puerFDataObject = convertChinese(fmData.puerFDataObject);
-            console.log(fmData);
             fm.render('${ftlTemplate}', fmData, function(err, data, out) {
-                console.log('---------------------------------');
-                console.log(data);
                 if(/.+DONE.+/.test(out)) {
                     logger.debug('FreeMarker said', out);
                 } else {

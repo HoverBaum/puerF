@@ -171,8 +171,8 @@ function runPuerF(cli, callback) {
      *   Handle Ctrl + C
      */
     process.on('SIGINT', function() {
-        /*fs.unlink(combinedFile, function() {
+        fs.unlink(combinedFile, function() {
             logger.info('Now exiting, goodby.');
-        });*/
+        });
     });
 };
