@@ -15,6 +15,8 @@ var processor = require('./routePreProcessor');
 var startPuer = require('./puerServer');
 var logger = require('./logger');
 
+var cleanTemplates = require('./templateCleaner');
+
 //The server we are running, so that it can be closed later.
 var server = null;
 
@@ -172,7 +174,9 @@ function runPuerF(cli, callback) {
      */
     process.on('SIGINT', function() {
         fs.unlink(combinedFile, function() {
-            logger.info('Now exiting, goodby.');
+			cleanTemplates(templatesPath, function() {
+				logger.info('Now exiting, goodby.');
+			});
         });
     });
 };
