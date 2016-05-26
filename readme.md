@@ -1,5 +1,7 @@
 # puerF
 
+[![Join the chat at https://gitter.im/HoverBaum/puerF](https://badges.gitter.im/HoverBaum/puerF.svg)](https://gitter.im/HoverBaum/puerF?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Commandline interface to use [puer](https://github.com/leeluolee/puer) with [FreeMarker templates](http://freemarker.org/).
 
 ## Usage
