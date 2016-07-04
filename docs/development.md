@@ -31,6 +31,16 @@ Each module of puerF has it's own testing file. These files are name 'test[somet
 testSomething(test);
 ```
 
+### Manual testing
+
+If you want to use your locally changed version of puerF instead of the npm package go into th puerF directory and run
+
+```
+npm link
+```
+
+This will reference the global puerF to your local version.
+
 ## Development process
 
 This project follows a git workflow based on a [successful git branching model](http://nvie.com/posts/a-successful-git-branching-model/) by Vincent Driessen. However we mainly use three types of braches:

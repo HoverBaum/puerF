@@ -9,6 +9,7 @@
 
 //Dependencies.
 var fs = require('fs');
+var path = require('path');
 
 //Submodules
 var processor = require('./routePreProcessor');
@@ -127,6 +128,16 @@ function runPuerF(cli, callback) {
         }
     });
 
+	//Also watch template files for changed.
+	walk(templatesPath, /.ftl$/, function(err, templateFiles) {
+		templateFiles.forEach(function(template) {
+			var watcher = fs.watch(template, (event, filename) => {
+				onRoutesChange();
+			});
+			watchers.push(watcher);
+		})
+	});
+
     /**
      *   A function to be called when routes change.
      *   Will parse them again and tell the server to update routes.
@@ -179,4 +190,38 @@ function runPuerF(cli, callback) {
 			});
         });
     });
+
+	/**
+	 *   Walks a filestructure starting from a given root and pushes all found
+	 *   files onto a given stream. Compares all files against a filter.
+	 *   @param  {String}   dir    - Root directory
+	 *   @param  {RegEx}    filter - RegEx to test found files against
+	 *   @param  {Function} done   - Callback will be called with (err, foundFiles)
+	 *   @private
+	 */
+	 function walk(dir, filter, done) {
+ 	    var results = [];
+ 	    fs.readdir(dir, function(err, list) {
+ 	        if (err) return done(err);
+ 	        var pending = list.length;
+ 	        if (!pending) return done(null, results);
+ 	        list.forEach(function(file) {
+ 	            file = path.resolve(dir, file);
+ 	            fs.stat(file, function(err, stat) {
+ 	                if (stat && stat.isDirectory()) {
+ 	                    walk(file, function(err, res) {
+ 	                        results = results.concat(res);
+ 	                        if (!--pending) done(null, results);
+ 	                    });
+ 	                } else {
+ 						if(filter.test(file)) {
+ 							results.push(file);
+ 						}
+ 	                    if (!--pending) done(null, results);
+ 	                }
+ 	            });
+ 	        });
+ 	    });
+ 	};
+
 };
