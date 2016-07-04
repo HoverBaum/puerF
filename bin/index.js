@@ -209,7 +209,7 @@ function runPuerF(cli, callback) {
  	            file = path.resolve(dir, file);
  	            fs.stat(file, function(err, stat) {
  	                if (stat && stat.isDirectory()) {
- 	                    walk(file, function(err, res) {
+ 	                    walk(file, filter, function(err, res) {
  	                        results = results.concat(res);
  	                        if (!--pending) done(null, results);
  	                    });
