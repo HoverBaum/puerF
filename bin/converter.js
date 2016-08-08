@@ -55,7 +55,7 @@ module.exports = function convertTemplates(routesFile, ftlRoot, targetFolder) {
  *   @param  {Function} callback      - Called once finished with html.
  */
 function convertRoute(route, fm, absRoutesFile, callback) {
-	var ftlData = route.jsonFile ? require(path.resolve(path.dirname(absRoutesFile), route.jsonFile)) : route.data;
+	var ftlData = route.jsonFile ? require(path.resolve(path.dirname(absRoutesFile), route.jsonFile)) : route.data || {};
 	fm.render(route.template, ftlData, function(err, data, out) {
 		if(/.+DONE.+/.test(out)) {
 			logger.debug('FreeMarker said', out);
