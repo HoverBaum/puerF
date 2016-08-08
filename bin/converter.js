@@ -9,6 +9,7 @@ var helper = require('./helper');
 var Freemarker = require('freemarker.js');
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
 
 /**
  *   Convert all templates within a routes file.
@@ -79,5 +80,20 @@ function convertRoute(route, fm, absRoutesFile, callback) {
 function saveHtml(templatePath, html, targetFolder, callback) {
 	var htmlPath = templatePath.replace(/ftl$/, 'html');
 	var destination = path.join(targetFolder, htmlPath);
-	fs.writeFile(destination, html, callback);
+	var writeFolder = path.dirname(destination)
+	fs.stat(writeFolder, function(err, stats) {
+		console.log(writeFolder);
+		if(err) {
+			console.log('creating directory');
+			mkdirp(writeFolder, function(err) {
+				if(err) throw err;
+				actuallySaveHTML();
+			})
+		} else {
+			actuallySaveHTML();
+		}
+	})
+	function actuallySaveHTML() {
+		fs.writeFile(destination, html, callback);
+	}
 }
