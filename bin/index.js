@@ -176,7 +176,8 @@ function runPuerF(cli, callback) {
             watch: cli.watch,
             localhost: cli.localhost,
             browser: noBrowser,
-            templatesPath: templatesPath
+            templatesPath: templatesPath,
+			staticDir: cli.staticDir
         }, callback);
     });
 

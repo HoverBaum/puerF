@@ -9,6 +9,7 @@ var helper = require('./helper');
 var Freemarker = require('freemarker.js');
 var fs = require('fs');
 var path = require('path');
+var mkdirp = require('mkdirp');
 
 /**
  *   Convert all templates within a routes file.
@@ -55,7 +56,7 @@ module.exports = function convertTemplates(routesFile, ftlRoot, targetFolder) {
  *   @param  {Function} callback      - Called once finished with html.
  */
 function convertRoute(route, fm, absRoutesFile, callback) {
-	var ftlData = route.jsonFile ? require(path.resolve(path.dirname(absRoutesFile), route.jsonFile)) : route.data;
+	var ftlData = route.jsonFile ? require(path.resolve(path.dirname(absRoutesFile), route.jsonFile)) : route.data || {};
 	fm.render(route.template, ftlData, function(err, data, out) {
 		if(/.+DONE.+/.test(out)) {
 			logger.debug('FreeMarker said', out);
@@ -79,5 +80,20 @@ function convertRoute(route, fm, absRoutesFile, callback) {
 function saveHtml(templatePath, html, targetFolder, callback) {
 	var htmlPath = templatePath.replace(/ftl$/, 'html');
 	var destination = path.join(targetFolder, htmlPath);
-	fs.writeFile(destination, html, callback);
+	var writeFolder = path.dirname(destination)
+	fs.stat(writeFolder, function(err, stats) {
+		console.log(writeFolder);
+		if(err) {
+			console.log('creating directory');
+			mkdirp(writeFolder, function(err) {
+				if(err) throw err;
+				actuallySaveHTML();
+			})
+		} else {
+			actuallySaveHTML();
+		}
+	})
+	function actuallySaveHTML() {
+		fs.writeFile(destination, html, callback);
+	}
 }

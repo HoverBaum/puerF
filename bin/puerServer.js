@@ -78,7 +78,7 @@ module.exports = function startPuerServer(routesFile, options, callback) {
     function configureServer() {
 
         //The root directory for static files.
-        var staticDir = (options.dir) ? helper.absolutePath(options.dir) : process.cwd();
+        var staticDir = (options.staticDir) ? helper.absolutePath(options.staticDir) : process.cwd();
         logger.debug('Static files will be served from: ', staticDir);
 
         //A container for mocked routes.
