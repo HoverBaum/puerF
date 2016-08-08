@@ -32,18 +32,19 @@ Commands:
 
 Options:
 
-    -h, --help              output usage information
-    -V, --version           output the version number
-    -r, --routes <file>     Configuration file for mocked routes (multiple possible)
-    -c, --config            If a config file should be used
-    -t, --templates <path>  Path to folder in which Freemarker templates are stored
-    -r, --root <folder>     The root folder that files should be served from
-    -p, --port <number>     Specific port to use
-    -w, --watch <files>     Filetypes to watch, defaults to js|css|html|xhtml|ftl
-    -x, --exclude <files>   Exclude files from being watched for updates
-    -l, --localhost         Use "localhost" instead of "127.0.0.1"
-    --no-browser            Do not autimatically open a brwoser
-    --debug                 Display debug messages
+	-h, --help               output usage information
+	-V, --version            output the version number
+	-r, --routes <file>      Configuration file for mocked routes (multiple possible)
+	-c, --config             If a config file should be used
+	-t, --templates <path>   Path to folder in which Freemarker templates are stored
+	-s, --static-dir <path>  Path to serve static assets from
+	-o, --root <folder>      The root folder that files should be served from
+	-p, --port <number>      Specific port to use
+	-w, --watch <files>      Filetypes to watch, defaults to js|css|html|xhtml|ftl
+	-x, --exclude <files>    Exclude files from being watched for updates
+	-l, --localhost          Use "localhost" instead of "127.0.0.1"
+	--no-browser             Do not autimatically open a brwoser
+	--debug                  Display debug messages
 ```
 
 ## Mocking requests
