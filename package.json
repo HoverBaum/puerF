@@ -11,7 +11,7 @@
     "express": "^4.13.4",
     "freemarker.js": "^1.2.2",
     "mkdirp": "^0.5.1",
-    "open": "0.0.5",
+    "open": "6.0.0",
     "puer": "^1.1.1",
     "winston": "^2.2.0"
   },
