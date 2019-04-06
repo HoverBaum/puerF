@@ -11,9 +11,10 @@
     "express": "^4.13.4",
     "freemarker.js": "^1.2.2",
     "mkdirp": "^0.5.1",
-    "open": "0.0.5",
-    "puer": "^1.1.1",
-    "winston": "^2.2.0"
+    "open": "6.0.0",
+    "puer": "^2.0.0",
+    "winston": "^2.2.0",
+    "snyk": "^1.147.4"
   },
   "bin": {
     "puerf": "./bin/puerf.js"
@@ -22,7 +23,9 @@
     "test": "node test/test.js",
     "jsdoc": "./node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
     "serve-docs": "./node_modules/.bin/live-server ./docs/puer-freemarker",
-    "api-docs": "node_modules/.bin/jsdoc2md bin/index*.js > docs/api.md"
+    "api-docs": "node_modules/.bin/jsdoc2md bin/index*.js > docs/api.md",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "devDependencies": {
     "cheerio": "^0.20.0",
@@ -33,5 +36,6 @@
     "live-server": "^0.9.2",
     "request": "^2.70.0",
     "tape": "^4.5.1"
-  }
+  },
+  "snyk": true
 }
